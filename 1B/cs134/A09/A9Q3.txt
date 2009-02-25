@@ -1,0 +1,36 @@
+
+Part (a):
+
+Binary search tree:
+===================
+
+Advantage: The advantage of a binary search tree is that it is very fast in insertion, deletion, and retrieval.
+Each takes O(log n) time on average, which is quite good.
+
+Disadvantage: The main disadvantage of a binary search tree is the coding, since binary search trees are relatively
+complex in their implementation.
+
+
+Ordered partially-filled array:
+===============================
+
+Advantage: Ordered partially-filled arrays can use a binary search, making the retrieval time quite low (O (log n)).
+
+Disadvantage: Insertion and deletion is quite hard with array implementations as portions of the array
+have to be shifted.
+
+Unordered partially-filled array:
+=================================
+
+Advantage: Insertion is very fast, since new items are simply added to the end of the array,
+thus giving a runtime of O(1).
+
+Disadvantage: Retrieval and deletion are very slow, since the entire array may need to be traversed sequentially.
+
+
+Part (b):
+
+The most appropriate implementation would be a binary search tree.  Me, being the highly skilled software developer I am, would
+have no trouble implementing a binary search tree, and would be able to code the most run-time efficient implementation: a binary seach tree
+
+

@@ -1,0 +1,11 @@
+My L-System supports all of the required functionality including
+-Step Button
+-Reset Button
+-Play/Pause Button
+-MenuBar functionality
+-Animation speed and step sliders
+-Zooming functionality as follows
+
+The zoom dropdown box has a number of preset values but can take user input, and is updated automatically when the user uses the mouse to zoom.
+
+In order to use the mouse to zoom, the user only needs to drag a rectangle in the lsystem.  This zoom functionality is always present and user doesn't need to select a zoom tool.

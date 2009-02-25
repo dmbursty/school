@@ -1,0 +1,29 @@
+Final Exam
+1. Program Output style of questions
+2. Write program fragments
+3. 4-8 keyword definitions (1-3 sentences)
+4. Short answer questiosn (One sentence to half a page) ["Give 2 significant reasons for declaring instance variables"]
+5. Few questions from 1.2 "milestones in Computing" and 1.4 "Milestones in information storage and retrieval"
+6. Little more emphasis on the lectures covered after the midterm
+7. Not expected to memorize any of the Java class libraries' API [String class' substring methods, ActionListener method signatures will be provided]
+8. GUI Concepts page on course website (make sure you know these concepts well!)
+9. Labs -> it is well worth your time to go through them again
+10. Assignments -> go through them again
+
+Topics
+1. Inheritance
+2. Dynamic diagrams
+3. Program output
+4. Lines that will or wont compile in a program
+5. Helper methods (eg toString, MagicSquares, etc)
+6. Files (eg a) StudentList constructor can take a file name as a parameter  b) To append to a file)
+7. GUIs (eg add a remove button, provide GUI code layout)
+8. Inheritance and GUI
+
+Other topics
+1. Static methods/variables
+2. Class hierarchies, super class constructors
+3. Method resolution (? method)
+4. File Exception
+5. Graphics (JPanel, JFrame, Button, Layout)
+6. Files

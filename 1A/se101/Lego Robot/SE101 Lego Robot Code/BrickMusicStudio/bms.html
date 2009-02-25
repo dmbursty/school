@@ -1,0 +1,256 @@
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<meta name=Generator content="Microsoft Notepad">
+<meta name=Originator content="Microsoft Notepad">
+<title>Brick's Music Studio</title>
+<meta name=keywords content="Brick's Music Studio, Mindstorms, LEGO, RCX, MIDI, WAV">
+</head>
+
+<body bgcolor=yellow>
+
+<table border=1 width=100% bgcolor=red>
+ <tr><td align=center><font size=7 color=yellow>Brick's Music Studio</font></td></tr>
+</table>
+
+<table border=1 cellpadding=0 width="100%">
+ <tr>
+  <td><a href="#Overview">Overview</a></td>
+  <td><a href="#Example">Guided Tour</a></td>
+  <td><a href="#Reference">Menu Reference</a></td>
+  <td><a href="#Thanks">Thanks</a></td>
+  <td><a href="#Updates">Updates</a></td>
+ </tr>
+</table>
+
+<h2><font color=red><a name=Overview>Overview</a></font></h2>
+
+<p align=justify>Brick's Music Studio is a simple tool that generates source code to play
+midi and wave files on your <a href="http://mindstorms.lego.com/">LEGO
+Mindstorms®</a> RCX. You can simply select any MIDI or WAVE file and you'll be
+able to generate a program written in one of the following languages: <A HREF=http://www.enteract.com/~dbaum/nqc/index.html>NQC</A>, C for
+<A HREF=http://legos.sourceforge.net>legOS</A>, or Java for <A HREF=http://lejos.sourceforge.net>lejOS</A>. </p>
+
+
+<hr>
+
+<h2><font color=red>Guided tour</font></h2>
+
+<h3>Step 1: Opening the original music file</h3>
+
+<p align=justify>Of course the first step consists in the selection of the MIDI or WAV file
+you want to work with. To do this you should simply select the File menu and
+click <a href="#Open">Open</a> or <a
+href="#OpenWav">Open Wav</a>. Alternatively
+you can click on the corresponding toolbar icon. Once you have selected the
+file you'll see a graphical representation of all the tracks of the song. MIDI
+files can have up to 16 tracks (aka channels), while WAV files usually can have
+one or two channels (mono or stereo).</p>
+
+<h3>Step 2: Selecting the tracks</h3>
+
+<p align=justify>You can select a track by clicking on the rectangle containing its graphical
+representation. When you have selected the track it should become red colored.
+At this point you can play this single track selecting the <a
+href="#EmulateTrack">Emulate current track</a>
+command or icon. If you click on the track number (on the left) you will enable
+or disable the track. When a track is disabled, it should appear gray. Normally
+you'll end up using single track midi files (downloaded by sites dealing with
+cellular phones), but if you open larger midi files you'll notice that the 10th
+track will be disabled by default. This is done because this track is normally
+reserved to drums, that won't be emulated well by the RCX. When you select more
+than one track the generated program will merge them in a single track, but the
+currently selected one (the red one) will be considered the main line, thus it
+will have an higher priority than others. </p>
+
+<h3>Step 3: Selecting the range</h3>
+
+<p align=justify>Maybe you want to select only a part of the whole song, mainly for limiting
+the generated program size. You can select the desired range by clicking and
+dragging the blue lines starting on the blue bar at the top of the working
+area. </p>
+
+<h3>Step 4: Generating the code</h3>
+
+<p align=justify>Once you are satisfied with your selection you can generate the corresponding
+<a href="http://www.aga.it/~guy/lego/<A HREF=http://www.enteract.com/~dbaum/nqc/index.html>NQC</A>">program</a> in the desired language
+by selecting the corresponding icon. At the end of the process you'll see the
+source file in Notepad . </p>
+
+<hr>
+
+<h2><font color=red><a name=Reference>Menu Reference</a></font></h2>
+
+<table border=1 cellpadding=0>
+ <tr>
+  <th><a href="#File">File</a></th>
+  <th><a href="#View">View</a></th>
+  <th><a href="#Play">Play</a></th>
+  <th><a href="#Help">Help</a></th>
+ </tr>
+ <tr>
+  <td><a href="#Open">Open...</a></td>
+  <td><a href="#Options">Options...</a></td>
+  <td><a href="#Play">Play the song</a></td>
+  <td><a href="#Help">Help</a></td>
+ </tr>
+ <tr>
+  <td><a href="#OpenWAV">Open Wav...</a></td>
+  <td><a href="#ToolBar">Toolbar</a></td>
+  <td><a href="#Stop">Stop playing</a></td>
+  <td><a href="#About">About...</a></td>
+ </tr>
+ <tr>
+  <td><a href="#NQC">Save NQC...</a></td>
+  <td><a href=#StatusBar>Status bar</td>
+  <td><a href="#Emulate">Emulate RCX</a></td>
+  <td></td>
+ </tr>
+ <tr>
+  <td><a href="#legOS">Save legOS...</a></td>
+  <td></td>
+  <td><a href="#EmulateTrack">Emulate current track</a></td>
+ </tr>
+ <tr>
+  <td><a href="#pbForth">Save pbForth...</a></td>
+ </tr>
+ <tr>
+  <td><a href="#lejOS">Save lejOS...</a></td>
+ </tr>
+ <tr>
+  <td><a href="#JAL">Save JAL...</a></td>
+ </tr>
+ <tr>
+  <td><a href="#WAV">Save WAV...</a></td>
+ </tr>
+ <tr>
+  <td><a href="#Exit">Exit</a></td>
+ </tr>
+</table>
+
+<h3><a name=File><span style='color:blue'>File</span></a></h3>
+
+<h3><a name=Open>Open</a></h3>
+
+<p align=justify>This is the standard command that allows you
+to select the music file you want to work with. You can specify any MIDI (.mid
+o .rmi extension) or WAVE (.wav extension) file.</p>
+
+<h3><A NAME=OpenWav>Open WAV</A></h3>
+<p align=justify>This is a shortcut for opening WAV files.</p>
+
+<h3><a name=NQC>Save NQC</a></h3>
+<p align=justify>This command creates an <A HREF=http://www.enteract.com/~dbaum/nqc/index.html>NQC</A> program that plays the current song. You can
+compile it as is with the <A HREF=http://www.enteract.com/~dbaum/nqc/index.html>NQC</A> compiler and download it to yor RCX. </p>
+
+<h3><a name=legOS>Save legOS</a></h3>
+<p align=justify>This command creates a C program for <A HREF=http://legos.sourceforge.net>legOS</A> that plays the current song. If
+you have succesfully installed <A HREF=http://legos.sourceforge.net>legOS</A>, you should't need any further hint. </p>
+
+<h3><a name=pbForth>Save pbForth</a></h3>
+<p align=justify>This command creates a Forth script for <A HREF=http://www.hempeldesigngroup.com/lego/pbForth/>pbForth</A> that plays the current song.
+For more info about music with pbForth please read the <A HREF=http://www.hempeldesigngroup.com/lego/pbForth/scripts/howtoRCXMusic.html>tutorial</A>
+</p>
+
+<h3><a name=lejOS>Save lejOS</a></h3>
+<p align=justify>This command creates a Java program for <A HREF=http://lejos.sourceforge.net>lejOS</A> that plays the current song.
+If you have succesfully installed <A HREF=http://lejos.sourceforge.net>lejOS</A>, you should't need any further hint. </p>
+
+<h3><a name=JAL>Save JAL</a></h3>
+<p align=justify>This command saves a JAL program for PIC devices. If you want to learn more about JAL please refer to 
+<A HREF=http://baserv.uci.kun.nl/~smientki/PIC/Projects/PIC_music.htm>Stef Mientki's site</A></p>
+
+<h3><a name=WAV>Save WAV</a></h3>
+<p align=justify>This command saves a WAV file that tries to emulate the output of the RCX
+speaker. It's far from perfect by now. </p>
+
+<h3><a name=Exit>Exit</a></h3>
+
+<p>Exits the program.</p>
+
+<h3><a name=View><span style='color:blue'>View</span></a></h3>
+
+<h3><a name=Options>Options</a></h3>
+<p>Show the options dialog box, where you can set the following preferences:</p>
+<dl>
+<li><i>Use PC speaker for playback</i><br>
+If you select this option the program will use the PC speaker 
+instead of the sound card for playing the selected tracks.
+PS speaker emulation is much faster than the default one, but alas ... it works only on Windows '95 and '98.
+</li>
+<li><i>Copy output to the clipboard</i><br>
+This option forces all the generated source code to be copied into the clipboard in order to be easily pasted in your editor.
+</li>
+<li>
+<i>Open output file with the editor</i><br>
+This option pops up Notetap showing the generated source code.
+</li>
+<li>
+<i>Transpose</i><br>
+This slider allows you to transpose up to two octaves the resulting notes. 
+For example a middle C (C4) will be transformed in a C2 when the cursor is all on the left.
+On the other end, it will become a C6 when the cursor is all on the right. 
+Of course the cursor in the central position won't affect the output.
+</li>
+</dl>
+
+<h3><a name=ToolBar>Toolbar</a></h3>
+<p>Hide/Display the tool bar </p>
+
+<h3><a name=StatusBar>Status bar</a></h3>
+<p>Hide/Display the status bar </p>
+
+<h3><a name=Play><font color=blue>Play</font></a></h3>
+
+<h3><a name=Play>Play song</a></h3>
+<p align=justify>This command plays the original song (or sample) using your sound card. </p>
+
+<h3><a name=Stop>Stop playing</a></h3>
+
+<p>This command stops any sound currently playing. </p>
+
+<h3><a name=Emulate>Emulate RCX</a></h3>
+
+<p align=justify>This command plays the current song as if it were played by the RCX. This is
+quite a time consuming process, so be prepared to wait a lot of seconds for
+longer songs. The quality of sound emulation is quite primitive, but it should
+give you a nice preview of the final result. </p>
+
+<h3><a name=EmulateTrack>Emulate current track</a></h3>
+
+<p align=justify>This command plays the currently selected track (the red
+one) as if it were played by the RCX. </p>
+
+<h3><a name=Speaker>Use PC Speaker for emulation</a></h3>
+
+<p align=justify>If you select this option, the PC speaker will be used in order to emulate
+the RCX one. <br>
+<b>WARNING: At the moment this option doesn't work on Windows NT or 2000</b>. </p>
+
+<h3><a name=Help><font color=blue>Help</font></a></h3>
+
+<h3><A name=Help>Help</A></h3>
+<p>Display this help page using your browser.</p>
+
+<h3><a name=About>About</a></h3>
+
+<p>Display a small box containing some program info. </p>
+
+<hr>
+
+<h2><a name=Thanks><font color=red>Thanks</font></a></h2>
+
+<p align=justify>This program has been developed also thanks to the support of the following people:<br>
+Mario Ferrari, Stef Mientki and Brian Bagnall. </p>
+
+<hr>
+
+<h2><a name=Updates><font color=red>Updates</font></a></h2>
+
+<p align=justify>For updates to Brick's Music Studio check the <a href="http://www.aga.it/~guy/lego/index.htm">Guy's Lego® page</a>. <br>
+If you have any comments or suggestions, feel free to contact me at the
+following address:<br>
+<address><a href="mailto:guy@aga.it">guy@aga.it</a></address>
+</p>
+</body>
+
+</html>

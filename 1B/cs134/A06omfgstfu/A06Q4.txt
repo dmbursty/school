@@ -1,0 +1,12 @@
+Assignment 6, Question 4
+Indicate a node in your answer by stating the value it contains.
+
+(a) The root of the tree is:
+
+(b) Children of B are:
+
+(c) The tree contains the following leaves:
+
+(d) Indicate all siblings as follows: X is a sibling of Y
+
+(e) The ancestors of F are:  

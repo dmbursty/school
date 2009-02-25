@@ -1,0 +1,1 @@
+An expression tree is either a single node, with no children, containing an integer, or a node containing a binary arithmetic operator (+, -, *, or /) which has two children which are each expression trees.

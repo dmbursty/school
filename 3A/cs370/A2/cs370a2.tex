@@ -1,0 +1,182 @@
+\documentclass[12pt]{article}
+% Preamble
+\usepackage[left=2cm,top=1cm,right=2cm,nohead,nofoot]{geometry}
+
+% Header
+\title{CS370 Assignment 2}
+\author{Daniel Burstyn (20206120)}
+\date{Feb 16, 2009}
+
+% Body
+\begin{document}
+\maketitle
+\newcounter{count}
+\newcounter{subcount}[count]
+\section{Analytic Problems}
+\begin{list}{\arabic{count}.}{\usecounter{count}}
+
+% Question 1: Suspension
+\item 
+\begin{list}{\alph{subcount})}{\usecounter{subcount}}
+
+% 1. a)
+\item 
+$x'_1(t) = w_1(t)$\\
+$x'_2(t) = w_2(t)$\\
+$w'_1(t) + c_1(w_1(t) - w_2(t)) + k_1(x_1(t) -  x_2(t)) + k_2x_1(t) = sin(t)$\\
+$w'_2(t) + c_2(x_1(t) - x_2(t)) - c_1(w_1(t) - w_2(t)) = 0$\\
+With initial conditions: $x_1(0)=x_2(0)=w_1(0)=w_2(0)=0$
+
+% 1. b)
+\item
+We need to rearrange our functions like so:\\
+$w'_1(t) = sin(t) - c_1(w_1(t) - w_2(t)) - k_1(x_1(t) -  x_2(t)) - k_2x_1(t)$\\
+$w'_2(t) = c_1(w_1(t) - w_2(t)) - c_2(x_1(t) - x_2(t))$\\
+Thus, we get our vectors:\\
+$y = \left(
+\begin{array}{c}
+x_1(t)\\ x_2(t)\\ w_1(t)\\ w_2(t)
+\end{array} \right),
+f = \left(
+\begin{array}{l}
+w_1(t)\\
+w_2(t)\\
+sin(t) - c_1(w_1(t) - w_2(t)) - k_1(x_1(t) -  x_2(t)) - k_2x_1(t)\\
+c_1(w_1(t) - w_2(t)) - c_2(x_1(t) - x_2(t))\\
+\end{array} \right)$
+\end{list}
+
+% Question 2.
+\item For this question we have $y'(t) = f(t,y) = -\lambda y$ to test the
+stability for:\\
+$y_{n+1} = y_n + \frac{h}{4}[f(t_n,y_n) + 3f(t_n + \frac{2h}{3},
+y_n + \frac{2}{3}hf(t_n,y_n))]$
+\begin{eqnarray*}
+y_{n+1} &=& y_n + \frac{h}{4}\left[f(t_n,y_n) + 3f\left(t_n + \frac{2h}{3},
+y_n + \frac{2}{3}hf(t_n,y_n)\right)\right]\\
+&=& y_n + \frac{h}{4}\left[-\lambda y_n -3\lambda\left(y_n -
+\frac{2}{3}h\lambda y_n \right) \right]\\
+&=& y_n\left[1 - \frac{h\lambda}{4} - \frac{3h\lambda}{4} +
+\frac{h^2\lambda^2}{2}\right]\\
+&=& y_n \left[1 - h\lambda + \frac{h^2\lambda^2}{2}\right]\\
+&=& y_{n-1} \left[1 - h\lambda + \frac{h^2\lambda^2}{2}\right]^2\\
+&=& \dots\\
+&=& y_0 \left[1 - h\lambda + \frac{h^2\lambda^2}{2}\right]^{n+1}\\
+\end{eqnarray*}
+\newpage
+Thus we can see that the solution decays to zero as $n \rightarrow \infty$ if
+and only if $|1 - h\lambda + \frac{h^2\lambda^2}{2}| \le 1$
+Solving this inequality we get:
+\begin{eqnarray*}
+-h\lambda + h^2\frac{\lambda^2}{2} \le 0 &\Rightarrow& 
+h \ge 0 \textrm{ and } h \le \frac{2}{\lambda} \\
+&\textrm{ and }&\\
+0 \le 2-h\lambda + h^2\frac{\lambda^2}{2} &\Rightarrow& 
+\textrm{Nothing, since this is always true}\\
+\end{eqnarray*}
+Therefore, we can conclude that this method is conditionally stable for $h \in
+\left[0, \frac{2}{\lambda}\right]$.
+
+% Question 3.
+\item 
+\begin{list}{\alph{subcount})}{\usecounter{subcount}}
+
+% 3. a)
+\item For reference, we have the taylor series, which is:\\
+$y(t_{n+1}) = y(t_n) + y'(t_n)h + y''(t_n)\frac{h^2}{2} +
+y'''(t_n)\frac{h^3}{6} + \dots$\\
+Our function gives us:
+\begin{eqnarray*}
+\frac{y_{n+1} - y_{n-1}}{2h} &=& f(t_n,y_n)\\
+y(t_{n+1}) &=& y(t_{n-1}) + 2hy'(t_n)\\
+&=& \left(y(t_n) - y'(t_n)h + y''(t_n)\frac{h^2}{2} - y'''(t_n)\frac{h^3}{6} +
+\dots\right)\\
+&& + 2h\left(y'(t_n) + y''(t_n)h + y'''(t_n)\frac{h}{2} + \dots\right)\\
+&=& y(t_n) + y'(t_n)h + y''(t_n)\frac{5h^2}{2} + \dots\\
+\end{eqnarray*}
+We can see that this differs from the taylor expansion in the $y''(t_n)$ term,
+thus we can conclude that the local error is $O(h^2)$.
+
+% 3. b)
+\item Like above, our method is $y_{n+1} = y_{n-1} + 2hy'_n$.  We will use
+$y'(t) = f(t,y) = -\lambda y$, so that we have:
+\[y_{n+1} = y_{n-1} - 2h\lambda y_n\]
+Applying perturbation analysis, we get:
+\[e_{n+1} = e_{n-1} - 2h\lambda e_n\]
+Solve this recurrence relation by setting $e_n = \mu^n$:
+\[\mu^2 + 2h\lambda\mu - 1 = 0\]
+which gives
+\begin{eqnarray*}
+\mu &=& \frac{-2h\lambda \pm \sqrt{4h^2\lambda^2 + 4}}{2}\\
+&=& -h\lambda \pm \sqrt{h^2\lambda^2 + 1}
+\end{eqnarray*}
+After some algebra, we can show that this method is \emph{unconditionally
+unstable}.
+\end{list}
+
+\newpage
+\section{Programming Problems}
+% Question 4.
+\item We find that given the values set in the assingment sheet, the pursuer
+will catch the target at $t = 12.9226$.  See attached plot, and documented code.
+
+% Question 5.
+\item The resulting table:
+\[
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Tolerance} & \textbf{T} & \textbf{No. of Ftn Evals}\\ \hline
+$10^{-3}$ & 10.1699 & 326\\ \hline
+$10^{-4}$ & 12.9243 & 558\\ \hline
+$10^{-5}$ & 12.9225 & 523\\ \hline
+$10^{-6}$ & 12.9226 & 703\\ \hline
+$10^{-7}$ & 12.9225 & 917\\ \hline
+$10^{-8}$ & 12.9225 & 1149\\ \hline
+$10^{-9}$ & 12.9225 & 1573\\ \hline
+\end{tabular}
+\]
+
+We can plainly see that as we lower the error tolerance, the number of function
+evaluations increases.  Since our tolerance for error is so low it takes a much
+larger number of evaluations to find an acceptable solution.  We can also see
+that, with the exception of the first entry, our $T$ values are approximately
+equal.  This makes sense, since the solution to the system should not depend on
+the error tolerance, for tolerance that is sufficiently small.  Of course, this
+shows that $10^{-3}$ is not small enough, since we get a solution that is
+obviously incorrect.
+
+% Question 6.
+\item Using the same table format as question 5, we get the table:
+\[
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Tolerance} & \textbf{T} & \textbf{No. of Ftn Evals}\\ \hline
+$10^{-5}$ & 24.3609 & 15325\\ \hline
+$10^{-6}$ & 18.6414 & 13009\\ \hline
+$10^{-7}$ & 12.9225 & 12793\\ \hline
+\end{tabular}
+\]
+
+Here we immediately notice that the number of function evaluations is much
+larger than in 5.  This is because ode45 is a nonstiff solver, and thus uses
+many more evaluations to arrive at a solution.  Since we have so many
+evaluations, our global errors get much higher, and so we need a lower tolerance
+in order to arrive at the correct solution.  This explains the other solutions
+times that we got using ode45.
+
+% Question 7.
+\item The evasion strategy I chose to implement is as follows:\\
+If the distance between the pursuer and the target is less than some constant,
+$d_0$, then the target should make a sharp turn in the opposite direction as
+normal.  Besides that, the code is the same as the other programming problems.
+
+The reason for this evasion strategy is that, the target can turn more sharply
+than the pursuer, so when the pursuer gets close, we make a sharp turn away from
+where the pursuer expects us to be.  This cause the pursuer to end up generally
+further away, and facing the wrong direction, allowing the target to escape.
+
+Setting $d_0$ is a matter of trial and error, and I've attached the plots for a
+few possibilities.
+
+\end{list}
+\end{document}

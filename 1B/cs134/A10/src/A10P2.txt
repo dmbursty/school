@@ -1,0 +1,21 @@
+2.
+
+a) Best case with respect to time is O(log(n!))
+
+In the best case, we have a balanced binary search tree, and the time it takes to insert is log(k)
+where k is the current height of the tree.  To add each of the items is sum of k=1 to n of log(k)
+which is equal to log(n!).  Adding the time for enqueue and dequeue we get O(log(n!) + 2n) which is
+reduced to O(log(n!))
+
+b) Worst case with respect to time is O(n^2)
+
+The worst case would be adding to the end of a linear binary tree (a tree where each node has 1 or 0 subtrees)
+The insertion time would be k where k is the height of the tree.  As before, adding up n isertions we get the sum of k=1 to n of k, which is n^2-n/2, which is O(n^2).  Once again enque and dequeue take O(2n) for a total of O(n^2).
+
+c) Best case with respect to auxillary space is O(n)
+
+The best case is once again with a balanced binary tree, and each call to insert is recursive up to the height of the tree: log(k).  So the most space needed will be log(n).  The extra space for the queue will be n: the size of the tree for a total of O(log(n) + n) = O(n)
+
+d) Worst case with respect to auxillary space is O(n)
+
+The worst case is once again a linear binary tree, the space needed for insertion is n, and the space needed for the queue is n, for a total of O(2n) = O(n)

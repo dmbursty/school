@@ -1,0 +1,14 @@
+Assignment 6, Question 2
+  
+(a) The implementation is incorrect because ...
+  If the method is called with two positions that are only one apart, the code will enter an infinite loop.
+  At the line with "int midpoint = (pos2-pos1+1)/2 + pos1;" if pos2-pos1 = 1, then (pos2-pos1+1)/2 = 1.
+  On the next line, when the method is called again, it will be called with (a, pos1, pos1+1) and (a, pos1+2, pos2).
+  The second call will return 0, since pos1+2 > pos2, and the first call will repeat the same process in an infinite loop.
+  
+  
+(b) To fix the implementation, change the line 
+    int midpoint = (pos2-pos1+1)/2 + pos1;
+    to
+    int midpoint = (pos2-pos1)/2 + pos1;
+  

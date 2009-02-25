@@ -1,0 +1,15 @@
+Name: Daniel Burstyn
+Student ID: 20206120
+Tutorial Section: 107
+
+Complete your answers below. Leave the "headings" in place, and add your answers in the space indicated.
+You may use extra lines, if necessary.
+  
+Question 1(a): What happens?
+The code will most like not execute as expected since the precondition for List.Array.get(int index) is not met in it's first execution in the for loop, when index is 0.
+    
+Question 1(b): 
+// Pre: list cannot be null, list.size() cannot be zero.
+
+Question 1(c):
+// Post: Returns true if input string has 8 or more characters, all of which are alphabetic.  Otherwise, returns false.

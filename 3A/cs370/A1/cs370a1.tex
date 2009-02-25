@@ -1,0 +1,38 @@
+\documentclass[12pt]{article}
+% Preamble
+\usepackage[left=2cm,top=1cm,right=2cm,nohead,nofoot]{geometry}
+\usepackage{palatino, url, multicol}
+
+% Header
+\title{CS370 Assignment 1}
+\author{Daniel Burstyn (20206120)}
+\date{January 23, 2009}
+
+% Body
+\begin{document}
+\maketitle
+\newcounter{Lcount}
+\begin{list}{\arabic{Lcount}.}{\usecounter{Lcount}}
+
+% Question 1
+\item
+\newcounter{subLcount}
+\begin{list}{(\roman{subLcount})}{\usecounter{subLcount}}
+% 1. (i)
+\item
+\begin{multicols}{2}
+$
+p_n + p_{n-1} - \frac{6}{25}p_{n-2} = 0\\
+\lambda^2 + \lambda - \frac{6}{25} = 0
+$
+
+$
+blah
+$
+\end{multicols}
+
+\end{list}
+
+\end{list}
+
+\end{document}

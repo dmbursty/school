@@ -1,0 +1,25 @@
+
+(a) We need to show that ...
+Using the formal definition of Big-O notation, we need to show
+f(n) + g(n) <= c*max{f(n),g(n)} for positive constant c, for all n greater than some n_0 (for large enough n)
+
+
+
+(b) To show this ...
+
+We see this is true since it holds if c = 2, and for all n, so n_0 = anything, let's say 0: the smallest number in the domain
+
+  observe that if f(n) = g(n), then 2*(max{f(n),g(n)}) = f(n) + g(n) and is thus satisfied
+  
+  also, if f(n) > g(n), then 2*(max{f(n),g(n)}) = f(n) + f(n), and since f(n) > g(n),
+  then f(n) + g(n) < f(n) + f(n), and therefore
+  f(n) + g(n) < 2*(max{f(n),g(n)}) and lastly
+  f(n) + g(n) <= 2*(max{f(n),g(n)}) thus satisfied
+  
+  finally , if f(n) < g(n), then 2*(max{f(n),g(n)}) = g(n) + g(n), and since g(n) > f(n),
+  then f(n) + g(n) < g(n) + g(n), and therefore
+  f(n) + g(n) < 2*(max{f(n),g(n)}) and lastly
+  f(n) + g(n) <= 2*(max{f(n),g(n)}) thus satisfied
+
+  Therefore, for all n >= 0, and c=2, f(n) + g(n) <= c*(max{f(n),g(n)})
+  And thus h1(n) is O(h2(n)

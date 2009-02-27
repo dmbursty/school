@@ -22,7 +22,8 @@
 \item This MAC scheme is \textbf{insecure}.\\
 First recall that a MAC scheme is insecure if it is vulnerable to a
 chosen-message attack.  Now I will show that this scheme is vulnerable to such
-an attack.\\
+an attack.
+
 Observe that to compute the tag of any arbitrary message $m = m_1m_2\dots m_t$
 an attacker can do the following:\\
 - Obtain the message tag pair $(m_1,MAC_k(m_1))$ via chosen-message attack.\\
@@ -70,21 +71,26 @@ First, let us define $M_i' = M_i$ with the last block of zeros, and the
 last one removed.  That way by using the message $M_i'$, the first step of the
 encryption will result in a one block modified message $M_i$.  Also, for
 convenience let us define $M_0 = 1000\dots 0$ --- the one block message of 1 one
-and 127 zeroes.\\
+and 127 zeroes.
+
 Now, let's begin by obtaining the MAC tags of $M_1', M_2', \dots, M_l'$.  Which
-from the scheme are equal to $c_1, c_2, \dots, c_l$ respectively.\\
+from the scheme are equal to $c_1, c_2, \dots, c_l$ respectively.
+
 Next, we will obtain $b$ by obtaining the tag to the message $M_1M_1'$.  We see
 that $MAC_{(k,b)}(M_1M_1') = c_1(1 + b)$ mod $p$.  Now, since $p$ is prime, we
 can divide by $c_1$ (Recall that modulo division is multiplication by an inverse
 which ALWAYS exists as long as the modulus is prime.)  Therefore we can obtain
-$b$ after a trivial subtraction by 1.\\
+$b$ after a trivial subtraction by 1.
+
 The last thing we need to find is $c_0 = AES_k(M_0)$.  To do this we obtain the
 tag for the message $M_1$ (Not $M_1'$).  The padding step of the scheme will
 result in the modified message $M_1M_0$, and the tag itself will be $c_1 + c_0b$
-mod $p$.  We can subtract $c_1$, and now divide by $b$ to get $c_0$.\\
+mod $p$.  We can subtract $c_1$, and now divide by $b$ to get $c_0$.
+
 We now have all the components we need to compute the MAC of $M$.  Observe that
 $MAC_{(k,b)}(M) = (c_1 + c_2b + c_3b^2 + \dots + c_lb^{l-1} + c_0b^l)$ mod $p$,
-and that we know all the variables and can thus compute the MAC.\\
+and that we know all the variables and can thus compute the MAC.
+
 Last we must consider whether this computation is \textbf{efficient}.  The
 computations done are addition, subtraction, multiplication (by inverses), and
 exponentiation.  Addition, subtraction and multiplication are trivially
@@ -123,8 +129,8 @@ $x$ & $y$ & $ex + \phi y$ & quotient\\
 \hline
 \end{tabular}\\
 \\
-- Using the EEA we find that $y = d = -461 \pmod \phi \equiv 547 \pmod \phi$ and thus we have obtained Alice's private
-key.
+- Using the EEA we find that $y = d = -461 \pmod \phi \equiv 547 \pmod \phi$ and
+thus we have obtained Alice's private key.
 
 \item To encrypt $m = 3$, we begin by obtaining $(n,e) = (1073, 715)$ from the
 assignment.  We now need to compute $c = m^e$ mod $n$.  We can use the repeated
@@ -134,8 +140,12 @@ find that $c = 548$.
 
 \end{list}
 
+\newpage
+% Question 4: GCDeasy
 \item \textbf{Computing GCD without long division}
 \begin{list}{\alph{subcount})}{\usecounter{subcount}}
+
+% 4. a)
 \item Compute GCD using GCDEasy: \\
 \begin{tabular}{|l|c|c|c|}
 \hline
@@ -159,29 +169,35 @@ While $a \neq 0$ \{ & & & \\
 \\
 The result is $e*b = 44$.
 
+% 4. b)
 \item The first step of GCDeasy is while $a$ and $b$ are both even, we divide
 them by 2.  Since $a$ and $b$ are both integers, they can be prime factored.
 The loop effectively is while there is a 2 in the prime factorization, remove a
 2.  It is obvious to see that eventually, all the 2s will be gone, since both
 numbers are finite, and the loop will end, and we will move on to the next
-step.\\
+step.
+
 For the next step, at the beginning of each loop, we reduce $a$ and $b$ so that
 they are both odd.  Now observe that the if statement will either reduce $a$ or
-reduce $b$, and that $a$ cannot go below 0, and that $b$ cannot go below 1.\\
+reduce $b$, and that $a$ cannot go below 0, and that $b$ cannot go below 1.
+
 We can see that at each iteration, either $a$ or $b$ must decrease, that
 neither can increase at any point, and that neither can go below 0.  By this
 logic, we can conclude that either $a$ or $b$ will eventually reach their
 minimum values.  If $a$ reaches 0, then the loop obviously terminates.  If $b$
 reaches 1, then we can easily see that $a$ will continue to decrease until it
-reaches 0, and the loop will still terminate.\\
+reaches 0, and the loop will still terminate.
+
 Therefore this procedure always terminates.
 
+% 4. c)
 \item First lets simplify a bit by considering the first loop, and last step.
 Note that at the end of the first loop, $e$ is the greatest common divisor or
 $a$ and $b$ that is a multiple of 2.  Thus we can see that
 gcd$(\frac{a}{e},\frac{b}{e}) * e = $ gcd$(a,b)$.  Now we only need to worry
 about the correctness of the inner loop.  For convenience let $a' = \frac{a}{e}$
-and $b' = \frac{b}{e}$.\\
+and $b' = \frac{b}{e}$.
+
 Let us now say that $\hat a$ and $\hat b$ refer to the running values of the
 variables in the procedure.  At the top of the loop, we know of course that
 gcd$(a',b')$ = gcd$(\hat a,\hat b)$.  This is our loop invariant.
@@ -194,10 +210,42 @@ again depending on which is larger.  So, once again we can conclude that our
 invariant is still true.  Now that we have reached the end of the loop, and the
 invariant still holds true, we can conclude that after the loop finishes (which
 it does as proved in (b)) that gcd$(a',b')$ = gcd$(\hat a,\hat b)$.  Since $\hat
-a = 0$, we can conclude that $gcd(\hat a, \hat b) = \hat b$.\\
+a = 0$, we can conclude that $gcd(\hat a, \hat b) = \hat b$.
+
 Now that we have shown that inner loop is correct, and that the initial loop,
 and the final multiplication by $e$ are correct if and only if the inner loop is
 correct, we can conclude that the procedure in its entirety is correct.
+
+% 4. d)
+\item First, we observe that each division is a bitshift (one bit operation) and
+each subtraction is single bit operation, so the running time of GCDeasy is the
+number of divisions plus the number of subtractions.
+
+In the worst case, $a$ is $\{1\}^k = 2^{k}-1$ (and is odd), and to minimize the
+number of subtractions, we want $b$ to be one in the inner loop, so the worst
+case is if $b$ is $\{1\}\{0\}^{k-1} = 2^{k-1}$.  Note that both numbers have the
+same bitlength ($k$) and that it doesn't matter which is $a$ or which is $b$ so
+I picked them this way arbitrarily.
+
+In the first step, $a$ is odd, so we immediately move on to the next step.  Here
+$b$ is even, so we reduce it to 1 in $k-1$ divisions (since it was $2^{k-1}$).
+Notice now that $a = \{1\}^k$ and that $b = 1$.  After the if statement, $a$ is
+reduced by one and is now $\{1\}^{k-1}\{0\}$ for a total of $k$ bit operations
+so far.
+
+Now, $b$ will remain at 1 for the remainder of the process.  We observe that at
+each iteration $a$ is now even, so it is bitshifted by one, and then again the
+if statement is reduced by 1 and now $a$ looks like $\{1\}^{k-2}\{0\}$.  This
+will repeat until $a = 0$ which means two bit operations times $k-1$ bits.  This
+gives a grand total of $3k-2$ bit operations, and thus the running time for
+GCDeasy is $O(k)$.
+
+% 4. e)
+\item From (d) we found that the running time for GCDeasy is $O(k)$.  We can see
+that a $k$-bit number is at most $2^k-1$, and so, if the running time of GCDeasy
+is $O(k)$, then the running time is $O(log_2(a))$ where $a$ is the larger of the
+two numbers.  We know that log time is polynomial-time, so \textbf{yes}, GCDeasy
+is a polynomial-time algorithm.
 
 \end{list}
 

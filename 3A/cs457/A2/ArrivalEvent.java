@@ -4,7 +4,7 @@ public class ArrivalEvent extends Event {
   }
 
   void handle() {
-    System.out.println("Arrival at " + time);
+    // This is pretty much the same as the pseudocode from lectures
     sim.nt--;
     int item = sim.dist.getItem(sim.M);
     sim.request_set.add(new Request(sim.clock, item));

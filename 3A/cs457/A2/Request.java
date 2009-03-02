@@ -1,3 +1,4 @@
+// Request is just a holder for an arrival time and an item
 public class Request {
   public double t_arrival;
   public int item;

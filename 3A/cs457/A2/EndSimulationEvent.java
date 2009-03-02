@@ -1,4 +1,4 @@
-
+// This is never handled, but only used as a marker as the end of the simulation
 public class EndSimulationEvent extends Event {
 
   public EndSimulationEvent(Simulation sim, double time) {

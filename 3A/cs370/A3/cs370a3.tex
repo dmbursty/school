@@ -1,0 +1,124 @@
+\documentclass[12pt]{article}
+% Preamble
+\usepackage[left=2cm,top=1cm,right=2cm,nohead]{geometry}
+
+% Header
+\title{CS370 Assignment 3}
+\author{Daniel Burstyn (20206120)}
+\date{March 16, 2009}
+
+% Body
+\begin{document}
+\maketitle
+\newcounter{count}
+\newcounter{subcount}[count]
+\begin{list}{\arabic{count}.}{\usecounter{count}}
+
+% Question 1: Discrete Fourier
+\item \textbf{Discrete Fourier by hand}
+\begin{list}{\roman{subcount})}{\usecounter{subcount}}
+
+% 1. a)
+\item $f[n]=(2,-2,1,-1)$  $(n=0,\dots,3; N=4)$\\
+Recall that $F_k = \frac{1}{N} \sum_{n=0}^{N-1}f_nW^{-nk}$, and that $W =
+e^{\frac{2 \pi i}{N}}$.\\
+This gives $W^{0} = 1, W^{-1} = -i, W^{-2} = -1, W^{-3} = i, W^{-4} = W^{0},
+W^{-5} = W^{-1}, $ etc.
+
+$F_0 = \frac{1}{4}(f_0 + f_1 + f_2 + f_3) = 0$\\
+$F_1 = \frac{1}{4}(f_0 + f_1W^{-1} + f_2W^{-2} + f_3W^{-3})
+     = \frac{1}{4}(2 +2i -1 -i) = \frac{1 + i}{4}$\\
+$F_2 = \frac{1}{4}(f_0 + f_1W^{-2} + f_2W^{-4} + f_3W^{-6})
+     = \frac{1}{4}(2 +2 +1 +1) = \frac{3}{2}$\\
+$F_3 = \frac{1}{4}(f_0 + f_1W^{-3} + f_2W^{-6} + f_3W^{-9})
+     = \frac{1}{4}(2 -2i -1 +i) = \frac{1 - i}{4}$\\
+
+\item $f[n]=(1,2,4,8)$  $(n=0,\dots,3; N=4)$\\
+Notice that the values for $W^{-i}$ are the same as in (i) since $N$ is the
+same.
+
+$F_0 = \frac{1}{4}(f_0 + f_1 + f_2 + f_3) = \frac{15}{4}$\\
+$F_1 = \frac{1}{4}(f_0 + f_1W^{-1} + f_2W^{-2} + f_3W^{-3})
+     = \frac{1}{4}(1 -2i -4 +8i) = \frac{-3 + 6i}{4}$\\
+$F_2 = \frac{1}{4}(f_0 + f_1W^{-2} + f_2W^{-4} + f_3W^{-6})
+     = \frac{1}{4}(1 -2 +4 -8) = \frac{-5}{4}$\\
+$F_3 = \frac{1}{4}(f_0 + f_1W^{-3} + f_2W^{-6} + f_3W^{-9})
+     = \frac{1}{4}(1 +2i -4 -8i) = \frac{-3 - 6i}{4}$\\
+
+\end{list}
+
+% Question 2: Discrete Fourier
+\item \textbf{More Fourier}
+\begin{list}{\alph{subcount})}{\usecounter{subcount}}
+
+% 2. a)
+\item $f_n = W^{3n}$\\
+\begin{eqnarray*}
+F_k &=& \frac{1}{N} \sum_{n=0}^{N-1}f_nW^{-nk}\\
+&=& \frac{1}{N} \sum_{n=0}^{N-1}W^{3n}W^{-nk}\\
+&=& \frac{1}{N} \sum_{n=0}^{N-1}W^{-n(k - 3)}\\
+&=& \left\{ \begin{array}{lcl}
+1\; \mathrm{if}\, k = 3 \\
+0\; \mathrm{otherwise}&
+\end{array} \right.
+\end{eqnarray*}
+
+% 2. b)
+\item $f_n = \cos(\frac{4n\pi}{N})$
+
+First, we observe the following:\\
+\begin{eqnarray*}
+\cos(\frac{4n\pi}{N}) &=& \frac{1}{2}(\cos(\frac{4n\pi}{N}) +
+\cos(\frac{4n\pi}{N}))\\
+&=& \frac{1}{2}\left[
+\left(\cos(\frac{4n\pi}{N}) + i\sin(\frac{4n\pi}{N})\right) +
+\left(\cos(\frac{4n\pi}{N}) - i\sin(\frac{4n\pi}{N})\right)\right]\\
+&=& \frac{1}{2}\left[
+\left(\cos(\frac{4n\pi}{N}) + i\sin(\frac{4n\pi}{N})\right) +
+\left(\cos(\frac{-4n\pi}{N}) + i\sin(\frac{-4n\pi}{N})\right)\right]\\
+&=& \frac{1}{2}\left(W^{2n} + W^{-2n}\right)\\
+\end{eqnarray*}
+
+So now,
+\begin{eqnarray*}
+F_k &=& \frac{1}{N} \sum_{n=0}^{N-1}f_nW^{-nk}\\
+&=& \frac{1}{N} \sum_{n=0}^{N-1}\cos\left(\frac{4n\pi}{N}\right)W^{-nk}\\
+&=& \frac{1}{2N} \sum_{n=0}^{N-1}\left(W^{2n} + W^{-2n}\right)W^{-nk}\\
+&=& \frac{1}{2N} \sum_{n=0}^{N-1}\left(W^{-n(k-2)} + W^{-n(k+2)}\right)\\
+&=& \left\{ \begin{array}{lcl}
+1\; \mathrm{if}\, k = 2\;\mathbf{and}\;k=N-2\;\mathrm{(only\;when\;k=4)} \\
+\frac{1}{2}\;\mathrm{if}\,k = 2\;\mathbf{or}\;k=N-2\;\mathrm{(but\;not\;both)}\\
+0\; \mathrm{otherwise}&
+\end{array} \right.
+\end{eqnarray*}
+
+% 2. c)
+\item $N=4m, f_n=0$ for $ m \le n < 3m$ and 1 otherwise.
+\newline \newline \newline \newline
+\newline \newline \newline \newline
+\newline \newline \newline \newline
+\newline \newline \newline \newline
+
+\end{list}
+
+% Question 3: Fast Fourier Transform
+\item \textbf{Fast Fourier Transform}
+\begin{list}{\alph{subcount})}{\usecounter{subcount}}
+
+% 3. a)
+\item $g_n = \frac{1}{2}(f_n + f_{n + \frac{N}{2}})$ and
+$h_n = \frac{1}{2}(f_n - f_{n + \frac{N}{2}})W^{-n}$ where
+$W = e^{\frac{2\pi i}{N}}$.\\
+Thus, $g = [\frac{-1 + 1}{2}, \frac{-2 + 2}{2}, \frac{-2 + 2}{2},
+\frac{-1 + 1}{2}] = [0, 0, 0, 0]$\\
+and $h = [\frac{-1 - 1}{2}W^0, \frac{-2 - 2}{2}W^{-1}, \frac{-2 - 2}{2}W^{-2},
+\frac{-1 - 1}{2}W^{-3}]$\\
+\verb!     !$=[-1, -2(\frac{1}{\sqrt{2}} - \frac{1}{\sqrt{2}}i),
+-2(-i), -1(-\frac{1}{\sqrt{2}} - \frac{1}{\sqrt{2}}i)]$\\
+\verb!     !$=[-1, -\sqrt2 +i \sqrt2, 2i, \frac{1}{2}\sqrt2
+             + \frac{1}{2}i\sqrt2]$\\
+
+\end{list}
+
+\end{list}
+\end{document}

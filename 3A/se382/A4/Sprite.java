@@ -88,7 +88,6 @@ public abstract class Sprite {
       for(Sprite s : scaleBuddies) {
         s.scale(scale.getX(), new_sy);
       }
-      System.out.println("Scaled");
     }
     
     /**
@@ -145,7 +144,6 @@ public abstract class Sprite {
               double theta = startRotation + angleBetween(oldPoint, newPoint);
               while(theta > Math.PI) {theta -= 2*Math.PI;}
               while(theta < -1*Math.PI) {theta += 2*Math.PI;}
-              System.out.println("Theta: " + theta);
               if (theta < minTheta) theta = minTheta;
               if (theta > maxTheta) theta = maxTheta;
               rotate(theta);

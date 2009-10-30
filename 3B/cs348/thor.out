@@ -1,0 +1,100 @@
+
+PNUM        PNAME                DEPT                          
+----------- -------------------- ------------------------------
+          2 Ilyas, Ihab          Computer Science              
+
+  1 record(s) selected.
+
+
+
+PROFCOUNT  
+-----------
+          1
+
+  1 record(s) selected.
+
+
+
+CNUM  CNAME                                    GRADE      
+----- ---------------------------------------- -----------
+CS348 Introduction to Databases                         87
+
+  1 record(s) selected.
+
+
+
+SNUM        SNAME                YEAR       
+----------- -------------------- -----------
+          5 Flath, Nathan                  2
+          6 Philosophy Guy                 3
+          7 No Courses Guy                 3
+       1337 Good Grades Gerald             5
+
+  4 record(s) selected.
+
+
+
+PNUM        PNAME                DEPT                          
+----------- -------------------- ------------------------------
+          6 Terry, Mike          Computer Science              
+          1 Weddell, Grant       Computer Science              
+          3 Smith, Larry         Philosophy                    
+          5 Statistics Guy       Statistics                    
+
+  4 record(s) selected.
+
+
+
+CNUM  TERM  SECTION     PNUM        PNAME               
+----- ----- ----------- ----------- --------------------
+CS348 W2007           1           1 Weddell, Grant      
+CS489 W2007           1           6 Terry, Mike         
+PH100 W2007           1           3 Smith, Larry        
+STAT1 W2007           1           5 Statistics Guy      
+CS348 W2007           2           1 Weddell, Grant      
+CS489 W2007           2           6 Terry, Mike         
+STAT1 W2007           2           5 Statistics Guy      
+
+  7 record(s) selected.
+
+
+
+CNUM  TE         
+----- -----------
+CS343           3
+CS466           3
+CS489           2
+PH123           0
+
+  4 record(s) selected.
+
+
+
+PNUM        PNAME                CNUM  TERM  SECTION     SECOND_YEAR_STUDENTS
+----------- -------------------- ----- ----- ----------- --------------------
+          4 CS Guy               CS343 W2009           4                    2
+          4 CS Guy               CS466 W2009           1                    1
+          2 Ilyas, Ihab          CS348 W2007           3                    0
+          3 Smith, Larry         CS466 W2009           2                    0
+          1 Weddell, Grant       PH100 W2009           1                    1
+
+  5 record(s) selected.
+
+
+
+PNUM        PNAME                CNUM  CNAME                                    TERM  SECTION     MIN_MARK    MAX_MARK   
+----------- -------------------- ----- ---------------------------------------- ----- ----------- ----------- -----------
+          5 Statistics Guy       STAT1 Introduction to Statistics               W2007           1          60          99
+          5 Statistics Guy       STAT1 Introduction to Statistics               W2007           2          90          90
+
+  2 record(s) selected.
+
+
+
+PERCENTAGE                       
+---------------------------------
+             66.66666666666666666
+
+  1 record(s) selected.
+
+

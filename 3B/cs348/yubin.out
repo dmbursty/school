@@ -1,0 +1,114 @@
+
+PNUM        PNAME                DEPT                          
+----------- -------------------- ------------------------------
+          3 Poupart, Pascal      Computer Science              
+          4 Harris, Randy        English                       
+          9 Toman, David         Computer Science              
+
+  3 record(s) selected.
+
+
+
+1          
+-----------
+          2
+
+  1 record(s) selected.
+
+
+
+CNUM     CNAME                                    GRADE      
+-------- ---------------------------------------- -----------
+CS348    Introduction to Databases                         92
+PHIL101  Intro to Phil                                     89
+SE126    Electromag                                        93
+
+  3 record(s) selected.
+
+
+
+SNUM        SNAME                YEAR       
+----------- -------------------- -----------
+          2 Brown, Joe                     1
+          6 Huges, Will                    2
+         12 Willow, John                   2
+       1224 Test, John                     4
+         10 Willow, John                   4
+
+  5 record(s) selected.
+
+
+
+PNUM        PNAME                DEPT                          
+----------- -------------------- ------------------------------
+          2 Ilyas, Ihab          Computer Science              
+          9 Toman, David         Computer Science              
+          1 Weddell, Grant       Computer Science              
+          5 Salama, Magdy        Electrical Engineering        
+          6 Plato                Philosophy                    
+
+  5 record(s) selected.
+
+
+
+CNUM     TERM  SECTION     PNUM        PNAME               
+-------- ----- ----------- ----------- --------------------
+PHIL101  F2007           1           6 Plato               
+SE126    F2007           1           5 Salama, Magdy       
+STAT101  F2007           1           7 Balka, Peter        
+STAT201  F2007           1           7 Balka, Peter        
+CS348    W2007           1           1 Weddell, Grant      
+SE126    F2007           2           5 Salama, Magdy       
+STAT101  F2007           2           7 Balka, Peter        
+CS348    W2007           2           1 Weddell, Grant      
+SE126    F2007           3           5 Salama, Magdy       
+STAT101  F2007           3           8 Norris, Chuck       
+CS348    W2007           3           2 Ilyas, Ihab         
+
+  11 record(s) selected.
+
+
+
+CNUM     NUMS       
+-------- -----------
+PHIL201            0
+PHIL101            1
+CS486              4
+
+  3 record(s) selected.
+
+
+
+PNAME                PNUM        CNUM     TERM  SECTION     6          
+-------------------- ----------- -------- ----- ----------- -----------
+Balka, Peter                   7 STAT101  F2010           1           1
+Harris, Randy                  4 ENGL306  W2010           1           3
+Norris, Chuck                  8 STAT101  F2010           2           0
+Norris, Chuck                  8 STAT101  F2010           3           0
+Norris, Chuck                  8 STAT201  F2010           1           2
+Poupart, Pascal                3 CS486    S2009           1           0
+Poupart, Pascal                3 CS486    S2009           2           1
+Toman, David                   9 CS348    W2010           1           1
+
+  8 record(s) selected.
+
+
+
+PNUM        PNAME                CNUM     CNAME                                    TERM  SECTION     MAXGRADE    MINGRADE   
+----------- -------------------- -------- ---------------------------------------- ----- ----------- ----------- -----------
+          7 Balka, Peter         STAT101  Intro to Stats                           F2007           1          99          31
+          7 Balka, Peter         STAT101  Intro to Stats                           F2007           2          97          22
+          8 Norris, Chuck        STAT101  Intro to Stats                           F2007           3          90          90
+          7 Balka, Peter         STAT201  Distributions and Laws                   F2007           1         100          88
+
+  4 record(s) selected.
+
+
+
+1                                
+---------------------------------
+             60.00000000000000000
+
+  1 record(s) selected.
+
+

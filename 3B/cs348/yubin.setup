@@ -1,0 +1,218 @@
+-- Example commands for (re) creating the STUDENT-COURSE database
+-- NOTE: insert commands should be modified to create appropriate
+-- test data
+
+connect to cs348
+
+drop table course
+create table course ( \
+    cnum        varchar(8) not null, \
+    cname       varchar(40) not null, \
+    primary key (cnum) )
+
+insert into course values ('CS348', 'Introduction to Databases')
+insert into course values ('CS486', 'AI')
+insert into course values ('ENGL306', 'Linguistics')
+insert into course values ('SE126', 'Electromag')
+insert into course values ('PHIL101', 'Intro to Phil')
+insert into course values ('PHIL201', 'Not Intro to Phil')
+insert into course values ('STAT101', 'Intro to Stats')
+insert into course values ('STAT201', 'Distributions and Laws')
+
+drop table professor
+create table professor ( \
+    pnum        integer not null, \
+    pname       varchar(20) not null, \
+    office      varchar(10) not null, \
+    dept        varchar(30) not null, \
+    primary key (pnum) )
+
+insert into professor values (1, 'Weddell, Grant', 'DC3346', 'Computer Science')
+insert into professor values (2, 'Ilyas, Ihab', 'DC3348', 'Computer Science')
+insert into professor values (3, 'Poupart, Pascal', 'DC1234', 'Computer Science')
+insert into professor values (4, 'Harris, Randy', 'HH247', 'English')
+insert into professor values (5, 'Salama, Magdy', 'E2125', 'Electrical Engineering')
+insert into professor values (6, 'Plato', 'HH147', 'Philosophy')
+insert into professor values (7, 'Balka, Peter', 'MC1010', 'Statistics')
+insert into professor values (8, 'Norris, Chuck', 'MC2010', 'Statistics')
+insert into professor values (9, 'Toman, David', 'DC3848', 'Computer Science')
+
+drop table student
+create table student ( \
+    snum        integer not null, \
+    sname       varchar(20) not null, \
+    year        integer not null, \
+    primary key (snum) )
+
+insert into student values (1, 'Oak, Fred', 4)
+insert into student values (2, 'Brown, Joe', 1)
+insert into student values (3, 'Kim, Yubin', 3)
+insert into student values (4, 'Burstyn, Max', 3)
+insert into student values (5, 'Flath, Nathan', 3)
+insert into student values (6, 'Huges, Will', 2)
+insert into student values (7, 'Bain, Jeff', 2)
+insert into student values (8, 'Blue, Ben', 2)
+insert into student values (9, 'Red, Peter', 1)
+insert into student values (10, 'Willow, John', 4)
+insert into student values (11, 'Willow, John', 4)
+insert into student values (12, 'Willow, John', 2)
+insert into student values (1224, 'Test, John', 4)
+
+drop table class
+create table class ( \
+    cnum        varchar(8) not null, \
+    term        varchar(5) not null, \
+    section     integer not null, \
+    pnum        integer not null, \
+    primary key (cnum, term, section), \
+    foreign key (cnum) references course (cnum), \
+    foreign key (pnum) references professor (pnum) )
+
+insert into class values ('CS348', 'W2007', 1, 1)
+insert into class values ('CS348', 'W2007', 2, 1)
+insert into class values ('CS348', 'W2007', 3, 2)
+insert into class values ('CS348', 'W2010', 1, 9)
+insert into class values ('CS486', 'S2009', 1, 3)
+insert into class values ('CS486', 'S2009', 2, 3)
+insert into class values ('ENGL306', 'W2010', 1, 4)
+insert into class values ('SE126', 'F2007', 1, 5)
+insert into class values ('SE126', 'F2007', 2, 5)
+insert into class values ('SE126', 'F2007', 3, 5)
+insert into class values ('PHIL101', 'F2007', 1, 6)
+insert into class values ('STAT101', 'F2007', 1, 7)
+insert into class values ('STAT101', 'F2007', 2, 7)
+insert into class values ('STAT101', 'F2007', 3, 8)
+insert into class values ('STAT201', 'F2007', 1, 7)
+insert into class values ('STAT101', 'F2010', 1, 7)
+insert into class values ('STAT101', 'F2010', 2, 8)
+insert into class values ('STAT101', 'F2010', 3, 8)
+insert into class values ('STAT201', 'F2010', 1, 8)
+
+drop table enrollment
+create table enrollment ( \
+    snum        integer not null, \
+    cnum        varchar(8) not null, \
+    term        varchar(5) not null, \
+    section     integer not null, \
+    primary key (snum, cnum, term, section), \
+    foreign key (snum) references student (snum), \
+    foreign key (cnum, term, section) references class (cnum, term, section) )
+
+insert into enrollment values (1, 'CS348', 'W2007', 1)
+insert into enrollment values (2, 'CS348', 'W2007', 2)
+insert into enrollment values (3, 'CS348', 'W2007', 3)
+insert into enrollment values (1224, 'CS348', 'W2007', 3)
+insert into enrollment values (8, 'CS348', 'W2010', 1)
+insert into enrollment values (9, 'CS348', 'W2010', 1)
+insert into enrollment values (4, 'CS486', 'S2009', 1)
+insert into enrollment values (5, 'CS486', 'S2009', 2)
+insert into enrollment values (6, 'CS486', 'S2009', 2)
+insert into enrollment values (1224, 'CS486', 'S2009', 2)
+insert into enrollment values (1, 'ENGL306', 'W2010', 1)
+insert into enrollment values (7, 'ENGL306', 'W2010', 1)
+insert into enrollment values (8, 'ENGL306', 'W2010', 1)
+insert into enrollment values (12, 'ENGL306', 'W2010', 1)
+insert into enrollment values (1224, 'ENGL306', 'W2010', 1)
+insert into enrollment values (8, 'SE126', 'F2007', 1)
+insert into enrollment values (9, 'SE126', 'F2007', 1)
+insert into enrollment values (1, 'SE126', 'F2007', 1)
+insert into enrollment values (10, 'SE126', 'F2007', 2)
+insert into enrollment values (11, 'SE126', 'F2007', 3)
+insert into enrollment values (1224, 'SE126', 'F2007', 3)
+insert into enrollment values (1224, 'PHIL101', 'F2007', 1)
+insert into enrollment values (1, 'STAT101', 'F2007', 1)
+insert into enrollment values (2, 'STAT101', 'F2007', 1)
+insert into enrollment values (3, 'STAT101', 'F2007', 1)
+insert into enrollment values (4, 'STAT101', 'F2007', 2)
+insert into enrollment values (5, 'STAT101', 'F2007', 2)
+insert into enrollment values (6, 'STAT101', 'F2007', 2)
+insert into enrollment values (7, 'STAT101', 'F2007', 3)
+insert into enrollment values (8, 'STAT201', 'F2007', 1)
+insert into enrollment values (9, 'STAT201', 'F2007', 1)
+insert into enrollment values (10, 'STAT101', 'F2010', 1)
+insert into enrollment values (11, 'STAT101', 'F2010', 1)
+insert into enrollment values (12, 'STAT101', 'F2010', 1)
+insert into enrollment values (1, 'STAT101', 'F2010', 2)
+insert into enrollment values (2, 'STAT101', 'F2010', 2)
+insert into enrollment values (3, 'STAT101', 'F2010', 3)
+insert into enrollment values (4, 'STAT101', 'F2010', 3)
+insert into enrollment values (5, 'STAT201', 'F2010', 1)
+insert into enrollment values (6, 'STAT201', 'F2010', 1)
+insert into enrollment values (7, 'STAT201', 'F2010', 1)
+
+drop table mark
+create table mark ( \
+    snum        integer not null, \
+    cnum        varchar(8) not null, \
+    term        varchar(5) not null, \
+    section     integer not null, \
+    grade       integer not null, \
+    primary key (snum, cnum, term, section), \
+    foreign key (snum, cnum, term, section) \
+    references enrollment (snum, cnum, term, section) )
+
+insert into mark values (1, 'CS348', 'W2007', 1, 77)
+insert into mark values (1, 'SE126', 'F2007', 1, 89)
+insert into mark values (2, 'CS348', 'W2007', 2, 97)
+insert into mark values (3, 'CS348', 'W2007', 3, 50)
+insert into mark values (8, 'SE126', 'F2007', 1, 90)
+insert into mark values (9, 'SE126', 'F2007', 1, 77)
+insert into mark values (10, 'SE126', 'F2007', 2, 100)
+insert into mark values (11, 'SE126', 'F2007', 3, 61)
+insert into mark values (1224, 'CS348', 'W2007', 3, 92)
+insert into mark values (1224, 'SE126', 'F2007', 3, 93)
+insert into mark values (1224, 'PHIL101', 'F2007', 1, 89)
+insert into mark values (1, 'STAT101', 'F2007', 1, 31)
+insert into mark values (2, 'STAT101', 'F2007', 1, 99)
+insert into mark values (3, 'STAT101', 'F2007', 1, 80)
+insert into mark values (4, 'STAT101', 'F2007', 2, 33)
+insert into mark values (5, 'STAT101', 'F2007', 2, 22)
+insert into mark values (6, 'STAT101', 'F2007', 2, 97)
+insert into mark values (7, 'STAT101', 'F2007', 3, 90)
+insert into mark values (8, 'STAT201', 'F2007', 1, 88)
+insert into mark values (9, 'STAT201', 'F2007', 1, 100)
+
+drop table schedule
+create table schedule ( \
+    cnum        varchar(8) not null, \
+    term        varchar(5) not null, \
+    section     integer not null, \
+    day         varchar(10) not null, \
+    time        varchar(5) not null, \
+    room        varchar(10) not null, \
+    primary key (cnum, term, section, day, time), \
+    foreign key (cnum, term, section) \
+    references class (cnum, term, section) )
+
+insert into schedule values ('CS348', 'W2007', 1, 'Tuesday', '10:00', 'MC4042')
+insert into schedule values ('CS348', 'W2007', 1, 'Thursday', '10:00', 'MC4042')
+insert into schedule values ('CS348', 'W2007', 2, 'Tuesday', '14:30', 'MC4042')
+insert into schedule values ('CS348', 'W2007', 2, 'Thursday', '14:30', 'MC4042')
+insert into schedule values ('CS348', 'W2007', 3, 'Tuesday', '11:30', 'MC4020')
+insert into schedule values ('CS348', 'W2007', 3, 'Thursday', '11:30', 'MC4020')
+insert into schedule values ('CS348', 'W2010', 1, 'Tuesday', '11:30', 'MC4020')
+insert into schedule values ('CS348', 'W2010', 1, 'Thursday', '11:30', 'MC4020')
+insert into schedule values ('CS486', 'S2009', 1, 'Tuesday', '1:00', 'DC2020')
+insert into schedule values ('CS486', 'S2009', 1, 'Wednesday', '1:00', 'DC2020')
+insert into schedule values ('CS486', 'S2009', 1, 'Friday', '12:00', 'DC2021')
+insert into schedule values ('CS486', 'S2009', 2, 'Tuesday', '3:00', 'MC2020')
+insert into schedule values ('CS486', 'S2009', 2, 'Wednesday', '3:00', 'MC2020')
+insert into schedule values ('CS486', 'S2009', 2, 'Friday', '1:00', 'MC2021')
+insert into schedule values ('ENGL306', 'W2010', 1, 'Tuesday', '3:00', 'HH126')
+insert into schedule values ('ENGL306', 'W2010', 1, 'Friday', '3:00', 'HH126')
+insert into schedule values ('SE126', 'F2007', 1, 'Tuesday', '2:00', 'E2111')
+insert into schedule values ('SE126', 'F2007', 1, 'Wednesday', '2:00', 'E2111')
+insert into schedule values ('SE126', 'F2007', 1, 'Tuesday', '4:00', 'E2111')
+insert into schedule values ('SE126', 'F2007', 1, 'Wednesday', '4:00', 'E2111')
+insert into schedule values ('PHIL101', 'F2007', 1, 'Tuesday', '3:00', 'HH129')
+insert into schedule values ('STAT101', 'F2007', 1, 'Monday', '1:00', 'ANY')
+insert into schedule values ('STAT101', 'F2007', 2, 'Monday', '1:00', 'ANY')
+insert into schedule values ('STAT101', 'F2007', 3, 'Friday', '1:00', 'ANY')
+insert into schedule values ('STAT201', 'F2007', 1, 'Friday', '1:00', 'ANY')
+insert into schedule values ('STAT101', 'F2010', 1, 'Friday', '1:00', 'ANY')
+insert into schedule values ('STAT101', 'F2010', 2, 'Monday', '1:00', 'ANY')
+insert into schedule values ('STAT101', 'F2010', 3, 'Monday', '1:00', 'ANY')
+insert into schedule values ('STAT201', 'F2010', 1, 'Monday', '1:00', 'ANY')
+
+commit work
+

@@ -1,0 +1,24 @@
+grid 20 20
+vertical capacity 1
+horizontal capacity 1
+num net 1
+num obstacles 15
+net000000 0 2 3
+  19 13
+  17 4
+  8 2
+obstacle000000 6 16 7 18
+obstacle000001 13 17 15 17
+obstacle000002 4 4 5 4
+obstacle000003 9 10 9 12
+obstacle000004 17 14 18 16
+obstacle000005 5 19 6 19
+obstacle000006 14 18 16 18
+obstacle000007 10 9 11 11
+obstacle000008 14 4 14 5
+obstacle000009 16 7 18 7
+obstacle000010 12 6 13 6
+obstacle000011 19 4 19 6
+obstacle000012 17 16 19 16
+obstacle000013 1 2 2 4
+obstacle000014 11 4 13 4

@@ -1,0 +1,75 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Equinox Search Results</title>
+    <script type="text/javascript">
+      function getUrlVars()
+      {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+      for(var i = 0; i < hashes.length; i++)
+                         {
+                         hash = hashes[i].split('=');
+                         vars.push(hash[0]);
+                         vars[hash[0]] = hash[1];
+                         }
+
+                         return vars;
+                         }
+                         </script>
+  </head>
+  <form name="queryform" action="resultbad.html" method="GET">
+    <table align="center">
+      <tr>
+        <td>
+          Search
+          <script type="text/javascript">
+            document.write("<input type=\"text\" name=\"query\" size=\"50\" value=" );
+            document.write( getUrlVars()['query'] );
+            document.write( ">");
+          </script>
+          in
+          <SELECT NAME="gourl">
+            <OPTION VALUE="All">All
+            <OPTION VALUE="Technology">Technology
+            <OPTION VALUE="Pop Culture">Pop Coluture
+            <OPTION VALUE="Economics">Economics
+            <OPTION VALUE="Politics">Politics
+          </SELECT>
+        </td>
+      </tr>
+      <tr>
+        <td><center><input type="submit" value="Search" /></center></td>
+      </tr>
+    </table>
+    <hr>
+    <table border=0 align="center" >
+      <tr>
+        <td valign="top">
+          <a href="http://g1-sucks.com/the-g1-sucks/">The G1 Sucks</a><br>
+          Yes, the G1 sucks! We all know it, it's just that most of us don't want to have to admit it. <br>
+          <a href="http://g1-sucks.com">http://g1-sucks.com</a><br>
+          <font color="red">Sentiment: Bad</font><br />
+          Keywords: Technology  &nbsp &nbsp &nbsp &nbsp &nbsp
+	  <script type="text/javascript">
+              document.write("<a href=\"resultbad.html?query=");
+              document.write( getUrlVars()['query'] );
+              document.write("\">");
+            </script>
+          Similar</a> <br /><br />
+          <a href="http://g1-sucks.com/the-g1-sucks/">The G1 Sucks, Here is Why</a><br>
+          T-Mobile launched their new G1 Device, the first with Google Android's Operating System and the Android Market application store.  T-Mobile is supplying a lot of marketing aruond this device, but we've found it falls short of the hype when you consider the following limitations:<br>
+          <a href="http://g1-sucks.com">http://g1-sucks.com</a><br>
+          <font color="red">Sentiment: Bad</font><br />
+          Keywords: Technology &nbsp &nbsp &nbsp &nbsp &nbsp
+	  <script type="text/javascript">
+              document.write("<a href=\"resultbad.html?query=");
+              document.write( getUrlVars()['query'] );
+              document.write("\">");
+            </script>
+          Similar</a>
+        </td>
+      </tr>
+    </table>
+
+</html>

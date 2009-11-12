@@ -1,0 +1,88 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Equinox Search Results</title>
+    <script type="text/javascript">
+      function getUrlVars()
+      {
+      var vars = [], hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+      for(var i = 0; i < hashes.length; i++)
+      {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+      }
+
+      return vars;
+      }
+    </script>
+  </head>
+  <form name="queryform" action="resultgood.html" method="GET">
+  <table align="center">
+    <tr>
+      <td>
+        Search
+        <script type="text/javascript">
+          document.write("<input type=\"text\" name=\"query\" size=\"50\" value=" );
+          document.write( getUrlVars()['query'] );
+          document.write( ">");
+        </script>
+        in
+        <SELECT NAME="gourl">
+          <OPTION VALUE="All">All
+          <OPTION VALUE="Technology">Technology
+          <OPTION VALUE="Pop Culture">Pop Coluture
+          <OPTION VALUE="Economics">Economics
+          <OPTION VALUE="Politics">Politics
+        </SELECT>
+      </td>
+    </tr>
+    <tr>
+      <td><center><input type="submit" value="Search" /></center></td>
+    </tr>
+  </table>
+  <hr>
+  <table border=0 align="center" >
+    <tr>
+      <td width="100%">
+        <a href="http://profy.com/2008/10/25/g1-phone-not-best-phone-ever-but-it-is-right-now-or-not/">G1 Phone May Not Be the Best Phone Ever But It Is Right Now</a><br>
+        I've had the G1 for 3 days now and without a doubt this is the best phone I've ever laid hands on, with every passing moment I learn new things and see new app's, and now that I've learned everything (well almost everything) I'm very VERY happy with the purchase and will no longer purchase any other phone.<br>
+        <a href="http://profy.com">http://profy.com</a><br>
+        <font color="green">Sentiment: Good</font><br />
+        Keywords: Technology  &nbsp &nbsp &nbsp &nbsp &nbsp
+	  <script type="text/javascript">
+              document.write("<a href=\"resultgood.html?query=");
+              document.write( getUrlVars()['query'] );
+              document.write("\">");
+            </script>
+          Similar</a><br /><br />
+
+      <a href="http://blog.usweb.com/archives/android-g1-google-review/">Google Android G1 Phone is Pretty Awesome</a><br>
+        Thus far, I absolutely love this phone. The best part is the way it feels when the screen is slid out and the keyboard is revealed.<br />
+        <a href="http://blog.uwweb.com">http://blog.usweb.com</a><br>
+        <font color="green">Sentiment: Good</font><br />
+        Keywords: Technology  &nbsp &nbsp &nbsp &nbsp &nbsp
+	  <script type="text/javascript">
+              document.write("<a href=\"resultgood.html?query=");
+              document.write( getUrlVars()['query'] );
+              document.write("\">");
+            </script>
+          Similar</a><br /><br />
+
+      <a href="http://realworldmom.com/2009/09/02/not-so-wordless-wednesday-my-awesome-g1/">Not So Wordless Wednsday: My Awesome G1</a><br />
+        A few weeks ago, I got a G1.  It is awesome!  Tim got one first, and, after playing with his (his G1!), I wanted one so badly I could taste it!<br />
+        <a href="http://realworldmom.com">http://realworldmom.com</a><br>
+        <font color="green">Sentiment: Good</font><br />
+        Keywords: Technology  &nbsp &nbsp &nbsp &nbsp &nbsp
+	  <script type="text/javascript">
+              document.write("<a href=\"resultgood.html?query=");
+              document.write( getUrlVars()['query'] );
+              document.write("\">");
+            </script>
+          Similar</a>
+      </td>
+    </tr>
+  </table>
+
+</html>

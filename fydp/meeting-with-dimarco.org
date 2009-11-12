@@ -1,0 +1,19 @@
+* Anything they do must be something they are already doing
+* Our requirements
+** Business case - clients, demo
+* Scotland - corpora of annotated arguments analyzed with Jacob's code
+** Nancy Green - Using it on biomedical texts
+* Dont want to give us code :(
+* Spam Filter
+** Gordon Cormack
+* Analyzing the Screaming Blogosphere
+** Work with Hannei, Charlie's student
+** Industrial Project Preperation of Data
+*** IP issues
+** Others
+* Randy harris interest
+** Emotion is largely neglected in reasoning processes
+** and argumentation, would like to be able to correlate with traditional tools
+** This kind of info is not being extracted, very har
+* IP issues
+** Corpora - just pull things off the web

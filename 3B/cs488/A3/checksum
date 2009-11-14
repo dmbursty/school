@@ -1,0 +1,133 @@
+sum is: /usr/bin/sum
+
+
+2009-10-27 22:16 Checksum for A3 for dmbursty on gl04.student.cs  Page 1
+
+
+A3:
+total 928
+22933181 drwxrwx--- 8 dmbursty cs488       4096 2009-10-27 22:16 ../
+ 3547909 drwxrwx--- 2 dmbursty cs488       4096 2009-10-27 22:15 data/
+16195378 drwxrwx--- 4 dmbursty cs488       4096 2009-10-27 21:52 ./
+24455236 -rw-r--r-- 1 dmbursty dmburstyn   4783 2009-10-27 21:52 checksum
+25138833 -rw-r-x--- 1 dmbursty dmburstyn    419 2009-10-27 21:51 README*
+25138831 -rw-r-x--- 1 dmbursty dmburstyn   4718 2009-10-27 21:42 puppet.lua*
+16195379 drwxrwx--- 2 dmbursty cs488       8192 2009-10-27 21:40 src/
+25138830 -rwxr-xr-x 1 dmbursty dmburstyn 903375 2009-10-27 21:37 puppeteer*
+
+A3/data:
+total 36
+ 3547909 drwxrwx--- 2 dmbursty cs488      4096 2009-10-27 22:15 ./
+ 3547913 -rw-r--r-- 1 dmbursty dmburstyn 24481 2009-10-27 22:15 manual.pdf
+ 3547915 -rw-r----- 1 dmbursty dmburstyn  1530 2009-10-27 22:15 manual.tex
+16195378 drwxrwx--- 4 dmbursty cs488      4096 2009-10-27 21:52 ../
+
+A3/src:
+total 176
+16195378 drwxrwx--- 4 dmbursty cs488      4096 2009-10-27 21:52 ../
+16195379 drwxrwx--- 2 dmbursty cs488      8192 2009-10-27 21:40 ./
+ 6929571 -rw-r-x--- 1 dmbursty dmburstyn  4718 2009-10-27 21:13 puppet.lua*
+16195383 -rw-r-x--- 1 dmbursty cs488     11153 2009-10-27 21:12 viewer.cpp*
+25482167 -rw-r-x--- 1 dmbursty cs488      5222 2009-10-27 21:03 scene.cpp*
+20801903 -rw-r--r-- 1 dmbursty dmburstyn  1569 2009-10-27 17:39 joints.lua
+20801892 -rw-r--r-- 1 dmbursty dmburstyn 12288 2009-10-27 17:13 .TODO.swp
+20801887 -rw-r--r-- 1 dmbursty dmburstyn 12288 2009-10-27 17:12 .undo.hpp.swp
+20801888 -rw-r--r-- 1 dmbursty dmburstyn  1023 2009-10-27 17:12 undo.hpp
+25482158 -rw-r-x--- 1 dmbursty cs488       393 2009-10-27 17:10 primitive.hpp*
+16195387 -rw-r-x--- 1 dmbursty cs488       354 2009-10-27 17:09 primitive.cpp*
+16195388 -rw-r-x--- 1 dmbursty cs488      3100 2009-10-27 16:56 viewer.hpp*
+25482156 -rw-r-x--- 1 dmbursty cs488      3194 2009-10-27 16:35 appwindow.cpp*
+25482161 -rw-r-x--- 1 dmbursty cs488       647 2009-10-27 16:32 appwindow.hpp*
+27914414 -rw-r--r-- 1 dmbursty dmburstyn  2035 2009-10-27 02:58 undo.cpp
+16195384 -rw-r-x--- 1 dmbursty cs488      2696 2009-10-27 02:50 scene.hpp*
+24590758 -rw-r--r-- 1 dmbursty dmburstyn  5835 2009-10-26 22:45 trackball.cpp
+ 5291389 -rw-r--r-- 1 dmbursty dmburstyn   396 2009-10-26 22:41 trackball.hpp
+16195381 -rw-r-x--- 1 dmbursty cs488       554 2009-10-25 21:43 material.cpp*
+16195385 -rw-r-x--- 1 dmbursty cs488      9527 2009-10-25 20:23 algebra.hpp*
+25482163 -rw-r-x--- 1 dmbursty cs488       644 2009-10-25 19:34 main.cpp*
+25482166 -rw-r-x--- 1 dmbursty cs488      3308 2009-09-28 20:24 algebra.cpp*
+25482165 -rw-r-x--- 1 dmbursty cs488       703 2009-09-28 20:24 Makefile*
+25482164 -rw-r-x--- 1 dmbursty cs488       170 2009-09-28 20:24 lua488.hpp*
+25482162 -rw-r-x--- 1 dmbursty cs488      5680 2009-09-28 20:24 a3mark.png*
+25482157 -rw-r-x--- 1 dmbursty cs488      1032 2009-09-28 20:24 a3mark.lua*
+16195386 -rw-r-x--- 1 dmbursty cs488       457 2009-09-28 20:24 material.hpp*
+16195382 -rw-r-x--- 1 dmbursty cs488       145 2009-09-28 20:24 scene_lua.hpp*
+16195380 -rw-r-x--- 1 dmbursty cs488     11679 2009-09-28 20:24 scene_lua.cpp*
+
+A3                                      
+A3/checksum                             59833     5
+A3/data                                 
+A3/data/manual.pdf                      02996    24
+A3/data/manual.tex                      41284     2
+A3/puppeteer                            11116   883
+
+
+
+
+
+
+
+2009-10-27 22:16 Checksum for A3 for dmbursty on gl04.student.cs  Page 2
+
+
+A3/puppet.lua                           18432     5
+A3/README                               39513     1
+A3/src                                  
+A3/src/a3mark.lua                       25163     2
+A3/src/a3mark.png                       02377     6
+A3/src/algebra.cpp                      00294     4
+A3/src/algebra.hpp                      24783    10
+A3/src/appwindow.cpp                    39039     4
+A3/src/appwindow.hpp                    08219     1
+A3/src/joints.lua                       04663     2
+A3/src/lua488.hpp                       04702     1
+A3/src/main.cpp                         10493     1
+A3/src/Makefile                         15129     1
+A3/src/material.cpp                     25643     1
+A3/src/material.hpp                     19923     1
+A3/src/primitive.cpp                    47289     1
+A3/src/primitive.hpp                    62304     1
+A3/src/puppet.lua                       18432     5
+A3/src/scene.cpp                        15970     6
+A3/src/scene.hpp                        16041     3
+A3/src/scene_lua.cpp                    55304    12
+A3/src/scene_lua.hpp                    34090     1
+A3/src/.TODO.swp                        11150    12
+A3/src/trackball.cpp                    59421     6
+A3/src/trackball.hpp                    47611     1
+A3/src/undo.cpp                         38518     2
+A3/src/undo.hpp                         16795     1
+A3/src/.undo.hpp.swp                    51022    12
+A3/src/viewer.cpp                       47659    11
+A3/src/viewer.hpp                       60887     4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

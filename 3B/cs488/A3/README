@@ -1,0 +1,25 @@
+Name: 
+Student Number: 
+User-id: 
+Assignment: 
+
+The final executable was compiled on this machine: 
+gl04.student.cs
+
+How to invoke my program: 
+Build and run:
+make
+./puppeteer [model file]
+
+Run:
+./puppeteer [model file]
+
+How to use my extra features: 
+N/A
+
+I have created the following data files, which are in the data directory:
+N/A
+
+My program assumes the following: 
+The user has a keyboard and three button mouse
+

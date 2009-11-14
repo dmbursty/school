@@ -1,0 +1,106 @@
+\documentclass {article}
+\usepackage{fullpage}
+
+\title{CS488 Initial Project Proposal}
+\author{Daniel Burstyn (20206120)}
+\date{Nov 10, 2009}
+
+\begin{document}
+\maketitle
+\newpage
+
+\noindent{\Large \bf Final Project:}
+\begin{description}
+\item[Purpose]:\\
+	To implement a number of advanced ray tracer features and model an
+        attractive scene.
+
+\item[Statement]:\\
+        The scene I plan to render is that of the top of a marble bathroom sink.
+        On the sink there will be a clear glass containing a thoothbrush, and
+        sink stopper.  The faucet will be running, and the sink will be full of
+        water.  The wall behind the sink will have a simple tile texture, and a
+        mirror.
+
+        The sink stopper is a cut off cone that will require a cone primitive
+        and CSG to make.  A torus will also be used as the metal loop at the top
+        of the stopper.  The glass and toothbrush will require refraction.
+
+        The water in the sink will be rippled and require bump mapping.  The
+        sink and faucet will be constructed with CSG.  The mirror and sink will
+        both be reflective, and texture mapping will be used for the tiles, and
+        running water.
+
+\item[Technical Outline]:\\
+        The additional primitives are very straight forward and will require
+        additional intersection computations.
+
+        Texture mapping will be done simply by mapping the pixel on the screen
+        to a pixel on the polygon, and then onto the texture map to determine
+        the right colour of the pixel.
+
+        Bump mapping is done by perturbing the normals of a polygon according to
+        a map.  These changed normals will affect the lighting calculations and
+        cause the desired effect.
+
+        For CSG, we must store both member primitives under a boolean operation
+        in our hierarchy.  Intersection for the combined object can be done by
+        doing ray intersect for both primitives, and performing the appropriate
+        boolean operations on the resulting line segments.
+
+        Glossy reflections are a simple extension to mirror reflections.
+        Instead of casting a secondary ray in the mirror direction, we first
+        perturb the ray slightly at random to get a glossy effect.
+
+        Refraction can be done by changing the direction of the cast ray through
+        a clear object.  The direction change can be computed using snell's law.
+
+        To get soft shadows, when we cast our shadow rays to the lights we can
+        cast many rays to random points on an area light.  Averaging these
+        results will produce soft shadows.
+
+        To get a marble texture for the sink, we can use a procedural generation
+        of the 3D texture.  Functions exist to generate marble texture with
+        perlin noise.
+
+        Bounding boxes can be used to decrease the number of intersection
+        calculations that need to be performed.  When we cast a ray, we check
+        whether it intersects any bounding boxes intead of every polygon in the
+        scene.  This is much cheaper improves render speed.
+
+\item[Bibliography]:\\
+        1. Most information will come directly from the relevant chapters of the
+        provided course notes.\\
+        2. http://en.wikipedia.org/wiki/Procedural\_texture\\
+        3. people.scs.carleton.ca/~mould/courses/3501/procedural.pptx\\
+
+\end{description}
+\newpage
+
+
+\noindent{\Large\bf Objectives:}
+
+{\hfill{\bf Full UserID:\rule{2in}{.1mm}}\hfill{\bf Student ID:\rule{2in}{.1mm}}\hfill}
+
+\begin{description}
+     \item[\_\_\_]  Additional primitives cylinder, cone, and torus are added.
+
+     \item[\_\_\_]  Texture mapping is added.
+
+     \item[\_\_\_]  Bump mapping is added.
+
+     \item[\_\_\_]  Constructive solid geometry for primitives is added.
+
+     \item[\_\_\_]  Glossy Reflections are added.
+
+     \item[\_\_\_]  Refraction is added
+
+     \item[\_\_\_]  Soft shadows from area light sources are added.
+
+     \item[\_\_\_]  Procedural solid texture mapping for marble.
+
+     \item[\_\_\_]  Bounding boxes are used for improved efficiency.
+
+     \item[\_\_\_]  A final scene is modelled as described above.
+\end{description}
+\end{document}

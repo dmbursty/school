@@ -5,6 +5,7 @@
 #include <iosfwd>
 #include "primitive.hpp"
 #include "algebra.hpp"
+#include "ray.hpp"
 
 // A polygonal mesh.
 class Mesh : public Primitive {
@@ -13,12 +14,16 @@ public:
        const std::vector< std::vector<int> >& faces);
 
   typedef std::vector<int> Face;
-  
+  virtual Intersection ray_intersect(Ray r);
+  virtual Vector4D getBoundingBox();
+
 private:
   std::vector<Point3D> m_verts;
   std::vector<Face> m_faces;
 
   friend std::ostream& operator<<(std::ostream& out, const Mesh& mesh);
+
+  Primitive* boundingBox;
 };
 
 #endif

@@ -29,3 +29,13 @@ Intersection::Intersection(double x, double y, double z, GeometryNode* node) {
   hit = true;
   this->node = node;
 }
+
+double Intersection::dist_from(Point3D& p) {
+  return (p - pt).length();
+}
+
+void Intersection::transform(const Matrix4x4& trans, const Matrix4x4& inv) {
+  pt = trans * pt;
+  Matrix4x4 inv_trans = inv.transpose();
+  normal = inv_trans * normal;
+}

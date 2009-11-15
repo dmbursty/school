@@ -39,6 +39,8 @@ public:
     m_children.remove(child);
   }
 
+  std::string get_name() { return m_name; }
+
   // Callbacks to be implemented.
   // These will be called from Lua.
   void rotate(char axis, double angle, bool right = true);
@@ -104,6 +106,18 @@ public:
 
 protected:
   Material* m_material;
+  Primitive* m_primitive;
+};
+
+class BoundingNode : public SceneNode {
+public:
+  BoundingNode(const std::string& name,
+               Primitive* primitive);
+  virtual ~BoundingNode();
+
+  virtual Intersection ray_intersect(Ray r);
+
+protected:
   Primitive* m_primitive;
 };
 

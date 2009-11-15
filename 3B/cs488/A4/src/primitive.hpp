@@ -13,11 +13,13 @@ public:
 class Sphere : public Primitive {
 public:
   virtual ~Sphere();
+  virtual Intersection ray_intersect(Ray r);
 };
 
 class Cube : public Primitive {
 public:
   virtual ~Cube();
+  virtual Intersection ray_intersect(Ray r);
 };
 
 class NonhierSphere : public Primitive {
@@ -42,6 +44,7 @@ public:
   }
   
   virtual ~NonhierBox();
+  virtual Intersection ray_intersect(Ray r);
 
 private:
   Point3D m_pos;

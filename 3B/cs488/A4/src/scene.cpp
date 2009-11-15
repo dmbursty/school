@@ -13,12 +13,13 @@ SceneNode::~SceneNode()
 
 Intersection SceneNode::ray_intersect(Ray r) {
   r.transform(get_inverse());
-  int closest = std::numeric_limits<int>::max();
+  double closest = std::numeric_limits<double>::max();
   Intersection ret;
   for (ChildList::iterator it = m_children.begin(); it != m_children.end(); it++) {
     Intersection i = (*it)->ray_intersect(r);
     if (i.hit) {
-      int dist = (i.pt - r.eye).length();
+      i.transform(get_transform(), get_inverse());
+      double dist = (i.pt - r.eye).length();
       if (dist < closest) {
         closest = dist;
         ret = i;
@@ -134,7 +135,21 @@ GeometryNode::~GeometryNode()
 Intersection GeometryNode::ray_intersect(Ray r) {
   r.transform(get_inverse());
   Intersection i = m_primitive->ray_intersect(r);
-  if (i.hit) i.node = this;
+  if (i.hit) {
+    i.node = this;
+    i.transform(get_transform(), get_inverse());
+  }
   return i;
 }
 
+BoundingNode::BoundingNode(const std::string& name, Primitive* primitive)
+  : SceneNode(name),
+    m_primitive(primitive) {}
+
+BoundingNode::~BoundingNode() {}
+
+Intersection BoundingNode::ray_intersect(Ray r) {
+  // MUST HAVE EXACTLY ONE CHILD NODE (GEOMETRY)
+  SceneNode* child = m_children.front();
+  return child->ray_intersect(r);
+}

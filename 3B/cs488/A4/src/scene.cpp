@@ -2,6 +2,8 @@
 #include <iostream>
 #include <limits>
 
+//#define BOUNDS 1
+
 SceneNode::SceneNode(const std::string& name)
   : m_name(name)
 {
@@ -18,10 +20,10 @@ Intersection SceneNode::ray_intersect(Ray r) {
   for (ChildList::iterator it = m_children.begin(); it != m_children.end(); it++) {
     Intersection i = (*it)->ray_intersect(r);
     if (i.hit) {
-      i.transform(get_transform(), get_inverse());
       double dist = (i.pt - r.eye).length();
       if (dist < closest) {
         closest = dist;
+        i.transform(get_transform(), get_inverse());
         ret = i;
       }
     }
@@ -94,6 +96,17 @@ bool SceneNode::is_joint() const
   return false;
 }
 
+BoundingNode* SceneNode::generateBounds() {
+  for (ChildList::iterator it = m_children.begin(); it != m_children.end(); it++) {
+    BoundingNode* bound = (*it)->generateBounds();
+    if (bound != NULL) {
+      it = m_children.erase(it);
+      it = m_children.insert(it, bound);
+    }
+  }
+  return NULL;
+}
+
 JointNode::JointNode(const std::string& name)
   : SceneNode(name)
 {
@@ -142,14 +155,36 @@ Intersection GeometryNode::ray_intersect(Ray r) {
   return i;
 }
 
-BoundingNode::BoundingNode(const std::string& name, Primitive* primitive)
-  : SceneNode(name),
-    m_primitive(primitive) {}
+BoundingNode* GeometryNode::generateBounds() {
+  double* bounds = m_primitive->getBoundingBox();
+  if (bounds != NULL) {
+    Cube* cube = new Cube();
+    GeometryNode* bound = new GeometryNode(*this);
+    bound->set_primitive(cube);
+    bound->translate(Vector3D(bounds[0], bounds[1], bounds[2]));
+    bound->scale(Vector3D(bounds[3] - bounds[0],
+                          bounds[4] - bounds[1],
+                          bounds[5] - bounds[2]));
+    BoundingNode* boundNode = new BoundingNode("bound", bound, this);
+    delete bounds;
+    return boundNode;
+  }
+  return NULL;
+}
+
+BoundingNode::BoundingNode(const std::string& name,
+                           GeometryNode* bound, GeometryNode* obj)
+  : SceneNode(name), m_bound(bound), m_obj(obj) {}
 
 BoundingNode::~BoundingNode() {}
 
 Intersection BoundingNode::ray_intersect(Ray r) {
-  // MUST HAVE EXACTLY ONE CHILD NODE (GEOMETRY)
-  SceneNode* child = m_children.front();
-  return child->ray_intersect(r);
+  Intersection i = m_bound->ray_intersect(r);
+#ifdef BOUNDS
+  return i;
+#endif
+  if (i.hit) {
+    return m_obj->ray_intersect(r);
+  }
+  return i;
 }

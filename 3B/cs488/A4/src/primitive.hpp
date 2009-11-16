@@ -8,6 +8,7 @@ class Primitive {
 public:
   virtual ~Primitive();
   virtual Intersection ray_intersect(Ray r);
+  virtual double* getBoundingBox();
 };
 
 class Sphere : public Primitive {

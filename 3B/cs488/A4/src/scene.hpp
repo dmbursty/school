@@ -7,6 +7,8 @@
 #include "material.hpp"
 #include "ray.hpp"
 
+class BoundingNode;
+
 class SceneNode {
 public:
   SceneNode(const std::string& name);
@@ -49,6 +51,8 @@ public:
 
   // Returns true if and only if this node is a JointNode
   virtual bool is_joint() const;
+
+  virtual BoundingNode* generateBounds();
   
 protected:
   
@@ -92,6 +96,7 @@ public:
   virtual ~GeometryNode();
 
   virtual Intersection ray_intersect(Ray r);
+  virtual BoundingNode* generateBounds();
 
   const Material* get_material() const;
   Material* get_material()
@@ -104,6 +109,11 @@ public:
     m_material = material;
   }
 
+  void set_primitive(Primitive* primitive)
+  {
+    m_primitive = primitive;
+  }
+
 protected:
   Material* m_material;
   Primitive* m_primitive;
@@ -112,13 +122,15 @@ protected:
 class BoundingNode : public SceneNode {
 public:
   BoundingNode(const std::string& name,
-               Primitive* primitive);
+               GeometryNode* bound,
+               GeometryNode* obj);
   virtual ~BoundingNode();
 
   virtual Intersection ray_intersect(Ray r);
 
 protected:
-  Primitive* m_primitive;
+  GeometryNode* m_bound;
+  GeometryNode* m_obj;
 };
 
 #endif

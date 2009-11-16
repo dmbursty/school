@@ -9,8 +9,8 @@
 #define DIFFUSE 1
 #define SPECULAR 1
 #define SHADOWS 1
-#define ANTIALIAS 5
-//#define BOUNDS 1
+#define ANTIALIAS 15
+#define PARALLEL 1
 //#define NORMAL 1
 
 void a4_render(// What to render
@@ -27,6 +27,10 @@ void a4_render(// What to render
                const std::list<Light*>& lights
                )
 {
+
+  // Generate Bounding Volumes
+  root->generateBounds();
+
   // Fill in raytracing code here.
   Image img(width, height, 3);
   // Colour Background
@@ -55,11 +59,19 @@ void a4_render(// What to render
   int numPixels = height * width;
   int processedPixels = 0;
 
+#ifdef PARALLEL
+#pragma omp parallel for
+#endif
   for (int y = -height / 2; y < height / 2; y++) {
     for (int x = -width / 2; x < width / 2; x++) {
       // Print current progress
+#ifdef PARALLEL
+#pragma omp critical
+#endif
+      {
       int percent = 100 * (++processedPixels / (double)numPixels);
       std::cerr << percent << "%\r";
+      }
 
       double r_sum = 0;
       double g_sum = 0;
@@ -67,17 +79,17 @@ void a4_render(// What to render
 
       for (int supersample = 0; supersample < ANTIALIAS; supersample++) {
         // Cast ray
+        double x_diff, y_diff;
         if (supersample == 0) {
-          direction = norm_view +
-                      y_inc * y * norm_up +
-                      x_inc * x * side;
+          x_diff = 0;
+          y_diff = 0;
         } else {
-          double x_rand = ((rand() % 2001) / 1000) - 1;
-          double y_rand = ((rand() % 2001) / 1000) - 1;
-          direction = norm_view +
-                      y_inc * (y + y_rand) * norm_up +
-                      x_inc * (x + x_rand) * side;
+          x_diff = ((rand() % 1001) / 1000.0) - 0.5;
+          y_diff = ((rand() % 1001) / 1000.0) - 0.5;
         }
+        direction = norm_view +
+                    y_inc * (y + y_diff) * norm_up +
+                    x_inc * (x + x_diff) * side;
 
         Ray r(eye, direction);
         Intersection i = root->ray_intersect(r);
@@ -154,9 +166,9 @@ void a4_render(// What to render
           b_sum += b;
         } else {
           // On no hit, pull colour from background
-          r_sum += 0;//img(x + width/2, height/2 - y - 1, 0);
-          g_sum += 0;//img(x + width/2, height/2 - y - 1, 0);
-          b_sum += 0;//img(x + width/2, height/2 - y - 1, 0);
+          r_sum += img(x + width/2, height/2 - y - 1, 0);
+          g_sum += img(x + width/2, height/2 - y - 1, 1);
+          b_sum += img(x + width/2, height/2 - y - 1, 2);
         } // if hit
       } // For each supersampled ray
       img(x + width/2, height/2 - y - 1, 0) = r_sum / ANTIALIAS;

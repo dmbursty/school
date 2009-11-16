@@ -15,7 +15,7 @@ public:
 
   typedef std::vector<int> Face;
   virtual Intersection ray_intersect(Ray r);
-  virtual Vector4D getBoundingBox();
+  virtual double* getBoundingBox();
 
 private:
   std::vector<Point3D> m_verts;

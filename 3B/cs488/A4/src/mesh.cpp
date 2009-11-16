@@ -11,8 +11,6 @@ Mesh::Mesh(const std::vector<Point3D>& verts,
   : m_verts(verts),
     m_faces(faces)
 {
-  Vector4D bounds = getBoundingBox();
-  boundingBox = new NonhierBox(Point3D(bounds[0], bounds[1], bounds[2]), bounds[3]);
 }
 
 std::ostream& operator<<(std::ostream& out, const Mesh& mesh)
@@ -38,14 +36,6 @@ std::ostream& operator<<(std::ostream& out, const Mesh& mesh)
 }
 
 Intersection Mesh::ray_intersect(Ray r) {
-  // Check bounding box first
-  Intersection test = boundingBox->ray_intersect(r);
-  // Special Render mode (uncomment to enable)
-#ifdef BOUNDS
-  return test;
-#endif
-  if (!test.hit) return test;
-
   r.normalize();
   // x
   double x = r.eye[0];
@@ -99,23 +89,25 @@ Intersection Mesh::ray_intersect(Ray r) {
   return ret;
 }
 
-Vector4D Mesh::getBoundingBox() {
+double* Mesh::getBoundingBox() {
   // Goint to return the box as (x, y, z, r)
   Point3D p = m_verts.front();
-  Vector3D mins, maxs;
-  mins[0] = maxs[0] = p[0];
-  mins[1] = maxs[1] = p[1];
-  mins[2] = maxs[2] = p[2];
+  // 0-2 mins, 3-5 maxs
+  double* bounds = new double[6];
+  bounds[0] = p[0];
+  bounds[1] = p[1];
+  bounds[2] = p[2];
+  bounds[3] = p[0] + 0.001;
+  bounds[4] = p[1] + 0.001;
+  bounds[5] = p[2] + 0.001;
   for (std::vector<Point3D>::iterator I = m_verts.begin(); I != m_verts.end(); ++I) {
     p = (*I);
-    if (p[0] < mins[0]) mins[0] = p[0];
-    if (p[1] < mins[1]) mins[1] = p[1];
-    if (p[2] < mins[2]) mins[2] = p[2];
-    if (p[0] > maxs[0]) maxs[0] = p[0];
-    if (p[1] > maxs[1]) maxs[1] = p[1];
-    if (p[2] > maxs[2]) maxs[2] = p[2];
+    if (p[0] < bounds[0]) bounds[0] = p[0];
+    if (p[1] < bounds[1]) bounds[1] = p[1];
+    if (p[2] < bounds[2]) bounds[2] = p[2];
+    if (p[0] > bounds[3]) bounds[3] = p[0];
+    if (p[1] > bounds[4]) bounds[4] = p[1];
+    if (p[2] > bounds[5]) bounds[5] = p[2];
   }
-  Vector4D ret(mins[0], mins[1], mins[2], 0);
-  ret[3] = max(max(maxs[0] - mins[0], maxs[1] - mins[1]), maxs[2] - mins[2]);
-  return ret;
+  return bounds;
 }

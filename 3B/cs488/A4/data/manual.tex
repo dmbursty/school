@@ -1,0 +1,61 @@
+\documentclass[12pt]{article}
+% Preamble
+\usepackage[left=2cm,top=2cm,right=2cm,nohead,nofoot]{geometry}
+\pagestyle{empty}
+ 
+% Header
+\title{CS488 Assignment 4}
+\author{Daniel Burstyn (dmbursty) (20206120)}
+\date{Nov 16, 2009}
+ 
+% Body
+\begin{document}
+\begin{titlepage}
+\maketitle
+\thispagestyle{empty}
+\end{titlepage}
+\newpage
+
+\begin{center}
+\begin{Huge}
+Manual
+\end{Huge}
+\end{center}
+
+\section{Extra Feature - Antialiasing}
+For the ray tracer assignment, I chose antialiasing to be my extra objective.
+To achieve the antialiasing, I cast 15 rays to random points within each pixel
+and then average the colour results of the 15 points.  The default number of
+rays cast is 15, but that value can be changed at compile time.  The first ray
+cast will always be to the middle of the pixel, so setting the ANTIALIAS
+variable to 1 will act as normal.
+
+\section{Bounding Volumes}
+For this assignment I implemented only bounding (hierarchical) boxes for polygon
+meshes.  When the call to render() is made, the ray tracer will do one pass
+through the scene tree and make bounding boxes where necessary.  When a geometry
+node finds it has a primitive that supports a bounding volume, it will construct
+a bounding node that has a pointer to the geometry node, and a new geometry node
+containing the bounding volume.  The parent of the geometry node will then swap
+it's children to maintain the structure of the tree, with the bounding node
+above the geometry node.
+
+I chose this approach because it his highly extensible, as bounding nodes can be
+placed anywhere in the scene graph (useful for CSG for the project) and the
+bounding volume can be any geometry node itself.
+
+\section{Unique Scene}
+The unique scene in sample.png has a number of items of interest.
+
+The barn is modeled with 5 boxes for the base, two polygon meshes for the roof,
+and three separate instances of the same mesh for the window and door.  The barn
+is hierarchical and can be easily transformed.
+
+The UFO is made up of two spheres and is also hierarchical.  The UFO is made to
+be shiny to show off phong lighting.  A light is placed at the bottom of the UFO
+to demonstrate coloured lights and interesting shadow effects.
+
+The cow model was provided, and three of these cows are placed for humourous
+effect.
+
+\end{document}

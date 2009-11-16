@@ -2,7 +2,7 @@
 #include <iostream>
 #include <limits>
 
-#define EPSILON 0.1
+#define EPSILON 0.01
 
 Primitive::~Primitive()
 {
@@ -10,6 +10,10 @@ Primitive::~Primitive()
 
 Intersection Primitive::ray_intersect(Ray r) {
   return Intersection();
+}
+
+double* Primitive::getBoundingBox() {
+  return NULL;
 }
 
 Sphere::~Sphere()

@@ -1,0 +1,129 @@
+\documentclass[12pt]{article}
+% Preamble
+\usepackage[left=2cm,top=1cm,right=2cm,nohead,nofoot]{geometry}
+
+% Header
+\title{CE457 Project 2}
+\author{Daniel Burstyn (20206120)}
+\date{Nov 17}
+
+% Body
+\begin{document}
+\maketitle
+\newpage
+
+\section{Design of Neural Network}
+The neural network used in this assignment has a very simple design.  There are
+144 input nodes corresponding to each input pixel from the 12x12 image.  I chose
+to use 5 output nodes corresponding to each of the 5 digits we need to
+recognize.  Although the possible values can be encoded in 3 outputs, I chose to
+use 5 since each output will then directly indicate how close to that digit the
+input was.  This allows us to immediately see if perhaps the input could be one
+of two possible digits, for instance, a 9 that looks very similar to an 8 would
+give results where both the 8 and 9 output nodes have high values.\\
+
+I tried a variety of different numbers of hidden nodes to see how the number of
+nodes affects the accuracy and speed of the neural net.  For this assignment, I
+tested with 5, 10, 20, 30, 50, and 100 nodes.\\
+
+To train the neural net, I use all of the input training data and run it for
+1000 epochs, or until the total error across all the training data is less than
+0.5 whichever comes first.  The error for one item of training data is defined
+as in the nodes as $\frac{1}{2}\sum(T_i - O_i)$.\\
+
+\section{Error vs Epochs}
+Naturally, we would assume that the more epochs use to train the net, the better
+it gets, and the less error there is.  As we can see from the results below,
+this is quite true.\\
+
+\vspace{1em}
+Error as a function of epochs and number of hidden nodes:
+\begin{center}
+\begin{tabular}{|c|cccccc|}
+\hline
+Epochs & 5 Hidden & 10 Hidden & 20 Hidden & 30 Hidden & 50 Hidden & 100 Hidden\\
+\hline
+0    & 34.4 & 20.0 & 13.0 & 11.0 & 7.6 & 4.5 \\
+50   & 36.5 & 22.1 &  8.1 &  7.7 & 4.3 & 2.8 \\
+100  & 29.0 & 14.9 &  3.5 &  2.8 & 2.6 & 0.7 \\
+250  & 12.5 &  8.0 &    - &    - &   - &   - \\
+500  & 14.0 & 2.07 &    - &    - &   - &   - \\
+750  & 18.3 &  0.3 &    - &    - &   - &   - \\
+1000 & 17.6 &    - &    - &    - &   - &   - \\
+finish  & * & 700  & 160  & 160  & 120 & 100 \\
+\hline
+\end{tabular}
+\end{center}
+'-' denotes negligible error
+The final line shows how many epochs it took to complete the training.
+'*' indicates training ran 1000 epocs and did not reach the necessary error
+thresold.
+\vspace{1em}
+
+We can see that as we expected, as the epochs go on, the error is minimized.
+This makes sense since this is the foundation of how neural nets work. \\
+
+The more interseting result is the that as we use more and more hidden nodes,
+the error is reduced faster.  When we consider how a neural net works, the
+number of hidden nodes gives more flexibility to the classification of the
+output.  When we back-propogate, we attempt to reduce the error with a gradient
+descent, and as we can see from the equations used, the error at a node is
+divided up among the weights, so that each output node can choose the right
+hidden nodes to draw from and thus base it's output on. \\
+
+Essentially, since there are so many more weights with the many hidden nodes,
+there is much more flexibility, and when we do back-propagation the errors are
+divided up among much more nodes, so when we train different inputs to different
+outputs, the greater number of hidden nodes means that the two back-propagations
+interfere with eachother less, and so we converge more quickly to a "smart"
+neural net. \\
+
+At the far end of the spectum, with 100 hidden nodes, the training seems to take
+slower.  This is most likely due to the fact that there are too many nodes, and
+too many weights.  Since the error is distributed over all the weights, the
+change to each weight becomes smaller, and it therefore takes more time to reach
+a sufficiently trained net. \\
+
+On the other hand, with such a larger number of hidden nodes, the time it takes
+to do one back-propagation increases significantly.  So, even though it takes
+less epochs to train the net, the real time it takes to train it may not be
+decreasing.  From observing my program, the net is trained fastest with 10~20
+hidden nodes. \\
+
+\section{Success Rate of the Network}
+Here we will examine the networks ability to successfully identify a digit with
+respect to the number of hidden nodes in the net. \\
+
+\vspace{1em}
+\begin{center}
+\begin{tabular}{|c|cccccc|}
+\hline
+& 5 Hidden & 10 Hidden & 20 Hidden & 30 Hidden & 50 Hidden & 100 Hidden \\
+\hline
+Training Data  & 72\% & 96\% & 100\% & 100\% & 90\% & 88\% \\
+Test Data      & 62\% & 73\% &  72\% &  70\% & 62\% & 60\% \\
+Read Test Data & 20\% & 28\% &  38\% &  30\% & 26\% & 24\% \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{1em}
+
+The first thing we notice is that the net with 5 hidden nodes is very bad, and
+fails to even identify a good portion of the data it was trained with.
+Examination of the detailed data showed that it matched none of the training5s
+and all of the training 9s.  Since the number of hidden nodes is equal to the
+number of output nodes, we really aren't taking advantage of the multi-layer
+neural net.  Since we train the net with the digits 5 through 9, in that order,
+this may be the reason that te net is so bad at matching 5s.  In fact, the net
+matched not a single 5 from any data set. \\
+
+Next we see that for a large number of hidden nodes, the success rate of the net
+seems to drop.  I would guess that the reason for this is that, with a large
+number of hidden nodes, the image the net is trying to match is "fuzzier".
+Looking at the more in depth data, it seems that the nets are bad at recognizing
+6s.  Since 6s look so similar to 5s, 9s, and even 8s, it may be that these sixes
+are being wrongly identified and dropping the accuracy of the net. \\
+
+The data gathered implies that using 20--30 hidden nodes seems to be ideal.  Not
+only in terms of the accuracy but also in terms of training speed. \\
+\end{document}

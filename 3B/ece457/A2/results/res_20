@@ -1,0 +1,31 @@
+20 hidden nodes
+13.0297662054
+16.8636053869
+10.6114545422
+5.43799399863
+5.02060507581
+3.53277491912
+1.53178273656
+0.777552262257
+0.611106440502
+Training Data: 100 out of 100
+  0: 100 out of 100
+  5: 20 out of 20
+  6: 20 out of 20
+  7: 20 out of 20
+  8: 20 out of 20
+  9: 20 out of 20
+Testing Data: 43 out of 60
+  0: 43 out of 60
+  5: 8 out of 12
+  6: 4 out of 12
+  7: 10 out of 12
+  8: 9 out of 12
+  9: 12 out of 12
+Real Testing Data: 19 out of 50
+  0: 19 out of 50
+  5: 8 out of 10
+  6: 1 out of 10
+  7: 9 out of 10
+  8: 1 out of 10
+  9: 0 out of 10

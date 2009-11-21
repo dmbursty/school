@@ -1,0 +1,41 @@
+\documentclass[12pt]{article}
+\usepackage{ulem}
+\begin{document}
+
+\section{Temporal Logic}
+
+\subsection{States + THe Universe of Discourse}
+States in state machii diagrams (SMDs) are henceforth referred to as "control states"
+
+OUr notion of state innogic includes
+- values of all variables
+- existence of all "living" objects + ther references/ptrs
+- control states in SMD
+- event queue(of external events)
+
+\subsection{Logic as a Constraint Laguage}
+
+Predicate logic can be used to describe properties of a system by \sout{constraining} describing values of variables in a particular state: state formulae
+
+In an execution, values of variables change so state formulae can change truthiness.
+
+int main(...)
+int $x, y$;
+$s_0$    $x=y=0$;
+$s_1$    $y=3$;
+$s_2$    $x=5$;
+\}
+
+\begin{tabular}{c|ccl}
+& x & y & ($x \ge y$)(p) <-- state formulae \\
+$s_0$ & 0 & 0 & true \\
+$s_1$ & 0 & 3 & false \\
+$s_2$ & 5 & 3 & true \\
+\end{tabular}
+
+We evaluate a stateformula p with respect to an execution $\sigma$ which represents the sequence of program states for that particular execution $\sigma \equiv s_0s_1s_2$
+
+A state s atisfies a predicate p if p is true in state s
+Write as
+
+\end{document}

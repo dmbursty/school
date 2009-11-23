@@ -1,0 +1,95 @@
+a)
+
+Script started on Tue Nov 10 19:32:08 2009
+sh-2.03$ make q1
+u++ -o q1_1 -DV1 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_2 -DV2 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_3 -DV3 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_1o -O2 -DV1 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_2o -O2 -DV2 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_3o -O2 -DV3 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+sh-2.03$ time ./q1_1
+
+real    0m0.773s
+user    0m0.720s
+sys     0m0.020s
+sh-2.03$ time ./q1_2
+
+real    0m1.359s
+user    0m1.100s
+sys     0m0.020s
+sh-2.03$ time ./q1_3
+
+real    0m53.700s
+user    0m26.570s
+sys     0m0.040s
+sh-2.03$ time ./q1_1o
+
+real    0m0.849s
+user    0m0.310s
+sys     0m0.030s
+sh-2.03$ time ./q1_2o
+
+real    0m0.581s
+user    0m0.560s
+sys     0m0.010s
+sh-2.03$ time ./q1_3o
+
+real    0m27.535s
+user    0m25.800s
+sys     0m0.030s
+sh-2.03$ exit
+
+script done on Tue Nov 10 19:36:09 2009
+
+As a table:
++-------+--------------+--------------+
+| Time  |  Without -O2 |   With -O2   |
++-------+--------------+--------------+
+|  V1   |    0.72s     |    0.31s     |
++-------+--------------+--------------+
+|  V2   |     1.1s     |    0.56s     |
++-------+--------------+--------------+
+|  V3   |    26.57s    |    25.8s     |
++-------+--------------+--------------+
+
+b)
+
+From a quick look over the result data we can see that V1(routine call) gives
+the lowest timing, V2(Coroutine) gives a slightly worse result.  V3(Task) has
+the worst results by far and is significantly worse than both other
+alternatives.
+
+This is quite simply explained.  To do a routine call, all that happens is a new
+stack frame is added to the top of the stack, and control is transfered to the
+routine.  Both of these can be done extremly fast.  So it is no suprise that V1
+gives us very fast times.
+
+For a coroutine, the context switch is a lot more complicated than a routine
+call.  We must switch to the coroutine stack and restore execution at the point
+it left off at.  This takes more work, and so we see slightly slower times for
+V2.
+
+Tasks take the most time and this is no suprise.  Context switch for a task
+involves pausing the current thread at the current location and using the
+scheduler to figure out what task gets to use the CPU next.  That chosen task
+then has to have it's state restored so it can use the CPU.  There is a lot of
+work and a lot of overhead in doing this so we get much slower times.
+
+Optimization we see improves the times of both routine call and coroutine, but
+the task switching time remains almost the same.  Since routine calls are the
+common coding practice we expect that g++'s optimizations are geared towards
+improving those times.  Coroutines are similar to routines but require some
+additional overhead.  This similarity probably contributes to the speed boost we
+see in the results of V2.  Task switching is a very complicated procedure
+involving scheduling and preemption which cannot be optimized as easily as
+routine calls.  For example, the inlining of routine calls we saw in a previous
+assignment granted a speed boost that we cannot apply to yeilding a CPU because
+it is so conceptually different.  This is why the optimizations seem to have
+little effect on V3.

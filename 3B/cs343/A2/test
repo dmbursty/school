@@ -1,0 +1,13 @@
+""
+"plain valid string"
+"\'\"\?\\\a\b\f\n\r\t\v\777\xff\xFF"
+"valid string" with extra stuff
+"whitespace at end"   
+"Incomplete string
+"incomplete during escape \x
+"\"
+"\9"
+"\x"
+"\xg"
+bad
+  "start with space"

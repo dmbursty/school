@@ -1,0 +1,55 @@
+Each of the 10 runs does not NEED to produce the same result.
+The first 10 runs of the program produced these results:
+@student[!]% repeat 10 ./a.out
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+
+We see that in this case, all the results were the same.  However due to the
+randomness of the CPU's scheduler, we may see different results if we run the
+program even more:
+shared:-800000
+shared:-800000
+shared:-800000
+shared:0
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+shared:-800000
+
+In theory, the minimum that we should be able to get from this program is
+-800000.  This could happen  when each task runs to completion without
+interfering with the other.  By looking over the code, we can see that no matter
+how the tasks are interleaved, there is no way for the shared variable to be
+lowered by more than one for each decrement, leading to the -800000 result.
+
+The maximum value however, is not so simple to achieve.  In order to raise the
+final value of the shared variable, the tasks would have to be interleaved in a
+way that negates the most number of decrements.  This would happen when one task
+is interupted after they have read the shared memory, but before they have
+written back to it.
+
+At first, we see the case where one task reads the value 800000 and is then
+interrupted.  The other task runs to completion, and execution resumes with the
+first task, which writes over the shared memoy with 799999, and then runs to
+completion ending in 0.  This however is not the maximum result, since we only
+managed to negate half of the decrements.
+
+The real maximum value that could be produced is 799998.  This arises in the
+(highly unlikely) scenario where:
+Task 1 reads 800000 and is then interrupted.  (shared = 800000)
+Task 2 runs for 799999 iterations before being interrupted.  (shared = 1)
+Task 1 resumes, decrements, and is interrupted  (shared = 799999)
+Task 2 resumes for it's final iteration, but only reads and is then interrupted.
+Task 1 resumes, and runs to completion (shared = 0).
+Task 2 finally finishes the final iteration by writing 799998.
+Although this is practically impossible, it is the theoretical maximum output.

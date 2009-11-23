@@ -1,0 +1,62 @@
+a)
+student:~/cs343/A1/q3> gmake
+g++ q3.cpp -o a1 -Wall -Wextra -g
+g++ q3.cpp -o a2 -DSS -Wall -Wextra -g
+student:~/cs343/A1/q3> time ./a1 500000 > /dev/null
+1.77u 0.03s 0:01.92 93.7%
+student:~/cs343/A1/q3> time ./a1 500000 > /dev/null
+1.71u 0.02s 0:03.43 50.4%
+student:~/cs343/A1/q3> time ./a2 500000 > /dev/null
+9.72u 0.03s 0:11.70 83.3%
+student:~/cs343/A1/q3> time ./a2 500000 > /dev/null
+9.92u 0.03s 0:15.90 62.5%
+
+It seems that with SS defined (Java style) the time taken is significantly
+longer than the other approach.
+
+
+b)
+It makes sense that the "Java style" approach would take more time.  The Java
+style involves concatenating a bunch of strings and then printing the final
+string.  The C++ style on the other hand simply streams all the strings to cout.
+Concatenation is a relatively expensive operation, which is done repeatedly in
+the Java style approach and not done in the C++ style approach.  That is the
+reason for the time difference.
+
+
+c)
+student:~/cs343/A1/q3> gmake
+g++ q3.cpp -o a1 -Wall -Wextra -g -O2
+g++ q3.cpp -o a2 -DSS -Wall -Wextra -g -O2
+student:~/cs343/A1/q3> time ./a1 500000 > /dev/null
+1.76u 0.03s 0:05.50 32.5%
+student:~/cs343/A1/q3> time ./a1 500000 > /dev/null
+1.70u 0.01s 0:02.37 72.1%
+student:~/cs343/A1/q3> time ./a2 500000 > /dev/null
+8.78u 0.01s 0:13.94 63.0%
+student:~/cs343/A1/q3> time ./a2 500000 > /dev/null
+8.86u 0.02s 0:13.71 64.7%
+
+
+d)
+We can see from the results that yes, the optimization has some effect on
+performance.  The times of both approaches seem to be slightly lower, however
+the difference between the two is still quite large.
+
+
+e)
+g++ q3.cpp -o a1 -Wall -Wextra -g
+student:~/cs343/A1/q3> time ./a1 500000 > /dev/null
+3.54u 1.08s 0:09.47 48.7%
+student:~/cs343/A1/q3> time ./a1 500000 > /dev/null
+3.34u 1.10s 0:05.50 80.7%
+g++ q3.cpp -o a2 -DSS -Wall -Wextra -g -O2
+student:~/cs343/A1/q3> time ./a1 500000 > /dev/null
+3.32u 0.85s 0:04.70 88.7%
+student:~/cs343/A1/q3> time ./a1 500000 > /dev/null
+3.11u 1.08s 0:04.78 87.6%
+
+We can see that switching from "\n" to endl has decreased the speed of the
+program.  This extra time comes from the fact that using endl will flush the
+output buffer, whereas \n will not.  Since we are repeatedly printing lines,
+this extra time really adds up.

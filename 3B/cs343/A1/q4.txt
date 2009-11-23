@@ -1,0 +1,49 @@
+a)
+student:~/cs343/A1/q4> gmake
+g++ q4.cpp -o a1 -g -O
+g++ q4.cpp -o a2 -fno-inline -g -O
+student:~/cs343/A1/q4> time ./a1
+1.13u 0.00s 0:01.26 89.6%
+student:~/cs343/A1/q4> time ./a1
+1.15u 0.02s 0:01.27 92.1%
+student:~/cs343/A1/q4> time ./a2
+4.71u 0.02s 0:08.87 53.3%
+student:~/cs343/A1/q4> time ./a2
+4.75u 0.00s 0:09.18 51.7%
+
+
+b)
+The time difference comes from the -fno-inline flag, which tells the compiler
+not to inline functions.  Inlining functions is an optimization done to
+eliminate the overhead cost of calling a function.  Compiling with the no-inline
+flag means that overhead cost is still there, and that is what causes the time
+difference.
+
+
+c)
+student:~/cs343/A1/q4> gmake
+g++ q4.cpp -o a1 -g -O3
+g++ q4.cpp -o a2 -fno-inline -g -O3
+student:~/cs343/A1/q4> time ./a1
+0.78u 0.02s 0:01.10 72.7%
+student:~/cs343/A1/q4> time ./a1
+0.75u 0.02s 0:01.33 57.8%
+student:~/cs343/A1/q4> time ./a2
+4.92u 0.01s 0:08.97 54.9%
+student:~/cs343/A1/q4> time ./a2
+4.89u 0.00s 0:05.46 89.5%
+
+
+d)
+For the first executable, the optimizations seem to have made a small
+improvement.  For the second, the times seem roughly the same.  The difference
+between the two is still present, and still caused by -fno-inline as mentioned
+above.
+
+
+e)
+Virtual functions cannot be inlined.  At compile time, it is not known exactly
+what function will actually be executed if it is virtual, thus the function
+cannot be inlined.  Since all functions in Java are virtual by default, this
+means that Java can almost never take advantage of inline function
+optimizations.

@@ -1,0 +1,24 @@
+At the start, i is declared and put on the stack.
+Next we enter the scope of the try block where j0 and j1 are put on the stack.
+We can see from the printing of the three successive memory addresses that this
+is true.
+
+Next we call the routine f(), with parameters 3, and j0 and j1 passed by
+reference.  We see from the printing that a new l variable is placed on the
+stack, and then f is called again until the passed parameter is 0.  We see from
+the printing that successive calls to f() put new ls on the top of the stack.
+Eventually f() will throw E, passing it the same references it originally got to
+j0 and j1.
+
+Control is moved to the handler back in main().  Here we put k1 and k0 are put
+onto the stack with values of 2.  i is printed, and we see that it is still in
+the same place as we would think, since it was declared in the main() scope.  e
+is of course placed in a different part of memory.  Now we see that k0 and k1
+are just above i on the stack.  This would indicate that the stack has been
+unwound, which means that the code uses termination.
+
+Lastly, we see that when we print out the values that we passed to the
+exception, we get 2s, unlike the 1s that we originally passed in as j0 and j1.
+However, since we passed j0 and j1 by referenc through the whole process, we
+actually have references to where j0 and j1 were, which has since been
+overwritten by k0 and k1, which is why when we print we get 2s.

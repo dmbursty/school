@@ -1,0 +1,58 @@
+Testing was done using an input file that demonstrated many different valid and
+invalid strings.  Below is the result of script showing the results of the
+commands: make, cat test, and ./stringliteral test.
+
+The strings tested are (in the same order below):
+The empty string
+A valid string
+all escape sequences
+A valid string with extra characters at the end
+A valid string with whitespace at the end
+The line ends while still in CONT
+The line ends in the middle of an escape sequence, in CONT
+String with a single \
+Invalid escape \9
+Invalid escape \x by itself
+Invalid hex escape \xg
+Missing " marks
+Valid string with whitespace prefix
+
+Script started on Tue Oct 13 01:52:59 2009
+You have mail.
+1>student:~/cs343/A2> make
+u++ -o stringliteral q2.cpp
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+1>student:~/cs343/A2> cat test
+""
+"plain valid string"
+"\'\"\?\\\a\b\f\n\r\t\v\777\xff\xFF"
+"valid string" with extra stuff
+"whitespace at end"   
+"Incomplete string
+"incomplete during escape \x
+"\"
+"\9"
+"\x"
+"\xg"
+bad
+  "start with space"
+1>student:~/cs343/A2> ./stringliteral test
+'""' : '""' yes
+'"plain valid string"' : '"plain valid string"' yes
+'"\'\"\?\\\a\b\f\n\r\t\v\777\xff\xFF"' : '"\'\"\?\\\a\b\f\n\r\t\v\777\xff\xFF"' yes
+'"valid string" with extra stuff' : '"valid string"' no -- extraneous characters ' with extra stuff'
+'"whitespace at end"   ' : '"whitespace at end"' no -- extraneous characters '   '
+'"Incomplete string' : '"Incomplete string' no
+'"incomplete during escape \x' : '"incomplete during escape \x' no
+'"\"' : '"\"' no
+'"\9"' : '"\9' no -- extraneous characters '"'
+'"\x"' : '"\x"' no
+'"\xg"' : '"\xg' no -- extraneous characters '"'
+'bad' : 'b' no -- extraneous characters 'ad'
+'  "start with space"' : ' ' no -- extraneous characters ' "start with space"'
+uC++ Runtime warning (UNIX pid:20156) : program terminating with 12544(0x3100) bytes of storage allocated but not freed.
+Possible cause is unfreed storage allocated by the program or system/library routines called from the program.
+1>student:~/cs343/A2> exit
+exit
+
+script done on Tue Oct 13 01:53:49 2009

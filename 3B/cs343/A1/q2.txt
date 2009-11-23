@@ -1,0 +1,13 @@
+We can rewrite this code with an added boolean variable indicating whether we
+had executed any statements.
+
+BOOL B = False
+WHILE C1 AND NOT B
+  S1
+  B = True
+WHILE C2 AND NOT B
+  S2
+  B = True
+WHILE NOT B
+  S3
+  B = True

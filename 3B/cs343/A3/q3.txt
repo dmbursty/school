@@ -1,0 +1,47 @@
+a) This algorighm, unlike Peterson's, does not require atomic assignment.  This
+is because where in Peterson's the same variable is being written to
+concurrently, this algorighm uses two variables: Last1 and Last2.  Of course we
+observe that the Last variables are passed to the tasks in opposite order.  We
+can see that each task only modifies Last1 and me, however these are actually
+references to different variables.  Therefore, each task writes to different
+variables.  Since each task writes to different variables, the assignment does
+not need to be atomic.
+
+b) This algorighm is very similar to Peterson's, except that it uses two
+variables for entry instead of just one.  Here is how it works:
+Each task will set Last1 = (Last2 + who) % 2.  But, since task t1 got it's
+parameters in the reversed order, it will try to set Last2 = (Last1 + who) % 2.
+We also know the value of who for each task so:
+t0 will do Last1 = Last2 % 2 and t1 will do Last2 = (Last1 + 1) % 2.
+We see that t0 will effectively make Last1 = Last2 and t1 will do Last2 = !Last1
+
+Next each task will busy loop waiting for either a DontWantIn, or checking the
+Last variable in the same way Peterson's algorithm does.  Whichever task sets
+their last variable first will be the one to enter the critical section first
+(same as Petersons) because the other task will change their Last, and the value
+that the other task is checking against.
+
+c) Since all the operations on Last1 and Last2 are mod 2, it actually doesn't
+matter what the initial values of them are.  This also works since each equation
+depends on the value of the other Last variable.
+
+d) 
+
+3. While a task is in the critical section or the entry protocol, they will be
+set to DontWantIn.  While a task is set to DontWantIn, the other task can get
+through the busy loop condition and enter the critical section.  Therefore this
+algorithm satisfies rule 3.
+
+4. Consider that in order for an indefinite postponement situation, both tasks
+would have to be busy looping at the same time, neither being able to exit.
+However, as explained in (b) each task is waiting on a different condition.
+One task is waiting for Last1 = Last2 and the other task is waiting for Last1 !=
+Last2.  From this it is obvious that one of these conditions MUST be met, and
+that one of the tasks must be let into the critical section.  Therefore rule 4
+is satisfied by this algorithm.
+
+5. There is a bound, and the limit is 1.  Once a task has made its request to
+enter the critical section and is busy waiting, it will be able to proceed once
+any other task makes its request.  A request will change the evaluation of the
+Last expression (Last + who) % 2, and any task already busy looping will be free
+to continue.

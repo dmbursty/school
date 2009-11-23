@@ -1,0 +1,233 @@
+Since the output of both the program and the test executable are
+non-deterministic, it is very difficult to test.  The best approach to testing
+q3 was to check the output of my program by hand to make sure that the output is
+consistent and makes sense.
+
+Here are some of the things I specifically checked for:
+- State transitions must be N -> B, N -> S, B -> S, or S -> N.
+- Debug output was used to make sure the number of times to smoke was correct
+- The resource for a column is the same throughout
+- Smokers on the same resource block eachother appropriately
+- There is an asterisk on the first line
+- There is no asterisk on lines with exactly one item in it
+- There are asterisks on all other lines
+- A broad look over the whole output to make sure it makes sense
+
+In terms of error checking, I checked the following:
+- No arguments
+- Too many arguments
+- string arguments
+- int arguments out of range
+- testing invalid kind passed to acquire or release
+
+Below is some basic testing output:
+Script started on Tue Nov 10 18:59:53 2009
+sh-2.03$ ./smokers too many arguments
+Usage: ./q3_test [ no-of-smokers (1-10) ]
+sh-2.03$ ./smokers invalid
+Usage: ./q3_test [ no-of-smokers (1-10) ]
+sh-2.03$ ./smokers 0
+Usage: ./q3_test [ no-of-smokers (1-10) ]
+sh-2.03$ ./smokers 100
+Usage: ./q3_test [ no-of-smokers (1-10) ]
+sh-2.03$ ./smokers 1
+S0      
+N M*    
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+N M     
+S M     
+sh-2.03$ ./smokers 10
+S0      S1      S2      S3      S4      S5      S6      S7      S8      S9      
+N T*                                                                            
+S T     N M*                                                                    
+        S M     N M     N P     N T     N T*                                    
+                                        B       N M*                            
+                                                B       N P*                    
+                                                        B       N P*            
+                                                                B       N T*    
+                S M     S P                             S P*            B       
+                                                        N P                     
+                                S T             S M*    B       S P             
+                                                N M             N P*            
+                                        S T     S M     S P*    B               
+                                                        N P                     
+N T                                             N M     B       S P     S T*    
+                                                                        N T     
+S T     N M*                                                            B       
+        B       N M*                            S M                             
+                B       N P*                                                    
+N T                     B       N T*                    S P             S T     
+S T     S M*                    B                                               
+        N M                                                                     
+        B       S M     S P     S T     N T*                                    
+N T     S M                             S T     N M*            N P             
+S T                                             S M*                            
+                                                N M                             
+                                                S M             S P     N T*    
+                                N T*                                    S T     
+                        N P     S T     N T*                                    
+        N M*                            S T                                     
+N T     S M             S P     N T*                                            
+S T             N M*            B                                               
+                S M     N P             N T*                                    
+        N M                             B       N M*                            
+        S M     N M*    S P     S T             B                               
+                B                       S T*                                    
+                                        N T                                     
+N T*                                    S T     S M                             
+S T     N M*                                                                    
+        B       S M                             N M*                            
+                        N P*                    B                               
+                        S P             N T*                                    
+        S M             N P     N T     S T*                                    
+                                        N T                                     
+                                S T*    B                                       
+                                N T                                             
+N T*                            B                                               
+B                       S P             S T*    S M                             
+                                        N T                                     
+                N M*                    B                                       
+                S M     N P*                                                    
+S T     N M             S P     S T             N M*                            
+        S M                     N T*            B                               
+N T*                            B       S T                                     
+B               N M*            S T             S M                             
+S T*            S M                                                             
+N T                                             N M*                            
+                                        N T*    S M                             
+S T     N M     N M*                    B                                       
+        S M     B               N T*                                            
+                S M             B*      S T                                     
+                                S T     N T*    N M                             
+N T*                                    S T     S M                             
+S T     N M*                    N T             N M                             
+        B*                      S T             S M                             
+        S M                             N T*    N M                             
+        N M*                            S T                                     
+N T     B*                                      S M                             
+        S M                     N T*                                            
+S T                             B*                                              
+        N M                     S T     N T*                                    
+        S M                             S T*    N M                             
+                                        N T                                     
+                                        S T     S M*                            
+        N M*                                    N M                             
+N T*    B                                                                       
+S T                             N T*            S M                             
+                                S T                                             
+N T*                            N T                                             
+B       S M                     S T     N T*                                    
+S T                                     B*                                      
+                                        S T     N M*                            
+                                N T*            S M                             
+        N M*                    S T                                             
+        S M                                                                     
+        N M                             N T*                                    
+N T*    S M                             S T                                     
+S T                                                                             
+N T                                                                             
+S T                                                                             
+N T                             N T*                                            
+S T     N M                     B*                                              
+N T     S M                     S T*                                            
+                                N T                                             
+S T                             B*                                              
+N T*                            S T                                             
+S T     N M*                                                                    
+N T*    S M                                                                     
+S T     N M*                                                                    
+        S M                                                                     
+        N M                                                                     
+        S M                                                                     
+        N M                                                                     
+        S M                                                                     
+sh-2.03$ ./smokers
+S0      S1      S2      S3      S4      
+N P     N M     N M*                    
+                B       N T*            
+                        S T     N P*    
+S P     S M                     B*      
+                                S P     
+                S M             N P*    
+                                S P     
+                                N P     
+N P     N M             N T*    S P     
+S P     S M     N M     S T*            
+                        N T             
+                S M*    S T             
+                N M                     
+N P             S M     N T*            
+S P             N M*    S T             
+        N M*    S M                     
+N P*    S M             N T             
+S P     N M*    N M                     
+        B*      S M     S T             
+N P*    S M     N M     N T             
+S P*            S M     S T             
+N P                                     
+S P     N M*                            
+N P*    S M     N M     N T             
+S P             S M     S T*            
+                        N T             
+        N M*            S T             
+        S M             N T*            
+        N M*    N M     S T             
+        B*      S M                     
+        S M             N T*            
+                N M*    S T             
+                S M                     
+                N M                     
+                S M*    N T             
+                N M*    S T             
+                S M                     
+                N M                     
+                S M     N T*            
+                        S T             
+                        N T             
+                N M*    S T             
+                S M                     
+                N M                     
+                S M*    N T             
+                N M     S T*            
+                        N T             
+                        S T             
+                S M     N T*            
+                        S T             
+                        N T             
+                N M     S T*            
+                        N T             
+                S M     S T*            
+                        N T             
+                N M*    S T             
+                S M                     
+                N M                     
+                S M                     
+                N M                     
+                S M                     
+sh-2.03$ exit
+
+script done on Tue Nov 10 19:00:53 2009

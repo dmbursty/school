@@ -1,0 +1,47 @@
+Script started on Tue Nov 10 19:32:08 2009
+sh-2.03$ make q1
+u++ -o q1_1 -DV1 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_2 -DV2 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_3 -DV3 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_1o -O2 -DV1 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_2o -O2 -DV2 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+u++ -o q1_3o -O2 -DV3 q1.cc
+uC++ Version 5.5.0 (single processor) (debug) (no yield) (no verify) (no profile)
+sh-2.03$ time ./q_1  1_1
+
+real    0m0.773s
+user    0m0.720s
+sys     0m0.020s
+sh-2.03$ time ./q2 1_2
+
+real    0m1.359s
+user    0m1.100s
+sys     0m0.020s
+sh-2.03$ time ./q1_3
+
+real    0m53.700s
+user    0m26.570s
+sys     0m0.040s
+sh-2.03$ time ./q1_1o
+
+real    0m0.849s
+user    0m0.310s
+sys     0m0.030s
+sh-2.03$ time ./q1_2o
+
+real    0m0.581s
+user    0m0.560s
+sys     0m0.010s
+sh-2.03$ time ./q1_3o
+
+real    0m27.535s
+user    0m25.800s
+sys     0m0.030s
+sh-2.03$ exit
+
+script done on Tue Nov 10 19:36:09 2009

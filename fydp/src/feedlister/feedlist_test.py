@@ -34,9 +34,6 @@ class FeedListTestCase( unittest.TestCase ):
     self.assertEquals(FeedLister().getFeedFromPage(self.blogManyFeeds),
                       self.feed)
 
-  def testFail(self):
-    raise Exception("Mock fail test")
-
 
 def getSuite():
   return unittest.TestLoader().loadTestsFromTestCase(FeedListTestCase)

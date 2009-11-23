@@ -11,38 +11,102 @@
 \newpage
 
 \section{Introduction}
-This may be useful for code: \verb!verbatim text!
-
-This is how you embed graphics:
-
-\begin{center}
-\includegraphics[width=15cm]{screenshot.png}
-\end{center}
 
 \subsection{Outline}
 
 \subsection{Product Overview and Motivation}
+\ \ \ \ [Product] at its core is a large system that crawls the internet and
+collects blog information.  Blogs in particular are an interesting data source
+because, unlike most web pages, they are typically written by a single person
+from their point of view.  If we filter out this particular data we can
+investigate what the big topics the blogging population (the "blogosphere") is
+talking about.
+
+[Product] can be used in two very distinct ways.  The first is its web
+interface, which allows users to query the database looking for
+\textbf{opinions} on a topic.  A typical Google search will typically return a
+wide range of informative results.  However, user will frequently want to hear
+about a product or service from another actual person.  [Product] can be used
+to find user stories and not just feature lists.
+
+The second use is more advanced and aims to provide access to the collected
+data through an API.  This API is available to developers who want to perform
+their own analysis on our corpus of blogs.  This saves them the trouble of
+having to collect and clean all that data.
+
+
+\section{Search Basics}
+Search is simple: just type whatever comes to mind in the search box, hit
+Enter or click on the Search button, and [Product] will search the
+blogosphere for blogs that are relevant to your query.  Unfortunately, due to
+the nature of natural languages, it may be hard to get exactly the results you
+were looking for without refinement. Thus, the following tips can help you
+refine your technique to make the most of your searches.
+
+\subsection{Some Basic Facts}
 \begin{itemize}
-\setlength{\itemsep}{-1mm}
-\item aka, rationale
-\item rationale 1: for our data access use case; gathering/cleaning data takes
-a long time etc. i
-\item rationale 2: for sentiment search use case; describe a sample run using
-Google, and using [Product]
-\item quick description of product (emphasize product is two-fold; it provides
-a large collected/clean data for additional research, and it does sentiment
-search)
+\item \textbf{Select a category.} Certain terms in natural languages become
+almost impossible to disambiguate, for example logs about opera's can either
+be about the theatrical performances, or the browser, or many other words.
+Furthermore, results can be obtained faster and more filter functions can be
+used when a category is selected, due to the nature of the search algorithms
+used by [Product].
+\item Search is always case insensitive. Searching for “new york times” is the
+same as searching for “New York Times”.
 \end{itemize}
 
-\section{Website Features}
-\begin{itemize}
-\setlength{\itemsep}{-1mm}
-\item describe search features as outlined
-http://nflath.com/wiki/index.php/MeetingMinutes
-\item mention help page and how to get there
-\item provide screen shots (we will, of course, substitute these later after
-sprucing up webpage)
-\end{itemize}
+\subsubsection{How to read search results}
+[Product]'s goal is to provide you with results that are clear and easy to
+read. The diagram below points out four features that are important to
+understanding the search results page:
+\begin{center}
+\includegraphics{results.png}
+\end{center}
+
+\begin{enumerate}
+\item The Title: The first line of any search result is the title of the
+webpage.
+\item The Snippet: A description of or an excerpt from the webpage.
+\item The Sentiment: The basic stance the article has about the topic.
+\item Keyword: The category this blog falls under.
+\item Bins: Summary of categories for each result.
+\end{enumerate}
+
+All these features are important in determining whether the page is what you
+need. The title is what the author of the page designated as the best short
+description of the page.
+
+The snippet is [Product]'s algorithmic attempt to extract just the part of the
+page most relevant to your query. The sentiment plus keywords help you figure
+out if the article is what you want. Keywords help you verify that the link is
+the correct topic, and the bins will allow you to refine the results if you
+find that there are to many options, and many are irrelevent.
+
+\subsection{Break it down}
+If a finer level of detail is wanted, press “Break it down”.This mode causes
+all the data to be split into organized into good and bad results. This allows
+you to gather a quick overview of the system, and get an overall idea of how
+positive and negative the results are.
+
+\subsubsection{How to read the breakdown}
+The following screen helps us determine how the breakdown works in order to
+get a quick overview of the system.
+\begin{center}
+\includegraphics{brokendown.png}
+\end{center}
+
+The breakdown consists of two components:
+\begin{enumerate}
+\item Visualization
+\item Result separation.
+\end{enumerate}
+
+The visualization component consists of a simple pie graph that will allow you
+to quickly determine if the overall sentiment is pro or against the given
+topic.  The separation component allows us to isolate one set of opinionated
+results, and by clicking a sentiment we can display only the results that
+match the sentiment.
+
 
 \subsection{Help Mode}
 Users can get help with our product by clicking a `help' link on any of our
@@ -76,32 +140,25 @@ they can be used
 \end{itemize}
 
 \subsection{Data Access API}
-Should contain examples. This is some
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet nunc
-sapien. Aenean eu felis leo, eget rhoncus risus. In tempus nunc ac ipsum
-sagittis fringilla. Morbi volutpat, diam quis condimentum posuere, ligula
-libero vestibulum odio, quis posuere magna dui ut orci. Cum sociis natoque
-nullam a metus eu tortor interdum pellentesque.
-
-Aliquam erat volutpat. Integer volutpat turpis non lacus porttitor quis
-egestas ante eleifend. Pellentesque habitant morbi tristique senectus et netus
-et malesuada fames ac turpis egestas. Aenean quam felis, dapibus ut volutpat
-convallis, adipiscing pulvinar felis. Donec eleifend eleifend est at molestie.
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
-ridiculus mus. Pellentesque pharetra leo vitae neque gravida eu faucibus nisi
-elementum vehicula a sed augue.
+The Data Access API allows developers to get direct access to [Product]'s
+database of blog information.
 
 \subsection{Sentiment Search API}
-Should contain examples
+The Sentiment Search API has the exact same function as [Product]'s web
+interface but can be accessed programmatically.  This is useful for advanced
+users that wish to retrieve blog post information and do their own analysis on
+top of to existing sentiment analysis.
 
 \section{Glossary}
 \begin{description}
-\item[Term] 
-This is a lot of definition. This is a lot of definition. This is
-a lot of definition. This is a lot of definition. This is a lot of definition.
-This is a lot of definition. This is a lot of definition. This is a lot of
-definition. This is a lot of definition.
-\item[Next Term] Some other definition.
+\item[Blogosphere] 
+The blogosphere is made up of all blogs and their interconnections. The term
+implies that blogs exist together as a connected community (or as a collection
+of connected communities) or as a social network in which everyday authors can
+publish their opinions.
+\item[API]
+API stands for Application Programming Interface and is an interface that a
+piece of software implements that allows other software to interact with it.
 \end{description}
 \end{document}
 

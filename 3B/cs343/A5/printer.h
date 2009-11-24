@@ -24,10 +24,11 @@ _Monitor Printer {
   unsigned int noOfPhil;
   BufferSlot* buffer;
 
-  void flush(int id);
-  void finish(int id);
+  void flush(unsigned int id);
+  void finish(unsigned int id);
   void printOnlyMe(unsigned int id, Philosopher::States state,
                    unsigned int bite, unsigned int noodles);
+  void errorCheck();
 };
 
 #endif

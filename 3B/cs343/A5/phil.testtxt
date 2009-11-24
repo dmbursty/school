@@ -1,0 +1,441 @@
+Since the output of both the program and the test executable are
+non-deterministic, it is very difficult to test.  The best approach to testing
+was to check the output of my program by hand to make sure that the output is
+consistent and makes sense.
+
+The following was done for each table type.
+
+Here are the things I specifically checked for:
+
+Dealing with states & state transitions:
+- State transitions must be H->W, H->E, W->E, E->T, or T->H.
+- Philosophers all start hungry.
+- Checking the values of all eating outputs to make sure they are correct.
+- Checking the values of waiting outputs to make sure they are phil #, and phil #+1.
+- No two adjacent philosophers are eating at the same time (this is also tested
+in the code explicitly)
+- No output is made by a philosopher after they finish, and all philosophers
+finish.
+- No philosopher eats more noodles than they had left.
+- A philosopher only starts waiting when an adjacent philosopher is eating.
+- A philosopher only finishes waiting when both adjacent philosophers are not
+eating.
+
+Dealing with output formatting:
+- All lines have asterisks except for lines with only one output.
+- The line immediately after the second last finish will have an asterisk even
+though there is only one output - this is the only exception.
+- All lines have at most one asterisk.
+- Values below asterisks will be different than the value above.
+- There is an asterisk above all items that were printed on their own line.
+- After an item is printed on it's own line, the next line is either the
+philosopher printing an item on it's own line, or an entire flush with an
+asterisk on a *different* column.
+- ... is printed for all philosophers whenever any philosopher finishes.
+- The item above an "F" is either on its own line or has an asterisk.
+- The lines below and above a string of items on their own line are identical
+except for that column.
+
+For error checking, I did the following:
+- Too many arguments
+- string arguments
+- int arguments out of range
+- no arguments  (should default to 5, 30)
+- only one argument (should default to 30 noodles)
+- both arguments
+
+Below is some basic testing output:
+This is only from TYPE=SEM since all three types produced equivalent output.
+Script started on Tue Nov 24 03:35:16 2009
+sh-2.03$ ./phil 5 5 5
+Usage: ./phil [ P [ N ] ], P = # philosophers >= 2, N = # noodles >= 1
+sh-2.03$ ./phil string arguments
+Usage: ./phil [ P [ N ] ], P = # philosophers >= 2, N = # noodles >= 1
+sh-2.03$ ./phil -10 10
+Usage: ./phil [ P [ N ] ], P = # philosophers >= 2, N = # noodles >= 1
+sh-2.03$ ./phil 10 -
+Usage: ./phil [ P [ N ] ], P = # philosophers >= 2, N = # noodles >= 1
+sh-2.03$ ./phil
+Phil0   Phil1   Phil2   Phil3   Phil4   
+******  ******  ******  ******  ******  
+H*      H       H       H       H       
+E5,25                                   
+T                                       
+T       H       H       H       H*      
+T       H*      H       H       E3,27   
+T       E5,25   H*      H       E3,27   
+T       E5,25   W2,3    H*      E3,27   
+T       E5,25   W2,3    W3,4    E3,27*  
+T       E5,25*  W2,3    W3,4    T       
+        T                               
+        H                               
+T       H       W2,3    W3,4*   T       
+T       H*      W2,3    E3,27   T       
+        E1,24                           
+        T                               
+T       T       W2,3    E3,27*  T       
+T       T       W2,3*   T       T       
+                E3,27                   
+                T                       
+                H                       
+T       T       H       T       T*      
+T*      T       H       T       H       
+H       T       H*      T       H       
+H       T       E2,25   T       H*      
+H       T       E2,25   T*      E1,26   
+H*      T       E2,25   H       E1,26   
+W0,1    T       E2,25*  H       E1,26   
+W0,1    T       T       H       E1,26*  
+W0,1*   T       T       H       T       
+E1,24                                   
+T                                       
+T       T       T       H*      T       
+T       T       T       E4,23   T*      
+T       T       T       E4,23*  H       
+T*      T       T       T       H       
+H       T       T       T       H*      
+                                E5,21   
+                                T       
+H       T*      T       T       T       
+H*      H       T       T       T       
+E2,22   H       T*      T       T       
+E2,22   H       H       T       T*      
+E2,22   H       H       T*      H       
+E2,22   H*      H       H       H       
+E2,22   W1,2    H       H       H*      
+E2,22   W1,2    H*      H       W4,0    
+E2,22*  W1,2    E4,21   H       W4,0    
+T       W1,2    E4,21*  H       W4,0    
+T       W1,2    T       H*      W4,0    
+T       W1,2    T       W3,4    W4,0*   
+T       W1,2*   T       W3,4    E1,20   
+T       E1,23   T       W3,4    E1,20*  
+T       E1,23*  T       W3,4    T       
+T       T       T       W3,4*   T       
+T*      T       T       E1,22   T       
+H       T       T*      E1,22   T       
+H*      T       H       E1,22   T       
+E3,19   T       H*      E1,22   T       
+E3,19   T       W2,3    E1,22*  T       
+E3,19*  T       W2,3    T       T       
+T       T       W2,3*   T       T       
+T       T       E2,19   T       T*      
+                                H       
+                                E3,17   
+T       T       E2,19   T*      E3,17   
+T       T       E2,19   H       E3,17*  
+T       T       E2,19*  H       T       
+T       T*      T       H       T       
+T*      H       T       H       T       
+H       H       T       H*      T       
+H       H*      T       E3,19   T       
+H*      E4,19   T       E3,19   T       
+W0,1    E4,19   T       E3,19*  T       
+W0,1    E4,19*  T       T       T       
+W0,1*   T       T       T       T       
+E3,16   T       T       T       T*      
+                                H       
+                                W4,0    
+E3,16   T       T       T*      W4,0    
+E3,16   T       T*      H       W4,0    
+E3,16   T*      H       H       W4,0    
+E3,16*  H       H       H       W4,0    
+T       H       H*      H       W4,0    
+T       H       E4,15   H       W4,0*   
+T       H       E4,15   H*      E3,14   
+T       H       E4,15*  W3,4    E3,14   
+T       H*      T       W3,4    E3,14   
+T       E5,14   T       W3,4    E3,14*  
+T       E5,14   T       W3,4*   T       
+T       E5,14*  T       E5,14   T       
+        T                               
+        H                               
+T       H       T       E5,14*  T       
+T       H       T       T       T*      
+T       H       T*      T       H       
+T*      H       H       T       H       
+H       H       H       T       H*      
+H       H*      H       T       E2,12   
+H*      E2,12   H       T       E2,12   
+W0,1    E2,12   H*      T       E2,12   
+W0,1    E2,12   W2,3    T       E2,12*  
+W0,1    E2,12*  W2,3    T       T       
+W0,1*   T       W2,3    T       T       
+E4,12   T       W2,3*   T       T       
+E4,12   T*      E4,11   T       T       
+E4,12*  H       E4,11   T       T       
+T       H       E4,11   T*      T       
+T       H       E4,11   H       T*      
+T       H       E4,11*  H       H       
+T       H       T       H*      H       
+T       H*      T       E1,13   H       
+        E1,11                           
+        T                               
+T       T       T       E1,13   H*      
+T       T       T       E1,13*  W4,0    
+T       T       T       T       W4,0*   
+T*      T       T       T       E1,11   
+H       T       T       T       E1,11*  
+H       T       T       T*      T       
+H       T       T*      H       T       
+H       T*      H       H       T       
+H*      H       H       H       T       
+E4,8    H       H       H*      T       
+E4,8    H       H       E1,12   T*      
+E4,8    H       H*      E1,12   H       
+E4,8*   H       W2,3    E1,12   H       
+T       H*      W2,3    E1,12   H       
+T*      E4,7    W2,3    E1,12   H       
+H       E4,7    W2,3    E1,12   H*      
+H       E4,7    W2,3    E1,12*  W4,0    
+H       E4,7    W2,3    T       W4,0*   
+H       E4,7*   W2,3    T       E5,6    
+H       T       W2,3*   T       E5,6    
+H*      T       E1,10   T       E5,6    
+W0,1    T*      E1,10   T       E5,6    
+W0,1    H       E1,10   T       E5,6*   
+W0,1    H*      E1,10   T       T       
+W0,1*   W1,2    E1,10   T       T       
+E5,3    W1,2    E1,10*  T       T       
+E5,3*   W1,2    T       T       T       
+T       W1,2    T       T       T*      
+T       W1,2*   T       T       H       
+T       E1,6    T       T       H*      
+T       E1,6    T       T*      E1,5    
+T       E1,6*   T       H       E1,5    
+T*      T       T       H       E1,5    
+H       T       T*      H       E1,5    
+H       T       H       H*      E1,5    
+H       T       H       W3,4    E1,5*   
+H       T       H       W3,4*   T       
+H*      T       H       E1,11   T       
+E3,0    T       H*      E1,11   T       
+E3,0*   T       W2,3    E1,11   T       
+F       ...     ...     ...     ...     
+        T       W2,3    E1,11*  T       
+        T       W2,3*   T       T       
+        T       E2,8    T       T*      
+        T*      E2,8    T       H       
+        H       E2,8    T*      H       
+        H       E2,8*   H       H       
+        H       T       H*      H       
+        H       T       E1,10   H*      
+        H*      T       E1,10   W4,0    
+        E4,2    T       E1,10*  W4,0    
+        E4,2*   T       T       W4,0    
+        T       T       T       W4,0*   
+                                E1,4    
+                                T       
+                                H       
+        T       T*      T       H       
+        T*      H       T       H       
+        H       H       T*      H       
+        H       H*      H       H       
+        H       E5,3    H       H*      
+...     ...     ...     ...     F       
+        H*      E5,3    H               
+        W1,2    E5,3*   H               
+        W1,2    T       H*              
+                        E5,5            
+                        T               
+        W1,2*   T       T               
+...     F       ...     ...     ...     
+                T       T*              
+                T*      H               
+                H                       
+                E3,0                    
+                E3,0    H*              
+                E3,0*   W3,4            
+...     ...     F       ...     ...     
+                        W3,4*           
+                        E3,2            
+                        T               
+                        H               
+                        E2,0            
+...     ...     ...     F       ...     
+***********************
+Philosophers terminated
+sh-2.03$ ./phil 3
+Phil0   Phil1   Phil2   
+******  ******  ******  
+H       H*      H       
+H       E5,25   H*      
+H*      E5,25   W2,0    
+W0,1    E5,25*  W2,0    
+W0,1*   T       W2,0    
+E4,26   T*      W2,0    
+        H               
+        W1,2            
+E4,26*  W1,2    W2,0    
+T       W1,2    W2,0*   
+                E3,27   
+                T       
+T       W1,2*   T       
+        E2,23           
+        T               
+T*      T       T       
+H       T*      T       
+H*      H       T       
+E3,23   H*      T       
+E3,23*  W1,2    T       
+T       W1,2    T*      
+T       W1,2*   H       
+T       E5,18   H*      
+T       E5,18*  W2,0    
+T       T       W2,0*   
+                E5,22   
+                T       
+T       T*      T       
+        H               
+        E4,14           
+        T               
+T*      T       T       
+H                       
+E3,20                   
+T                       
+T       T*      T       
+        H               
+        E3,11           
+        T               
+T*      T       T       
+H       T*      T       
+H       H       T*      
+H*      H       H       
+E2,18                   
+T                       
+T       H       H*      
+T       H*      E5,17   
+T       W1,2    E5,17*  
+T       W1,2*   T       
+        E3,8            
+        T               
+        H               
+        E1,7            
+T*      E1,7    T       
+H                       
+W0,1                    
+W0,1    E1,7*   T       
+W0,1*   T       T       
+E4,14   T       T*      
+                H       
+                W2,0    
+E4,14*  T       W2,0    
+T       T       W2,0*   
+                E1,16   
+                T       
+T*      T       T       
+H       T*      T       
+H*      H       T       
+E3,11   H*      T       
+E3,11*  W1,2    T       
+T       W1,2*   T       
+        E5,2            
+        T               
+        H               
+        E2,0            
+...     F       ...     
+T               T*      
+T*              H       
+H                       
+E1,10                   
+E1,10           H*      
+E1,10*          W2,0    
+T               W2,0*   
+                E4,12   
+                T       
+                H       
+                E3,9    
+T*              E3,9    
+H                       
+W0,1                    
+W0,1            E3,9*   
+W0,1*           T       
+E3,7                    
+T                       
+H                       
+E1,6                    
+T                       
+H                       
+H               T*      
+                H       
+                E3,6    
+H*              E3,6    
+W0,1            E3,6*   
+W0,1*           T       
+E4,2                    
+T                       
+T               T*      
+                H       
+                E1,5    
+                T       
+T*              T       
+H                       
+E2,0                    
+F       ...     ...     
+                T*      
+                H       
+                E2,3    
+                T       
+                H       
+                E1,2    
+                T       
+                H       
+                E2,0    
+...     ...     F       
+***********************
+Philosophers terminated
+sh-2.03$ ./phil 3 10
+Phil0   Phil1   Phil2   
+******  ******  ******  
+H       H       H*      
+H*      H       E1,9    
+W0,1    H*      E1,9    
+W0,1    W1,2    E1,9*   
+W0,1    W1,2*   T       
+        E4,6            
+        T               
+W0,1*   T       T       
+E2,8                    
+T                       
+H                       
+H       T*      T       
+H       H       T*      
+                H       
+                E1,8    
+H       H*      E1,8    
+H*      W1,2    E1,8    
+W0,1    W1,2    E1,8*   
+W0,1    W1,2*   T       
+        E2,4            
+        T               
+W0,1*   T       T       
+E4,4                    
+T                       
+H                       
+E2,2                    
+T                       
+T       T       T*      
+                H       
+                E5,3    
+                T       
+T       T*      T       
+        H               
+        E3,1            
+        T               
+        H               
+        E1,0            
+T       E1,0    T*      
+T       E1,0*   H       
+...     F       ...     
+T*              H       
+H               H*      
+H*              E3,0    
+W0,1            E3,0*   
+...     ...     F       
+W0,1*                   
+F       ...     ...     
+***********************
+Philosophers terminated
+sh-2.03$ exit
+
+script done on Tue Nov 24 03:36:11 2009

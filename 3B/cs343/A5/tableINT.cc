@@ -4,63 +4,59 @@
 Table::Table(unsigned int noOfPhil, Printer& prt)
   : noOfPhil(noOfPhil), prt(prt) {
   // Make fork conditions
-  forks = new uCondition*[noOfPhil];
+  philosophers = new uCondition*[noOfPhil];
   available = new bool[noOfPhil];
   for (unsigned int i = 0; i < noOfPhil; i++) {
-    forks[i] = new uCondition();
+    philosophers[i] = new uCondition();
     available[i] = true;
   }
 }
 
 Table::~Table() {
   for (unsigned int i = 0; i < noOfPhil; i++) {
-    delete forks[i];
+    delete philosophers[i];
   }
-  delete forks;
+  delete philosophers;
   delete available;
 }
 
 void Table::pickup(unsigned int id) {
-  // The first philosopher is left handed!
-  // This avoids deadlock
-  if (id == 0) {
-    bool printed = false;
-    if (!available[0]) {
-      prt.print(id, Philosopher::WAITING);
-      printed = true;
-      forks[0]->wait();
-    }
-    available[0] = false;
-
-    if (!available[1]) {
-      if (!printed) {
-        prt.print(id, Philosopher::WAITING);
-      }
-      forks[1]->wait();
-    }
-    available[1] = false;
+  unsigned int idb = (id+1) % noOfPhil;
+  // If either fork is unavailable, block
+  if (!available[id] || !available[idb]) {
+    prt.print(id, Philosopher::WAITING);
+    philosophers[id]->wait();
+    // We will only get signalled when another philosopher
+    // has given us both forks
+    return;
   } else {
-    // The rest of the philosophers are right handed
-    bool printed = false;
-    if (!available[id]) {
-      prt.print(id, Philosopher::WAITING);
-      forks[id]->wait();
-    }
+    // If both are available, pick them up
     available[id] = false;
-
-    if (!available[(id+1) % noOfPhil]) {
-      if (!printed) {
-        prt.print(id, Philosopher::WAITING);
-      }
-      forks[(id+1) % noOfPhil]->wait();
-    }
-    available[(id+1) % noOfPhil] = false;
+    available[idb] = false;
   }
 }
 
 void Table::putdown(unsigned int id) {
-  available[id] = true;
-  available[(id+1) % noOfPhil] = true;
-  forks[id]->signal();
-  forks[(id+1) % noOfPhil]->signal();
+  // Far left and right forks (the other fork of the adjacent philosopher)
+  int farLeft = (id == 0 ? noOfPhil - 1 : id - 1);
+  int farRight = (id + 2) % noOfPhil;
+  // My adjacent philosophers
+  int pLeft = farLeft;
+  int pRight = (id + 1) % noOfPhil;
+
+  // If either adjacent philosopher would have both forks available at this
+  // time, then pick up the other fork, and unblock that philosopher instead of
+  // putting down my fork on that side
+  if (available[farLeft] && !philosophers[pLeft]->empty()) {
+    available[farLeft] = false;
+    philosophers[pLeft]->signal();
+  } else {
+    available[id] = true;
+  }
+  if (available[farRight] && !philosophers[pRight]->empty()) {
+    available[farRight] = false;
+    philosophers[pRight]->signal();
+  } else {
+    available[pRight] = true;
+  }
 }

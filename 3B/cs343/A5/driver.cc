@@ -1,17 +1,34 @@
 #include <uC++.h>
 #include <cstdlib>
+#include <iostream>
 #include "philosopher.h"
 #include "table.h"
 #include "printer.h"
 
 void uMain::main() {
+  const char* usage = "Usage: ./phil [ P [ N ] ], P = # philosophers >= 2, N = # noodles >= 1";
+  // Parameters
+  int noOfPhil = 5;
+  int noodles = 30;
+
+  // Read in arguments
+  if (argc > 3) {
+    std::cerr << usage << std::endl;
+    exit(1);
+  } else if (argc > 2) {
+    noOfPhil = atoi(argv[1]);
+    noodles = atoi(argv[2]);
+  } else if (argc > 1) {
+    noOfPhil = atoi(argv[1]);
+  }
+
+  if (noOfPhil <= 1 || noodles <= 0) {
+    std::cerr << usage << std::endl;
+    exit(1);
+  }
+
   // Set random seed
   srand(time(NULL));
-  srand(0);
-
-  // Constants
-  unsigned int noOfPhil = 5;
-  unsigned int noodles = 10;
 
   // Make Printer, Table
   Printer prt(noOfPhil);

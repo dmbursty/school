@@ -10,13 +10,15 @@ class Printer;
 #if defined(TABLETYPE_SEM)
 class Table {
  private:
-  uSemaphore** forks;
+  uSemaphore tableLock;
+  bool* available;
+  uSemaphore** philosophers;
 
 #elif defined(TABLETYPE_INT)
 _Monitor Table {
  private:
-  uCondition** forks;
   bool* available;
+  uCondition** philosophers;
 
 #elif defined(TABLETYPE_AUTO)
 

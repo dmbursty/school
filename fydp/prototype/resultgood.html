@@ -1,6 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Equinox Search Results</title>
+    <link rel="stylesheet" type="text/css" href="css.css" />
+    <title>soblogitsgood Search Results</title>
     <script type="text/javascript">
       function getUrlVars()
       {
@@ -27,37 +28,87 @@
             document.write("<input type=\"text\" name=\"query\" size=\"50\" value=" );
 										   document.write( getUrlVars()['query'] );
 										   document.write( ">");
+	    document.write("<input type='hidden' name='bin' value='");
+              document.write( getUrlVars()['bin'] );
+              document.write( "'>" )
           </script>
           in
-          <SELECT NAME="gourl">
-            <OPTION VALUE="All">All
-            <OPTION VALUE="Technology">Technology
-            <OPTION VALUE="Pop Culture">Pop Coluture
-            <OPTION VALUE="Economics">Economics
-            <OPTION VALUE="Politics">Politics
-          </SELECT>
+	  
+          <SELECT NAME="bin">
+              <OPTION VALUE="all">All
+              <OPTION VALUE="tech">Technology
+              <OPTION VALUE="pop">Pop Culture
+              <OPTION VALUE="econ">Economics
+              <OPTION VALUE="pol">Politics
+            </SELECT>
 	</td>
       </tr>
       <tr>
 	<td><center><input type="submit" value="Search" /></center></td>
       </tr>
     </table>
-    </form>
+  </form>
   <body>
     <hr>
     <table border=0 align="center" >
       <tr>
 	<td width="15%" valign="top">
-	  <a href="result0.html">All(122)</a><br />
-	  <ul>
-	    <li><a href="resultgood.html">Technology (63)</a><br />
-	    <li><a href="resultgood.html">Pop Culture (11)</a><br />
-	    <li><a href="resultgood.html">Politics (17)</a><br />
-	    <li><a href="resultgood.html">Economics (31)</a><br />
-	  </ul>
+	  <script type = "text/javascript">
+	    function getLink( page, bin, label) {
+	    if( bin != getUrlVars()['bin'] ) {
+	    document.write("<a href='")
+				     document.write(page)		     
+				     document.write(".html?bin=")
+				     document.write(bin)
+				     document.write("&query=")
+				     document.write(getUrlVars()['query'])
+									document.write("'>");
+	      }
+	      document.write(label)
+	      if( bin != getUrlVars()['bin'] ) {
+	      document.write("</a>")
+	    }
+	    document.write("<br />")
+            }
+	    getLink( "resultgood", "all", "All (122) " )
+	  </script>
+	  
+          <ul>
+	    <li><script type="text/javascript">getLink( "resultgood", "tech", "Technology (63)" )</script>
+	    <li><script type="text/javascript">getLink( "resultgood", "pop", "Pop Culture (11)" )</script>
+	    <li><script type="text/javascript">getLink( "resultgood", "pol", "Politics (17)" )</script>
+	    <li><script type="text/javascript">getLink( "resultgood", "econ", "Economics (31)" )</script>
+          </ul>
 	</td>
 	<td width="85%">
-          <a href="http://profy.com/2008/10/25/g1-phone-not-best-phone-ever-but-it-is-right-now-or-not/">G1 Phone May Not Be the Best Phone Ever But It Is Right Now</a><br>
+	  <script type = "text/javascript">
+	    if( getUrlVars()['bin'] == undefined || getUrlVars()['bin'] == "all" ) {
+	    document.write("<a href='http://realworldmom.com/2009/09/02/not-so-wordless-wednesday-my-awesome-g1/'>Not So Wordless Wednsday: My Awesome G1</a><br />")
+            document.write("A few weeks ago, I got a G1.  It is awesome!  Tim got one first, and, after playing with his (his G1!), I wanted one so badly I could taste it!<br />")
+            document.write("<a href='http://realworldmom.com'>http://realworldmom.com</a><br>")
+            document.write("<font color='green'>Sentiment: Good</font><br />")
+            document.write("Keywords: Technology  <br /><br />")
+	    
+	    document.write("<a href='http://reviews.cnet.com/smartphones/t-mobile-g1-black/4864-6452_7-33283585-2.html?ord=creationDate+desc '>Awesome Phone!!!!!!!!!!!!! - T-Mobile G1 (black) user review and</a><br />")
+	    document.write("Pros: almost everything. plus 3g speed<br />")
+	    document.write("<a href='http://reviews.cnet.com'> reviews.cnet.com</a><br />")
+	    document.write("<font color='green'>Sentiment: Good</font><br />")
+	    document.write("Keywords: Technology <br /><br />")
+	    
+	    document.write("<a href='http://zedomax.com/blog/2008/09/23/t-mobile-g1-looking-great/'> T-Mobile G1 looking great.</a><br />")
+	    document.write("I think there's a very good chance T-Mobile G1 will be taking over some of that iPhone sales. (Sorry Steve Jobs but G1 phone looks like an iPhone Killer to me.) <br />")
+	    document.write("<a href='http://zedomax.com'> zedomax.com</a><br />")
+	    document.write("<font color='green'>Sentiment: Good</font><br />")
+	    document.write("Keywords: Technology <br /><br />")
+	    
+	    document.write("<a href='http://m.wisdomtap.com/T-Mobile-G1/mobilepp-1947,2255,3264,103,102/'> T-Mobile G1 reviews . Great for web browsing, texting</a><br />")
+	    document.write("Highest Rating for Web Browsing<br />")
+	    document.write("<a href='http://m.wisdomtap.com'> m.wisdomtap.com</a><br />")
+	    document.write("<font color='green'>Sentiment: Good</font><br />")
+	    document.write("Keywords: Technology <br /><br />")
+	    }
+	  </script>
+	  <a href="http://profy.com/2008/10/25/g1-phone-not-best-phone-ever-but-it-is-right-now-or-not/">G1 Phone May Not Be the Best Phone Ever But It Is Right Now</a><br>
           I've had the G1 for 3 days now and without a doubt this is the best phone I've ever laid hands on, with every passing moment I learn new things and see new app's, and now that I've learned everything (well almost everything) I'm very VERY happy with the purchase and will no longer purchase any other phone.<br>
           <a href="http://profy.com">http://profy.com</a><br>
           <font color="green">Sentiment: Good</font><br />
@@ -69,34 +120,10 @@
           <font color="green">Sentiment: Good</font><br />
           Keywords: Technology  <br /><br />
 
-	  <a href="http://realworldmom.com/2009/09/02/not-so-wordless-wednesday-my-awesome-g1/">Not So Wordless Wednsday: My Awesome G1</a><br />
-          A few weeks ago, I got a G1.  It is awesome!  Tim got one first, and, after playing with his (his G1!), I wanted one so badly I could taste it!<br />
-          <a href="http://realworldmom.com">http://realworldmom.com</a><br>
-          <font color="green">Sentiment: Good</font><br />
-          Keywords: Technology  <br /><br />
-
-	  <a href="http://reviews.cnet.com/smartphones/t-mobile-g1-black/4864-6452_7-33283585-2.html?ord=creationDate+desc ">Awesome Phone!!!!!!!!!!!!! - T-Mobile G1 (black) user review and</a><br />
-	  Pros: almost everything. plus 3g speed<br />
-	  <a href="http://reviews.cnet.com"> reviews.cnet.com</a><br />
-	  <font color="green">Sentiment: Good</font><br />
-	  Keywords: Technology <br /><br />
-
-	  <a href="http://zedomax.com/blog/2008/09/23/t-mobile-g1-looking-great/"> T-Mobile G1 looking great.</a><br />
-	  I think there's a very good chance T-Mobile G1 will be taking over some of that iPhone sales. (Sorry Steve Jobs but G1 phone looks like an iPhone Killer to me.) <br />
-	  <a href="http://zedomax.com"> zedomax.com</a><br />
-	  <font color="green">Sentiment: Good</font><br />
-	  Keywords: Technology <br /><br />
-	      
-	  <a href="http://m.wisdomtap.com/T-Mobile-G1/mobilepp-1947,2255,3264,103,102/"> T-Mobile G1 reviews . Great for web browsing, texting</a><br />
-	  Highest Rating for Web Browsing<br />
-	  <a href="http://m.wisdomtap.com"> m.wisdomtap.com</a><br />
-	  <font color="green">Sentiment: Good</font><br />
-	  Keywords: Technology <br /><br />
-
 	</td>
       </tr>
     </table>
     <br />
     <center><a href="resultgoodhelp.html">Click Here for Help</a></center>
-    </body>
+  </body>
 </html>

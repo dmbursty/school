@@ -27,7 +27,8 @@ def downloadAll( file, out ):
         out.write( "<add>\n" )
         d = feedparser.parse( line )
         for item in d.entries:
-            out.write( getDoc( d.feed, d.item ) )
+            out.write( getDoc( d.feed, item ) )
         out.write("</add>")
 
-
+if __name__ == "__main__":
+    downloadAll( file("../feedlister/feeds"), file("out.xml", "w") )

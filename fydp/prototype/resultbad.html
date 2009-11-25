@@ -1,6 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Equinox Search Results</title>
+    <link rel="stylesheet" type="text/css" href="css.css" />
+    <title>soblogitsgood Search Results</title>
     <script type="text/javascript">
       function getUrlVars()
       {
@@ -25,17 +26,22 @@
           Search
           <script type="text/javascript">
             document.write("<input type=\"text\" name=\"query\" size=\"50\" value=" );
-            document.write( getUrlVars()['query'] );
+	    document.write( getUrlVars()['query'] );
 	    document.write( ">");
+	    
+	    document.write("<input type='hidden' name='bin' value='");
+            document.write( getUrlVars()['bin'] );
+            document.write( "'>" )
           </script>
           in
-          <SELECT NAME="gourl">
-            <OPTION VALUE="All">All
-            <OPTION VALUE="Technology">Technology
-            <OPTION VALUE="Pop Culture">Pop Coluture
-            <OPTION VALUE="Economics">Economics
-            <OPTION VALUE="Politics">Politics
-          </SELECT>
+	  <SELECT NAME="bin">
+              <OPTION VALUE="all">All
+              <OPTION VALUE="tech">Technology
+              <OPTION VALUE="pop">Pop Culture
+              <OPTION VALUE="econ">Economics
+              <OPTION VALUE="pol">Politics
+            </SELECT>
+
         </td>
       </tr>
       <tr>
@@ -46,13 +52,32 @@
     <table border=0 align="center" >
       <tr>
 	<td width="15%" valign="top">
-	  <a href="result0.html">All(122)</a><br />
-	  <ul>
-	    <li><a href="resultbad.html">Technology (63)</a><br />
-	    <li><a href="resultbad.html">Pop Culture (11)</a><br />
-	    <li><a href="resultbad.html">Politics (17)</a><br />
-	    <li><a href="resultbad.html">Economics (31)</a><br />
-	  </ul>
+	  <script type = "text/javascript">
+	    function getLink( page, bin, label) {
+	    if( bin != getUrlVars()['bin'] ) {
+	    document.write("<a href='")
+				     document.write(page)		     
+				     document.write(".html?bin=")
+				     document.write(bin)
+				     document.write("&query=")
+				     document.write(getUrlVars()['query'])
+									document.write("'>");
+	      }
+	      document.write(label)
+	      if( bin != getUrlVars()['bin'] ) {
+	      document.write("</a>")
+	    }
+	    document.write("<br />")
+            }
+	    getLink( "resultbad", "all", "All (66) " )
+	  </script>
+	  
+          <ul>
+	    <li><script type="text/javascript">getLink( "resultbad", "tech", "Technology (31)" )</script>
+	    <li><script type="text/javascript">getLink( "resultbad", "pop", "Pop Culture (5)" )</script>
+	    <li><script type="text/javascript">getLink( "resultbad", "pol", "Politics (12)" )</script>
+	    <li><script type="text/javascript">getLink( "resultbad", "econ", "Economics (18)" )</script>
+          </ul>
 	</td>
         <td valign="top" width="85%">
           <a href="http://g1-sucks.com/the-g1-sucks/">The G1 Sucks</a><br>
@@ -66,19 +91,22 @@
           <a href="http://g1-sucks.com">http://g1-sucks.com</a><br>
           <font color="red">Sentiment: Bad</font><br />
           Keywords: Technology <br /><br />
-
-	  <a href="http://androidcommunity.com/forums/f9/the-g1-sucks-6214/"> The G1 Sucks</a><br />
-	   Sorry guys....the G1 has potential...the potential to make me go insanely impatient....yes I'm a complainer like a lot of people on<br />
-          <a href="http://androidcommunity.com">androidcommunity.com</a><br />
-          <font color="red">Sentiment: Bad</font><br />
-          Keywords: Technology <br /><br />
-
-	  <a href="http://gizmodo.com/5054638/ex+google-mobile-product-manager-nails-the-g1-with-good-reason">Ex-Google Mobile Product Manager Nails the G1 with Good Reason</a> <br />
-	  25 Sep 2008 ... Ulf Waschbusch, who was Google's Mobile Product Manager until he recently left for MySpace Mobile, thinks the T-Mobile G1 sucks for a<br />
-	  <a href="http://gizomodo.com">gizmodo.com</a><br />
-	  <font color="red">Sentiment: Bad</font><br />
-	  Keywords: Technology <br /><br />
 	  
+	  <script type = "text/javascript">
+	    if( getUrlVars()['bin'] == undefined || getUrlVars()['bin'] == "all" ) {
+	    document.write("<a href='http://androidcommunity.com/forums/f9/the-g1-sucks-6214/'> The G1 Sucks</a><br />")
+	    document.write("Sorry guys....the G1 has potential...the potential to make me go insanely impatient....yes I'm a complainer like a lot of people on<br />")
+            document.write("<a href='http://androidcommunity.com'>androidcommunity.com</a><br />")
+            document.write("<font color='red'>Sentiment: Bad</font><br />")
+            document.write("Keywords: Technology <br /><br />")
+
+	    document.write("<a href='http://gizmodo.com/5054638/ex+google-mobile-product-manager-nails-the-g1-with-good-reason'>Ex-Google Mobile Product Manager Nails the G1 with Good Reason</a> <br />")
+	    document.write("25 Sep 2008 ... Ulf Waschbusch, who was Google's Mobile Product Manager until he recently left for MySpace Mobile, thinks the T-Mobile G1 sucks for a<br />")
+	    document.write("<a href='http://gizomodo.com'>gizmodo.com</a><br />")
+	    document.write("<font color='red'>Sentiment: Bad</font><br />")
+	    document.write("Keywords: Technology <br /><br />")
+	    }
+	  </script>
         </td>
       </tr>
     </table>
@@ -87,3 +115,16 @@
     <center><a href="resultbadhelp.html">Click Here for Help</a></center>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

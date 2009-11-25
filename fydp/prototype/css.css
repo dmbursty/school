@@ -1,0 +1,46 @@
+body {
+  font-family: "Verdana", Sans-serif;
+}
+
+a {
+  color: #0000CC;
+}
+
+a.bid {
+  font-size: 120%;
+  font-weight: bold;
+}
+
+a.head {
+  color: #363636
+}
+
+ul
+{
+  list-style-image:url('arrow.jpg');
+}
+
+hr
+{
+  border-style: solid;
+  height: 1px;
+  border-color: #49BD43;
+}
+
+td.goodhead
+{
+  background-color: #49BD43;
+}
+
+td.badhead
+{
+  background-color: #F95353;
+}
+
+/*
+Red
+#F95353
+
+Green
+#49BD43
+*/

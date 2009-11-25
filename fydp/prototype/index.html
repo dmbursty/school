@@ -1,28 +1,33 @@
 <html>
   <head>
-    <title>Equinox Sentiment Search Engine</title>
+    <link rel="stylesheet" type="text/css" href="css.css" />
+    <title>soblogitsgood: A Sentiment Search Engine</title>
   </head>
   <body>
     <br /><br />
+    <p align="center">
+    <img src="logo.png"/>
+    </p>
+    <br />
     <form name="queryform" action="result0.html" method="GET">
 
-    <table align="center"> <tr>
-        <td>
-          Search <input type="text" name="query" size="50"/> in
-          <SELECT NAME="gourl">
-            <OPTION VALUE="All">All
-            <OPTION VALUE="Technology">Technology
-            <OPTION VALUE="Pop Culture">Pop Colture
-            <OPTION VALUE="Economics">Economics
-            <OPTION VALUE="Politics">Politics
-          </SELECT>
-        </td>
-      </tr>
-      <tr>
-        <td><center><input type="submit" value="Search" /></center></td>
-      </tr>
-    </table>
-  </form>
+      <table align="center"> <tr>
+          <td>
+            Search <input type="text" name="query" size="50"/> in
+	    <SELECT NAME="bin">
+              <OPTION VALUE="all">All
+              <OPTION VALUE="tech">Technology
+              <OPTION VALUE="pop">Pop Culture
+              <OPTION VALUE="econ">Economics
+              <OPTION VALUE="Pol">Politics
+            </SELECT>
+          </td>
+	</tr>
+	<tr>
+          <td><center><input type="submit" value="Search" /></center></td>
+	</tr>
+      </table>
+    </form>
     
     <br />
     <center><a href="helpmain.html">Click Here for Help</a></center>

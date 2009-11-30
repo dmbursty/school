@@ -1,0 +1,157 @@
+-- Example commands for (re) creating the BIBLIOGRAPHY database
+-- NOTE: insert commands should be modified to create appropriate
+-- test data
+
+connect to cs348
+
+drop table author
+create table author ( \
+    aid         integer not null, \
+    name        char(22) not null, \
+    url         char(42), \
+    primary key (aid) )
+
+insert into author (aid, name) values (1, 'Peter Bumbulis')
+insert into author (aid, name, url) \
+values (2, 'Ivan T. Bowman', 'http://db.uwaterloo.ca/~itbowman')
+insert into author (aid, name, url) values (3, 'Nathaniel Flath', 'http://nflath.com')
+insert into author (aid, name) values (4, 'Stephenie Meyer')
+insert into author (aid, name) values (5, 'Anime Lovers')
+insert into author (aid, name) values (6, 'Nature Lovers')
+insert into author (aid, name, url) values (7, 'Yubin Kim', 'http://yubinkim.com')
+insert into author (aid, name) values (8, 'Harold Abelson')
+insert into author (aid, name, url) values (9, 'Max Burstyn', 'http://burstyn.ca')
+insert into author (aid, name) values (10, 'No Arms')
+
+drop table publication
+create table publication ( \
+    pubid       char(10) not null, \
+    title       char(70) not null, \
+    primary key (pubid) )
+
+insert into publication (pubid, title) \
+values ('SIGMOD02', 'Proc. ACM SIGMOD Conference on Management of Data')
+insert into publication (pubid, title) \
+values ('BB02', 'A Compact B-Tree')
+insert into publication (pubid, title) values ('ANIME01', 'Anime North')
+insert into publication (pubid, title) values ('FAIL01', 'Fail Conference')
+insert into publication (pubid, title) values ('JOUR01', 'Nauture')
+insert into publication (pubid, title) values ('JOUR02', 'Cute Things')
+insert into publication (pubid, title) values ('BOOK01', 'Twilight')
+insert into publication (pubid, title) values ('BOOK02', \
+  'Structure and Interpretations of Computer Programs')
+insert into publication (pubid, title) values \
+('BOOK011', 'I love vampires')
+insert into publication (pubid, title) values \
+('BOOK012', 'Edward is a vampire')
+insert into publication (pubid, title) values \
+('BOOK013', 'Essays on the Cullen Family')
+insert into publication (pubid, title) values \
+('JOUR011', 'Butterflies')
+insert into publication (pubid, title) values \
+('JOUR012', 'Geologic Formations')
+insert into publication (pubid, title) values \
+('FAIL011', 'How to get 10 in every course')
+insert into publication (pubid, title) values \
+('FAIL012', 'How I failed all my courses')
+
+drop table wrote
+create table wrote ( \
+    aid         integer not null, \
+    pubid       char(10) not null, \
+    aorder      integer not null, \
+    primary key (aid, pubid), \
+    foreign key (aid) references author (aid), \
+    foreign key (pubid) references publication (pubid) )
+
+insert into wrote (aid, pubid, aorder) values (1, 'BB02', 1)
+insert into wrote (aid, pubid, aorder) values (2, 'BB02', 2)
+insert into wrote (aid, pubid, aorder) values (5, 'ANIME01', 1)
+insert into wrote (aid, pubid, aorder) values (7, 'JOUR02', 1)
+insert into wrote (aid, pubid, aorder) values (9, 'JOUR02', 2)
+insert into wrote (aid, pubid, aorder) values (1, 'JOUR02', 3)
+insert into wrote (aid, pubid, aorder) values (4, 'BOOK01', 1)
+insert into wrote (aid, pubid, aorder) values (8, 'BOOK02', 1)
+insert into wrote (aid, pubid, aorder) values \
+(4, 'BOOK011', 2)
+insert into wrote (aid, pubid, aorder) values \
+(3, 'BOOK011', 1)
+insert into wrote (aid, pubid, aorder) values \
+(9, 'BOOK012', 1)
+insert into wrote (aid, pubid, aorder) values \
+(3, 'BOOK013', 1)
+insert into wrote (aid, pubid, aorder) values \
+(6, 'JOUR011', 3)
+insert into wrote (aid, pubid, aorder) values \
+(7, 'JOUR011', 2)
+insert into wrote (aid, pubid, aorder) values \
+(9, 'JOUR011', 1)
+insert into wrote (aid, pubid, aorder) values \
+(9, 'JOUR012', 1)
+insert into wrote (aid, pubid, aorder) values \
+(3, 'FAIL011', 1)
+insert into wrote (aid, pubid, aorder) values \
+(3, 'FAIL012', 1)
+
+drop table proceedings
+create table proceedings ( \
+    pubid       char(10) not null, \
+    year        integer not null, \
+    primary key (pubid), \
+    foreign key (pubid) references publication (pubid) )
+
+insert into proceedings (pubid, year) values ('SIGMOD02', 2002)
+insert into proceedings (pubid, year) values ('ANIME01', 2000)
+insert into proceedings (pubid, year) values ('FAIL01', 2000)
+
+drop table journal
+create table journal ( \
+    pubid       char(10) not null, \
+    volume      integer not null, \
+    number      integer not null, \
+    year        integer not null, \
+    primary key (pubid), \
+    foreign key (pubid) references publication (pubid) )
+
+insert into journal (pubid, volume, number, year) values ('JOUR01', 1, 1, 1999)
+insert into journal (pubid, volume, number, year) values ('JOUR02', 2, 1, 1999)
+
+drop table book
+create table book ( \
+    pubid       char(10) not null, \
+    publisher   char(50) not null, \
+    year        integer not null, \
+    primary key (pubid), \
+    foreign key (pubid) references publication (pubid) )
+
+insert into book (pubid, publisher, year) values ('BOOK01', 'Random House', 2010)
+insert into book (pubid, publisher, year) values ('BOOK02', 'MIT Press', 2000)
+
+drop table article
+create table article ( \
+    pubid       char(10) not null, \
+    appearsin   char(10) not null, \
+    startpage   integer not null, \
+    endpage     integer not null, \
+    primary key (pubid), \
+    foreign key (pubid) references publication (pubid), \
+    foreign key (appearsin) references publication (pubid) )
+
+insert into article (pubid, appearsin, startpage, endpage) \
+values ('BB02', 'SIGMOD02', 533, 541)
+insert into article (pubid, appearsin, startpage, endpage) values \
+('BOOK011','BOOK01', 1, 5)
+insert into article (pubid, appearsin, startpage, endpage) values \
+('BOOK012','BOOK01', 6, 10)
+insert into article (pubid, appearsin, startpage, endpage) values \
+('BOOK013','BOOK01', 10, 20)
+insert into article (pubid, appearsin, startpage, endpage) values \
+('JOUR011', 'JOUR01', 89, 100)
+insert into article (pubid, appearsin, startpage, endpage) values \
+('JOUR012', 'JOUR01', 9, 12)
+insert into article (pubid, appearsin, startpage, endpage) values \
+('FAIL012', 'FAIL01', 2, 10)
+insert into article (pubid, appearsin, startpage, endpage) values \
+('FAIL011', 'FAIL01', 1, 2)
+
+commit work

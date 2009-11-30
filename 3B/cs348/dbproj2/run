@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+java -d32 -classpath .:db2java.zip "$@"

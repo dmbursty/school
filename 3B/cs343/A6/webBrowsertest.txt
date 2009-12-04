@@ -1,0 +1,701 @@
+-------+---------------------------------------------------------------------------------------------------------------
+Test # | Purpose of Tests
+-------+---------------------------------------------------------------------------------------------------------------
+1      | commandline parameter tests
+-------+---------------------------------------------------------------------------------------------------------------
+2-12   | test functionality         
+-------+---------------------------------------------------------------------------------------------------------------
+13     | stress testing
+-------+---------------------------------------------------------------------------------------------------------------
+
+
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+Test # | Type of Test | Line #s | Reason for Test                            | Analysis of Test
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+1      | Bad parameter| 2-7     | Make sure program rejects incorrect params.| Given less than 2 parameters or pool size
+       | test         |         |                                            | that's less than 1, it prints an usage  
+       |              |         |                                            | or error message and exits.                           
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+2      | Parameter    | 8-62    | Ensure that correct number of workers and  | Browser started 3 couriers and each 
+       | test         |         | couriers are instantiated for given params.| server started 3 workers.   
+       |              |         |                                            |                                                       
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+3      | find topic   | 63-89   | Make sure correct topics are found, and    | Program correctly prints out the list of 
+       | test         |         | nonexistent topics print an error msg.     | files under 'sf', but prints an error msg
+       |              |         |                                            | when given an incorrectly spelled                     
+       |              |         |                                            | version of topic 'art'
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+4      | find url     | 90-119  | Make sure correct urls are found, and      | Correctly outputs the contents of the    
+       | test         |         | nonexistent urls print an error msg.       | sf:topics/sf/The_Avengers, but prints an    
+       |              |         |                                            | error msg for nonexistent urls, and                   
+       |              |         |                                            | gibberish input.
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+5      | cache test   | 121-195 | Ensure that results of f/d are stored in   | When f/d commands are repeated again,    
+       |              |         | cache.                                     | the result is printed from the cache        
+       |              |         |                                            | without sending a courier.                            
+       |              |         |                                            | The p command prints out topic history
+       |              |         |                                            | and the Jesuit page, as expected.     
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+6      | clear cache  | 196-230 | Make sure c clears the cache.              | After c, the p command prints nothing.   
+       | test         |         |                                            | Also, f/d the same items as above           
+       |              |         |                                            | causes a courier to pick up the work and 
+       |              |         |                                            | check the TNS.                        
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+7      | test case    | 231-290 | Ensure that urls/topics are case sensitive.| f disney and d disney:topics/disney/Toy_ 
+       | sensitivity  |         |                                            | Story returns results, but not f Disney     
+       |              |         |                                            | or the lower case version of Toy_Story 
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+8      | kill server  | 291-334 | Ensure zombified server does not return    | Initial f science lists out urls in      
+       |              |         | results; for topic.                        | this topic. p shows that all science        
+       |              |         |                                            | topics are in server 0. When server 0  
+       |              |         |                                            | is killed, and the cache is cleared,   
+       |              |         |                                            | f science no longer returns results.   
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+9      | kill server  | 335-400 | Ensure zombified server does not return    | f sf and p shows that The_Avengers is   
+       |              |         | results; for url.                          | on server 9. When server 9 is killed and    
+       |              |         |                                            | cache is cleared, The_Avengers are no  
+       |              |         |                                            | longer found because zombie servers     
+       |              |         |                                            | don't return resuts.
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+10     | kill server  | 401-456 | Ensure zombified servers are cleaned up    | Each call to k causes the server and its
+       |              |         | immediately.                               | workers to clean up. When program quit      
+       |              |         |                                            | is finally called, there is no server                                       
+       |              |         |                                            | clean up because they all already have  
+       |              |         |                                            | cleaned themselves up.
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+11     | kill invalid | 457-472 | Make sure killing an invalid server id     | When an invalid server id (8) is killed,     
+       | server       |         | is handled correctly.                      | an appropriate error message is         
+       |              |         |                                            | printed.
+       |              |         |                                            |                                         
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+12     | test quit    | 473-552 | Ensure two methods of quitting work.       | Given a q, program quits. Given an eof       
+       |              |         |                                            | program quits.                          
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+13     | stress test  | 553-620 | Make sure program performs correctly under | Output is ommitted due to space 
+       |              |         | heavy work load.                           | constraints, but program performed and
+       |              |         |                                            | and ended correctly without issues.     
+-------+--------------+---------+--------------------------------------------+-----------------------------------------
+
+     1	Script started on Mon Nov 30 18:36:17 2009
+     2	y12kim@student ~/cs343/co/a6 $ ./webBrowser 
+     3	ERROR: Usage: ./webBrowser C (courier-pool size) W (worker-pool size)
+     4	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1
+     5	ERROR: Usage: ./webBrowser C (courier-pool size) W (worker-pool size)
+     6	y12kim@student ~/cs343/co/a6 $ ./webBrowser 10 0
+     7	ERROR: Pool size must be greater than 0.
+     8	y12kim@student ~/cs343/co/a6 $ ./webBrowser 3 1
+     9	        ASSASSIN: starting
+    10	        COURIER[0]: requesting work
+    11	        COURIER[1]: requesting work
+    12	        COURIER[2]: requesting work
+    13	KEYBOARD: starting
+    14	        WORKER[0][0]: starting
+    15	        WORKER[1][0]: starting
+    16	        WORKER[2][0]: starting
+    17	        WORKER[3][0]: starting
+    18	        WORKER[9][0]: starting
+    19	...
+    20	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 3
+    21	        ASSASSIN: starting
+    22	        COURIER[0]: requesting work
+    23	KEYBOARD: starting
+    24	        WORKER[0][0]: starting
+    25	        WORKER[0][1]: starting
+    26	        WORKER[0][2]: starting
+    27	        WORKER[1][0]: starting
+    28	        WORKER[1][1]: starting
+    29	        WORKER[1][2]: starting
+    30	        WORKER[2][0]: starting
+    31	        WORKER[2][1]: starting
+    32	        WORKER[2][2]: starting
+    33	        WORKER[3][0]: starting
+    34	        WORKER[3][1]: starting
+    35	        WORKER[3][2]: starting
+    36	        WORKER[9][0]: starting
+    37	        WORKER[9][1]: starting
+    38	        WORKER[9][2]: starting
+    39	...        
+    40	y12kim@student ~/cs343/co/a6 $ ./webBrowser 3 3
+    41	        ASSASSIN: starting
+    42	        COURIER[0]: requesting work
+    43	        COURIER[1]: requesting work
+    44	        COURIER[2]: requesting work
+    45	KEYBOARD: starting
+    46	        WORKER[0][0]: starting
+    47	        WORKER[0][1]: starting
+    48	        WORKER[0][2]: starting
+    49	        WORKER[1][0]: starting
+    50	        WORKER[1][1]: starting
+    51	        WORKER[1][2]: starting
+    52	        WORKER[2][0]: starting
+    53	        WORKER[2][1]: starting
+    54	        WORKER[2][2]: starting
+    55	        WORKER[3][0]: starting
+    56	        WORKER[3][1]: starting
+    57	        WORKER[3][2]: starting
+    58	        WORKER[9][0]: starting
+    59	        WORKER[9][1]: starting
+    60	        WORKER[9][2]: starting
+    61	...
+    62	Script started on Mon Nov 30 18:53:49 2009
+    63	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1
+    64	        ASSASSIN: starting
+    65	        COURIER[0]: requesting work
+    66	KEYBOARD: starting
+    67	        WORKER[0][0]: starting
+    68	        WORKER[1][0]: starting
+    69	        WORKER[2][0]: starting
+    70	        WORKER[3][0]: starting
+    71	        WORKER[9][0]: starting
+    72	f sf
+    73	BROWSER: requesting topic information sf
+    74	TNS: found topic sf on 2 servers
+    75	        COURIER[0]: requesting work
+    76	TOPIC: sf
+    77	sf:topics/sf/Babylon_5
+    78	sf:topics/sf/Blake's_7
+    79	sf:topics/sf/Day_of_the_Triffids
+    80	sf:topics/sf/Doctor_Who
+    81	sf:topics/sf/Science_fiction_on_television
+    82	sf:topics/sf/The_Avenger_television
+    83	sf:topics/sf/The_Avengers
+    84	
+    85	f fart
+    86	BROWSER: requesting topic information fart
+    87	TNS: found topic fart on 0 servers
+    88	        COURIER[0]: requesting work
+    89	No matches found for topic fart
+    90	d sf:topics/sf/The_Avengers
+    91	BROWSER: requesting file sf:topics/sf/The_Avengers
+    92	TNS: found topic sf on 2 servers
+    93	        WORKER[0][0]: Looking for file "topics/sf/The_Avengers" in topic "sf"
+    94	        WORKER[0][0]: Could not find url
+    95	        WORKER[9][0]: Looking for file "topics/sf/The_Avengers" in topic "sf"
+    96	        WORKER[9][0]: Found url sf:topics/sf/The_Avengers
+    97	        COURIER[0]: requesting work
+    98	URL: sf:topics/sf/The_Avengers
+    99	<TITLE>The Avengers</TITLE>
+   100	<TOPIC>The Avengers</TOPIC>
+   101	...
+   102	back and fix that link to point to the appropriate specific page.
+   103	</TEXT>
+   104	
+   105	d gibbersih
+   106	BROWSER: requesting file gibbersih
+   107	Could not parse url gibbersih as topic:filename
+   108	        COURIER[0]: requesting work
+   109	URL gibbersih not found
+   110	d sf:moregibberish
+   111	BROWSER: requesting file sf:moregibberish
+   112	TNS: found topic sf on 2 servers
+   113	        WORKER[0][0]: Looking for file "moregibberish" in topic "sf"
+   114	        WORKER[0][0]: Could not find url
+   115	        WORKER[9][0]: Looking for file "moregibberish" in topic "sf"
+   116	        WORKER[9][0]: Could not find url
+   117	        COURIER[0]: could not find url sf:moregibberish
+   118	        COURIER[0]: requesting work
+   119	URL sf:moregibberish not found
+   120	...
+   121	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1
+   122	        ASSASSIN: starting
+   123	        COURIER[0]: requesting work
+   124	        WORKER[0][0]: starting
+   125	        WORKER[1][0]: starting
+   126	        WORKER[2][0]: starting
+   127	        WORKER[3][0]: starting
+   128	        WORKER[9][0]: starting
+   129	KEYBOARD: starting
+   130	f history
+   131	BROWSER: requesting topic information history
+   132	TNS: found topic history on 4 servers
+   133	        COURIER[0]: requesting work
+   134	TOPIC: history
+   135	history:topics/history/Adoption_in_Rome
+   136	history:topics/history/Secret_Vatican_Archives
+   137	history:topics/history/Fraticelli
+   138	history:topics/history/Templar_Knights
+   139	history:topics/history/Jesuit
+   140	history:topics/history/Napoleon_Bonaparte
+   141	
+   142	f history
+   143	BROWSER: requesting topic information history
+   144	TOPIC: history
+   145	history:topics/history/Adoption_in_Rome
+   146	history:topics/history/Secret_Vatican_Archives
+   147	history:topics/history/Fraticelli
+   148	history:topics/history/Templar_Knights
+   149	history:topics/history/Jesuit
+   150	history:topics/history/Napoleon_Bonaparte
+   151	
+   152	d history:topics/history/Jesuit
+   153	BROWSER: requesting file history:topics/history/Jesuit
+   154	TNS: found topic history on 4 servers
+   155	        WORKER[0][0]: Looking for file "topics/history/Jesuit" in topic "history"
+   156	        WORKER[0][0]: Could not find url
+   157	        WORKER[1][0]: Looking for file "topics/history/Jesuit" in topic "history"
+   158	        WORKER[1][0]: Could not find url
+   159	        WORKER[2][0]: Looking for file "topics/history/Jesuit" in topic "history"
+   160	        WORKER[2][0]: Found url history:topics/history/Jesuit
+   161	        COURIER[0]: requesting work
+   162	URL: history:topics/history/Jesuit
+   163	<TITLE>Society of Jesus</TITLE>
+   164	<TOPIC>Society of Jesus</TOPIC>
+   165	...
+   166	Jesuit buildings include
+   167	
+   168	Ruins of Saint Paul's Cathedral in Macau 
+   169	</TEXT>
+   170	
+   171	d history:topics/history/Jesuit
+   172	BROWSER: requesting file history:topics/history/Jesuit
+   173	URL: history:topics/history/Jesuit
+   174	<TITLE>Society of Jesus</TITLE>
+   175	<TOPIC>Society of Jesus</TOPIC>
+   176	...
+   177	Jesuit buildings include
+   178	
+   179	Ruins of Saint Paul's Cathedral in Macau 
+   180	</TEXT>
+   181	
+   182	p
+   183	CACHE: Topic to Url
+   184	Topic: history
+   185	        Server/File name: 0 topics/history/Adoption_in_Rome
+   186	        Server/File name: 0 topics/history/Secret_Vatican_Archives
+   187	        Server/File name: 1 topics/history/Fraticelli
+   188	        Server/File name: 1 topics/history/Templar_Knights
+   189	        Server/File name: 2 topics/history/Jesuit
+   190	        Server/File name: 3 topics/history/Napoleon_Bonaparte
+   191	CACHE: Url to File Content
+   192	url history:topics/history/Jesuit   some content:
+   193	<TITLE>Society of Jesus</TITLE>
+   194	<TOPIC>Society of Jesus</TOP...
+   195	
+   196	c
+   197	p
+   198	CACHE: Topic to Url
+   199	CACHE: Url to File Content
+   200	f history
+   201	BROWSER: requesting topic information history
+   202	TNS: found topic history on 4 servers
+   203	        COURIER[0]: requesting work
+   204	TOPIC: history
+   205	history:topics/history/Adoption_in_Rome
+   206	history:topics/history/Secret_Vatican_Archives
+   207	history:topics/history/Fraticelli
+   208	history:topics/history/Templar_Knights
+   209	history:topics/history/Jesuit
+   210	history:topics/history/Napoleon_Bonaparte
+   211	
+   212	d history:topics/history/Jesuit
+   213	BROWSER: requesting file history:topics/history/Jesuit
+   214	TNS: found topic history on 4 servers
+   215	        WORKER[0][0]: Looking for file "topics/history/Jesuit" in topic "history"
+   216	        WORKER[0][0]: Could not find url
+   217	        WORKER[1][0]: Looking for file "topics/history/Jesuit" in topic "history"
+   218	        WORKER[1][0]: Could not find url
+   219	        WORKER[2][0]: Looking for file "topics/history/Jesuit" in topic "history"
+   220	        WORKER[2][0]: Found url history:topics/history/Jesuit
+   221	        COURIER[0]: requesting work
+   222	URL: history:topics/history/Jesuit
+   223	<TITLE>Society of Jesus</TITLE>
+   224	<TOPIC>Society of Jesus</TOPIC>
+   225	...
+   226	Jesuit buildings include
+   227	
+   228	Ruins of Saint Paul's Cathedral in Macau 
+   229	</TEXT>
+   230	...
+   231	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1
+   232	        ASSASSIN: starting
+   233	        COURIER[0]: requesting work
+   234	KEYBOARD: starting
+   235	        WORKER[0][0]: starting
+   236	        WORKER[1][0]: starting
+   237	        WORKER[2][0]: starting
+   238	        WORKER[3][0]: starting
+   239	        WORKER[9][0]: starting
+   240	f disney
+   241	BROWSER: requesting topic information disney
+   242	TNS: found topic disney on 4 servers
+   243	        COURIER[0]: requesting work
+   244	TOPIC: disney
+   245	disney:topics/disney/Beauty_and_the_Beast
+   246	disney:topics/disney/Snow_White_and_the_Seven_Dwarfs
+   247	disney:topics/disney/Finding_Nemo
+   248	disney:topics/disney/The_Walt_Disney_Company
+   249	disney:topics/disney/Mary_Poppins
+   250	disney:topics/disney/Toy_Story
+   251	disney:topics/disney/Pirates_of_the_Caribbean
+   252	
+   253	f Disney
+   254	BROWSER: requesting topic information Disney
+   255	TNS: found topic Disney on 0 servers
+   256	        COURIER[0]: requesting work
+   257	No matches found for topic Disney
+   258	d disney:topics/disney/Toy_Story
+   259	BROWSER: requesting file disney:topics/disney/Toy_Story
+   260	TNS: found topic disney on 4 servers
+   261	        WORKER[0][0]: Looking for file "topics/disney/Toy_Story" in topic "disney"
+   262	        WORKER[0][0]: Could not find url
+   263	        WORKER[1][0]: Looking for file "topics/disney/Toy_Story" in topic "disney"
+   264	        WORKER[1][0]: Could not find url
+   265	        WORKER[2][0]: Looking for file "topics/disney/Toy_Story" in topic "disney"
+   266	        WORKER[2][0]: Found url disney:topics/disney/Toy_Story
+   267	        COURIER[0]: requesting work
+   268	URL: disney:topics/disney/Toy_Story
+   269	<TITLE>Toy Story</TITLE>
+   270	<TOPIC>Toy Story</TOPIC>
+   271	...
+   272	Debian (a Linux distribution) releases are named after characters from this 
+   273	movie. (e.g. Potato, Woody)
+   274	</TEXT>
+   275	
+   276	d disney:topics/disney/toy_story
+   277	BROWSER: requesting file disney:topics/disney/toy_story
+   278	TNS: found topic disney on 4 servers
+   279	        WORKER[0][0]: Looking for file "topics/disney/toy_story" in topic "disney"
+   280	        WORKER[0][0]: Could not find url
+   281	        WORKER[1][0]: Looking for file "topics/disney/toy_story" in topic "disney"
+   282	        WORKER[1][0]: Could not find url
+   283	        WORKER[2][0]: Looking for file "topics/disney/toy_story" in topic "disney"
+   284	        WORKER[2][0]: Could not find url
+   285	        WORKER[3][0]: Looking for file "topics/disney/toy_story" in topic "disney"
+   286	        WORKER[3][0]: Could not find url
+   287	        COURIER[0]: could not find url disney:topics/disney/toy_story
+   288	        COURIER[0]: requesting work
+   289	URL disney:topics/disney/toy_story not found
+   290	...
+   291	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1
+   292	        ASSASSIN: starting
+   293	        WORKER[0][0]: starting
+   294	        WORKER[1][0]: starting
+   295	        WORKER[2][0]: starting
+   296	        WORKER[3][0]: starting
+   297	        WORKER[9][0]: starting
+   298	        COURIER[0]: requesting work
+   299	KEYBOARD: starting
+   300	f science
+   301	BROWSER: requesting topic information science
+   302	TNS: found topic science on 1 servers
+   303	        COURIER[0]: requesting work
+   304	TOPIC: science
+   305	science:topics/science/Anatomy
+   306	science:topics/science/Comparative_anatomy
+   307	science:topics/science/Homology_biology
+   308	science:topics/science/Mathematics
+   309	science:topics/science/Phylogeny
+   310	
+   311	p
+   312	CACHE: Topic to Url
+   313	Topic: science
+   314	        Server/File name: 0 topics/science/Anatomy
+   315	        Server/File name: 0 topics/science/Comparative_anatomy
+   316	        Server/File name: 0 topics/science/Homology_biology
+   317	        Server/File name: 0 topics/science/Mathematics
+   318	        Server/File name: 0 topics/science/Phylogeny
+   319	CACHE: Url to File Content
+   320	k 0
+   321	BROWSER: request termination of server 0
+   322	TNS: request kill of server 0
+   323	        COURIER[0]: requesting work
+   324	BROWSER: server 0 kill delivered.
+   325	        ASSASSIN: stalking server SERVER[0]
+   326	        SERVER[0]: cleanup
+   327	        WORKER[0][0]: ending
+   328	c
+   329	f science
+   330	BROWSER: requesting topic information science
+   331	TNS: found topic science on 0 servers
+   332	        COURIER[0]: requesting work
+   333	No matches found for topic science
+   334	...
+   335	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1
+   336	        ASSASSIN: starting
+   337	        COURIER[0]: requesting work
+   338	KEYBOARD: starting
+   339	        WORKER[0][0]: starting
+   340	        WORKER[1][0]: starting
+   341	        WORKER[2][0]: starting
+   342	        WORKER[3][0]: starting
+   343	        WORKER[9][0]: starting
+   344	f sf
+   345	BROWSER: requesting topic information sf
+   346	TNS: found topic sf on 2 servers
+   347	        COURIER[0]: requesting work
+   348	TOPIC: sf
+   349	sf:topics/sf/Babylon_5
+   350	sf:topics/sf/Blake's_7
+   351	sf:topics/sf/Day_of_the_Triffids
+   352	sf:topics/sf/Doctor_Who
+   353	sf:topics/sf/Science_fiction_on_television
+   354	sf:topics/sf/The_Avenger_television
+   355	sf:topics/sf/The_Avengers
+   356	
+   357	p
+   358	CACHE: Topic to Url
+   359	Topic: sf
+   360	        Server/File name: 0 topics/sf/Babylon_5
+   361	        Server/File name: 0 topics/sf/Blake's_7
+   362	        Server/File name: 0 topics/sf/Day_of_the_Triffids
+   363	        Server/File name: 0 topics/sf/Doctor_Who
+   364	        Server/File name: 0 topics/sf/Science_fiction_on_television
+   365	        Server/File name: 0 topics/sf/The_Avenger_television
+   366	        Server/File name: 9 topics/sf/The_Avengers
+   367	CACHE: Url to File Content
+   368	d sf:topics/sf/The_Avengers
+   369	BROWSER: requesting file sf:topics/sf/The_Avengers
+   370	TNS: found topic sf on 2 servers
+   371	        WORKER[0][0]: Looking for file "topics/sf/The_Avengers" in topic "sf"
+   372	        WORKER[0][0]: Could not find url
+   373	        WORKER[9][0]: Looking for file "topics/sf/The_Avengers" in topic "sf"
+   374	        WORKER[9][0]: Found url sf:topics/sf/The_Avengers
+   375	        COURIER[0]: requesting work
+   376	URL: sf:topics/sf/The_Avengers
+   377	<TITLE>The Avengers</TITLE>
+   378	<TOPIC>The Avengers</TOPIC>
+   379	...
+   380	back and fix that link to point to the appropriate specific page.
+   381	</TEXT>
+   382	
+   383	k 9
+   384	BROWSER: request termination of server 9
+   385	TNS: request kill of server 9
+   386	        COURIER[0]: requesting work
+   387	BROWSER: server 9 kill delivered.
+   388	        ASSASSIN: stalking server SERVER[9]
+   389	        SERVER[9]: cleanup
+   390	        WORKER[9][0]: ending
+   391	c
+   392	d sf:topics/sf/The_Avengers
+   393	BROWSER: requesting file sf:topics/sf/The_Avengers
+   394	TNS: found topic sf on 1 servers
+   395	        WORKER[0][0]: Looking for file "topics/sf/The_Avengers" in topic "sf"
+   396	        WORKER[0][0]: Could not find url
+   397	        COURIER[0]: could not find url sf:topics/sf/The_Avengers
+   398	        COURIER[0]: requesting work
+   399	URL sf:topics/sf/The_Avengers not found
+   400	...
+   401	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1
+   402	        ASSASSIN: starting
+   403	        COURIER[0]: requesting work
+   404	KEYBOARD: starting
+   405	        WORKER[0][0]: starting
+   406	        WORKER[1][0]: starting
+   407	        WORKER[2][0]: starting
+   408	        WORKER[3][0]: starting
+   409	        WORKER[9][0]: starting
+   410	k 0
+   411	BROWSER: request termination of server 0
+   412	TNS: request kill of server 0
+   413	        COURIER[0]: requesting work
+   414	BROWSER: server 0 kill delivered.
+   415	        ASSASSIN: stalking server SERVER[0]
+   416	        SERVER[0]: cleanup
+   417	        WORKER[0][0]: ending
+   418	k 1
+   419	BROWSER: request termination of server 1
+   420	TNS: request kill of server 1
+   421	        COURIER[0]: requesting work
+   422	BROWSER: server 1 kill delivered.
+   423	        ASSASSIN: stalking server SERVER[1]
+   424	        SERVER[1]: cleanup
+   425	        WORKER[1][0]: ending
+   426	k 2
+   427	BROWSER: request termination of server 2
+   428	TNS: request kill of server 2
+   429	        COURIER[0]: requesting work
+   430	BROWSER: server 2 kill delivered.
+   431	        ASSASSIN: stalking server SERVER[2]
+   432	        SERVER[2]: cleanup
+   433	        WORKER[2][0]: ending
+   434	k 3
+   435	BROWSER: request termination of server 3
+   436	TNS: request kill of server 3
+   437	        COURIER[0]: requesting work
+   438	BROWSER: server 3 kill delivered.
+   439	        ASSASSIN: stalking server SERVER[3]
+   440	        SERVER[3]: cleanup
+   441	        WORKER[3][0]: ending
+   442	k 9
+   443	BROWSER: request termination of server 9
+   444	TNS: request kill of server 9
+   445	        COURIER[0]: requesting work
+   446	BROWSER: server 9 kill delivered.
+   447	        ASSASSIN: stalking server SERVER[9]
+   448	        SERVER[9]: cleanup
+   449	        WORKER[9][0]: ending
+   450	KEYBOARD: quit received
+   451	BROWSER: quit received
+   452	BROWSER: cleaning up
+   453	        COURIER[0]: ending
+   454	CACHE: ending
+   455	BROWSER: ending
+   456	        ASSASSIN: ending
+   457	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1
+   458	        ASSASSIN: starting
+   459	        COURIER[0]: requesting work
+   460	KEYBOARD: starting
+   461	        WORKER[0][0]: starting
+   462	        WORKER[1][0]: starting
+   463	        WORKER[2][0]: starting
+   464	        WORKER[3][0]: starting
+   465	        WORKER[9][0]: starting
+   466	k 8
+   467	BROWSER: request termination of server 8
+   468	TNS: request kill of server 8
+   469	TNS: could not find server 8
+   470	        COURIER[0]: requesting work
+   471	BROWSER: server 8 kill delivered.
+   472	...
+   473	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1
+   474	        ASSASSIN: starting
+   475	        COURIER[0]: requesting work
+   476	KEYBOARD: starting
+   477	        WORKER[0][0]: starting
+   478	        WORKER[1][0]: starting
+   479	        WORKER[2][0]: starting
+   480	        WORKER[3][0]: starting
+   481	        WORKER[9][0]: starting
+   482	KEYBOARD: quit received
+   483	BROWSER: quit received
+   484	BROWSER: cleaning up
+   485	        COURIER[0]: ending
+   486	CACHE: ending
+   487	BROWSER: ending
+   488	        SERVER[0]: cleanup
+   489	        WORKER[0][0]: ending
+   490	        SERVER[1]: cleanup
+   491	        WORKER[1][0]: ending
+   492	        SERVER[2]: cleanup
+   493	        WORKER[2][0]: ending
+   494	        SERVER[3]: cleanup
+   495	        WORKER[3][0]: ending
+   496	        SERVER[9]: cleanup
+   497	        WORKER[9][0]: ending
+   498	        ASSASSIN: ending
+   499	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1
+   500	        ASSASSIN: starting
+   501	        COURIER[0]: requesting work
+   502	KEYBOARD: starting
+   503	        WORKER[0][0]: starting
+   504	        WORKER[1][0]: starting
+   505	        WORKER[2][0]: starting
+   506	        WORKER[3][0]: starting
+   507	        WORKER[9][0]: starting
+   508	q
+   509	KEYBOARD: quit received
+   510	BROWSER: quit received
+   511	BROWSER: cleaning up
+   512	        COURIER[0]: ending
+   513	CACHE: ending
+   514	BROWSER: ending
+   515	        SERVER[0]: cleanup
+   516	        WORKER[0][0]: ending
+   517	        SERVER[1]: cleanup
+   518	        WORKER[1][0]: ending
+   519	        SERVER[2]: cleanup
+   520	        WORKER[2][0]: ending
+   521	        SERVER[3]: cleanup
+   522	        WORKER[3][0]: ending
+   523	        SERVER[9]: cleanup
+   524	        WORKER[9][0]: ending
+   525	        ASSASSIN: ending
+   526	y12kim@student ~/cs343/co/a6 $ touch emptytest
+   527	y12kim@student ~/cs343/co/a6 $ ./webBrowser 1 1 < emptytest
+   528	        ASSASSIN: starting
+   529	        COURIER[0]: requesting work
+   530	KEYBOARD: starting
+   531	        WORKER[0][0]: starting
+   532	        WORKER[1][0]: starting
+   533	        WORKER[2][0]: starting
+   534	        WORKER[3][0]: starting
+   535	        WORKER[9][0]: starting
+   536	KEYBOARD: quit received
+   537	BROWSER: quit received
+   538	BROWSER: cleaning up
+   539	        COURIER[0]: ending
+   540	CACHE: ending
+   541	BROWSER: ending
+   542	        SERVER[0]: cleanup
+   543	        WORKER[0][0]: ending
+   544	        SERVER[1]: cleanup
+   545	        WORKER[1][0]: ending
+   546	        SERVER[2]: cleanup
+   547	        WORKER[2][0]: ending
+   548	        SERVER[3]: cleanup
+   549	        WORKER[3][0]: ending
+   550	        SERVER[9]: cleanup
+   551	        WORKER[9][0]: ending
+   552	        ASSASSIN: ending
+   553	y12kim@student ~/cs343/co/a6 $ cat browserstress.test 
+   554	f sf
+   555	f sf
+   556	c
+   557	f sf
+   558	f art
+   559	f history
+   560	f disney
+   561	f pop_culture
+   562	f science
+   563	f security
+   564	f art
+   565	d art:topics/art/Alexandre_Dumas
+   566	d art:topics/art/Amedeo_Modigliani
+   567	d art:topics/art/Captain_Nemo
+   568	d art:topics/art/Cathedral_of_Chartres
+   569	d art:topics/art/Claude_Monet
+   570	d disney:topics/disney/Beauty_and_the_Beast
+   571	d disney:topics/disney/Finding_Nemo
+   572	d disney:topics/disney/Mary_Poppins
+   573	d disney:topics/disney/Pirates_of_the_Caribbean
+   574	d sf:topics/sf/Science_fiction_on_television
+   575	d sf:topics/sf/The_Avenger_television
+   576	d sf:topics/sf/The_Avengers
+   577	p
+   578	p
+   579	y12kim@student ~/cs343/co/a6 $ ./webBrowser 3 3 < browserstress.test 
+   580	        ASSASSIN: starting
+   581	        WORKER[0][0]: starting
+   582	        WORKER[0][1]: starting
+   583	        WORKER[0][2]: starting
+   584	        WORKER[1][0]: starting
+   585	...
+   586	        Server/File name: 0 topics/sf/Doctor_Who
+   587	        Server/File name: 0 topics/sf/Science_fiction_on_television
+   588	        Server/File name: 0 topics/sf/The_Avenger_television
+   589	        Server/File name: 9 topics/sf/The_Avengers
+   590	CACHE: Url to File Content
+   591	KEYBOARD: quit received
+   592	BROWSER: quit received
+   593	BROWSER: cleaning up
+   594	...
+   595	        COURIER[0]: ending
+   596	        COURIER[1]: ending
+   597	        COURIER[2]: ending
+   598	CACHE: ending
+   599	BROWSER: ending
+   600	        SERVER[0]: cleanup
+   601	        WORKER[0][0]: ending
+   602	        WORKER[0][1]: ending
+   603	        WORKER[0][2]: ending
+   604	        SERVER[1]: cleanup
+   605	        WORKER[1][0]: ending
+   606	        WORKER[1][1]: ending
+   607	        WORKER[1][2]: ending
+   608	        SERVER[2]: cleanup
+   609	        WORKER[2][2]: ending
+   610	        WORKER[2][0]: ending
+   611	        WORKER[2][1]: ending
+   612	        SERVER[3]: cleanup
+   613	        WORKER[3][1]: ending
+   614	        WORKER[3][0]: ending
+   615	        WORKER[3][2]: ending
+   616	        SERVER[9]: cleanup
+   617	        WORKER[9][0]: ending
+   618	        WORKER[9][1]: ending
+   619	        WORKER[9][2]: ending
+   620	        ASSASSIN: ending
+   621	y12kim@student ~/cs343/co/a6 $ exit
+   622	
+   623	script done on Mon Nov 30 18:59:58 2009

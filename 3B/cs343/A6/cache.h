@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include "readerswriter.h"
 
 class Cache {
  public:
@@ -20,8 +21,8 @@ class Cache {
   void printAll();                     // Print contents of cache
 
  private:
-  // mutex for method calls
-  uSemaphore mutex;
+  // Mutual Exclusion for method calls (Readers Writer lock)
+  ReadersWriter rwlock;
 
   // Topic to server/file name
   std::map<std::string, std::vector<std::pair<int, std::string> > > filenames;

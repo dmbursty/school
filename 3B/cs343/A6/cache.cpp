@@ -17,25 +17,25 @@ Cache::~Cache() {
 void Cache::addFileName(const std::string &topic, const unsigned int server,
                         const std::string &fileName) {
   // Add filename, server pair to cache for given topic
-  mutex.P();
+  rwlock.startWrite();
   filenames[topic].push_back(std::pair<int, std::string>(server, fileName));
-  mutex.V();
+  rwlock.endWrite();
 }
 
 void Cache::addUrl(const std::string &url, const std::string &content) {
   // Cache contents of url
-  mutex.P();
+  rwlock.startWrite();
   contents[url] = content;
-  mutex.V();
+  rwlock.endWrite();
 }
 
 bool Cache::retrieveTopic(std::string &fileNames, const std::string &topic) {
-  mutex.P();
+  rwlock.startRead();
   // Check if topic is in cache
   std::map<std::string,std::vector<std::pair<int,std::string> > >::iterator it;
   it = filenames.find(topic);
   if (it == filenames.end()) {
-    mutex.V();
+    rwlock.endRead();
     return false;
   }
   // If in cache, return results in fileNames parameter
@@ -43,35 +43,35 @@ bool Cache::retrieveTopic(std::string &fileNames, const std::string &topic) {
     fileNames += topic + ":";
     fileNames += it->second[i].second + "\n";
   }
-  mutex.V();
+  rwlock.endRead();
   return true;
 }
 
 bool Cache::retrieveUrl(std::string &content, const std::string &url) {
-  mutex.P();
+  rwlock.startRead();
   // Check if url is in cache
   std::map<std::string, std::string>::iterator it;
   it = contents.find(url);
   if (it == contents.end()) {
-    mutex.V();
+    rwlock.endRead();
     return false;
   }
   // Simply retur the cached content
   content = it->second;
-  mutex.V();
+  rwlock.endRead();
   return true;
 }
 
 void Cache::clear() {
-  mutex.P();
+  rwlock.startWrite();
   // Clear both caches
   filenames.clear();
   contents.clear();
-  mutex.V();
+  rwlock.endWrite();
 }
 
 void Cache::printAll() {
-  mutex.P();
+  rwlock.startRead();
   // Print topic cache
   Printer::inst()->println("CACHE: Topic to Url");
   std::map<std::string,std::vector<std::pair<int,std::string> > >::iterator it;
@@ -93,5 +93,5 @@ void Cache::printAll() {
     Printer::inst()->println("url " + itt->first + "   some content:");
     Printer::inst()->println(itt->second.substr(0, 60) + "...\n");
   }
-  mutex.V();
+  rwlock.endRead();
 }

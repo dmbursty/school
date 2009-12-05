@@ -11,8 +11,9 @@
 // Lighting options
 // Variables
 unsigned int BUMPMAP = 100;
-unsigned int ANTIALIAS = 1;
+unsigned int ANTIALIAS = 10;
 unsigned int RECURSE = 10;
+unsigned int GLOSSY = 1;
 // Regular
 unsigned int AMBIENT = 1;
 unsigned int DIFFUSE = 1;
@@ -58,10 +59,13 @@ void a4_render(// What to render
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       double xx = ( 1 + x / (double)width );
-      //double yy = y / (double)height;
       bg(x, y, 0) = 0.15 * xx;
       bg(x, y, 1) = 0.15 * xx;
       bg(x, y, 2) = 0.35 * xx;
+
+      //double yy = y / (double)height;
+      //bg(x, y, 0) = 1 - xx - yy;
+      //bg(width - x - 1, y, 2) = 1 - xx - yy;
     }
   }
 
@@ -199,12 +203,36 @@ Pixel ray_trace_recurse(int x, int y, Ray ray, RenderConfig* data, double index,
   }
 
   if (p.reflect > 0.1) {
-    //if (index != 1) { std::cout << "internal reflection" << std::endl; }
-    // Recurse to get reflection
-    Pixel reflected = ray_trace_recurse(x, y, p.reflect_ray, data, index, p.reflect, recursion + 1);
-    ret.r += reflected.r;
-    ret.g += reflected.g;
-    ret.b += reflected.b;
+    // If glossy, do glossy reflections
+    double ref_r = 0;
+    double ref_g = 0;
+    double ref_b = 0;
+    if (p.gloss > 0) {
+      for (unsigned int i = 0; i < GLOSSY; i++) {
+        // Jitter reflection ray for glossy reflections
+        //double c1 = -1 * ray.dir.dot(p.normal);
+        // Jitter the angle here
+        //c1 = c1 + (p.gloss / 2) * ((rand() % 2000) / 1000.0 - 1);
+        //Vector3D jitter_dir = ray.dir + (2 * c1 * p.normal);
+        //Ray jittered_ray(p.reflect_ray.eye, jitter_dir);
+        Ray jittered_ray = p.reflect_ray.jitterCone(p.gloss);
+
+// Recurse to get reflection
+        Pixel gloss_ref = ray_trace_recurse(x, y, jittered_ray, data, index, p.reflect, recursion + 1);
+        ref_r += gloss_ref.r;
+        ref_g += gloss_ref.g;
+        ref_b += gloss_ref.b;
+      }
+      ret.r += ref_r / (GLOSSY + 1);
+      ret.g += ref_g / (GLOSSY + 1);
+      ret.b += ref_b / (GLOSSY + 1);
+    } else {
+      // Recurse to get reflection
+      Pixel reflected = ray_trace_recurse(x, y, p.reflect_ray, data, index, p.reflect, recursion + 1);
+      ret.r += reflected.r;
+      ret.g += reflected.g;
+      ret.b += reflected.b;
+    }
   }
 
   ret.r *= weight;
@@ -216,7 +244,9 @@ Pixel ray_trace_recurse(int x, int y, Ray ray, RenderConfig* data, double index,
 Pixel ray_trace(int x, int y, Ray ray, RenderConfig* data, double index) {
         Pixel ret;
 
-        Intersection i = data->root->ray_intersect(ray);
+        Intersections is = data->root->ray_intersect(ray);
+        is.sort(ray.eye);
+        Intersection i;
 
         if (NORMAL) {
           /*  Normal Shading */
@@ -227,7 +257,8 @@ Pixel ray_trace(int x, int y, Ray ray, RenderConfig* data, double index) {
           return ret;
         }
 
-        if (i.hit) {
+        if (is.size() > 0) {
+          i = is.inter[0];
           Material* m = i.node->get_material();
           // Lighting calculations
           double r = 0;
@@ -235,6 +266,8 @@ Pixel ray_trace(int x, int y, Ray ray, RenderConfig* data, double index) {
           double g = 0;
 
           // Check if we need to reflect
+          // Possible FIXME: Nothing can be both reflective and refractive
+          // because fresnels overwrite the regular reflective strength
           double reflect = m->reflect();
           if (reflect > 0) {
             ret.reflect = m->reflect();
@@ -244,13 +277,13 @@ Pixel ray_trace(int x, int y, Ray ray, RenderConfig* data, double index) {
             v.normalize();
             n.normalize();
             double c1 = -1 * v.dot(n);
-            //Vector3D reflect_dir = ray.dir + (2 * c1 * i.normal);
-            Vector3D reflect_dir(v[0] + (2 * n[0] * c1),
-                                 v[1] + (2 * n[1] * c1),
-                                 v[2] + (2 * n[2] * c1));
+            Vector3D reflect_dir = ray.dir + (2 * c1 * n);
             Ray reflect_ray(i.pt, reflect_dir);
             ret.reflect_ray = reflect_ray;
-            //std::cout << ray.dir << " to " << ret.reflect_ray.dir << std::endl;
+            ret.gloss = m->gloss();
+            // Give back the normal because we may need a different reflection
+            // ray for glossy reflections;
+            ret.normal = n;
           }
 
           // Check if we need to refract
@@ -273,11 +306,10 @@ Pixel ray_trace(int x, int y, Ray ray, RenderConfig* data, double index) {
             double c1 = -1 * V.dot(N);
 
             // Reflection ray
-            Vector3D reflect_dir(V[0] + (2 * N[0] * c1),
-                                 V[1] + (2 * N[1] * c1),
-                                 V[2] + (2 * N[2] * c1));
+            Vector3D reflect_dir = ray.dir + (2 * c1 * N);
             Ray reflect_ray(i.pt, reflect_dir);
             ret.reflect_ray = reflect_ray;
+            ret.normal = N;
 
             double c2 = 1 - n * n * (1 - c1 * c1);
             // Total internal reflection
@@ -293,20 +325,14 @@ Pixel ray_trace(int x, int y, Ray ray, RenderConfig* data, double index) {
             ret.refract_ray = refract_ray;
 
             // Fresnel
-            if (FRESNEL) {
-              double nd = -c1;
-              double nt = N.dot(refract_dir);
-              double r1 = (n2 * nd - n1 * nt) / (n2 * nd + n1 * nt);
-              double r2 = (n1 * nd - n2 * nt) / (n1 * nd + n2 * nt);
-              ret.reflect = (r1 * r1 + r2 * r2) / 2;
-              //if (index == m->refract()) std::cout << nt << ", " << n << ", " << c1 << ", " << c2 << ", " << V << ", " << N << std::endl;
-              //if (index == m->refract()) std::cout << nd << ", " << nt << ", " << r1 << ", " << r2 << ", " << ret.reflect << std::endl;
-              ret.refract = 1 - ret.reflect;
-            } else {
-              ret.reflect = 0;
-              ret.refract = 1;
-            }
-            //std::cout << V << " to " << refract_ray.dir << " - " << c1 << ", " << c2 << std::endl;
+            double nd = -c1;
+            double nt = N.dot(refract_dir);
+            double r1 = (n2 * nd - n1 * nt) / (n2 * nd + n1 * nt);
+            double r2 = (n1 * nd - n2 * nt) / (n1 * nd + n2 * nt);
+            ret.reflect = (r1 * r1 + r2 * r2) / 2;
+            ret.refract = 1 - ret.reflect;
+            ret.gloss = m->gloss();
+
             return ret;
           }
 
@@ -344,8 +370,8 @@ Pixel ray_trace(int x, int y, Ray ray, RenderConfig* data, double index) {
             // Check intersection
             if (SHADOWS) {
               Ray light_ray(i.pt, light_dir);
-              Intersection light_inter = data->root->ray_intersect(light_ray);
-              if (light_inter.hit) {
+              Intersections light_inter = data->root->ray_intersect(light_ray);
+              if (light_inter.size() > 0) {
                 //std::cout << i.node->get_name() << " in shadow of " << light_inter.node->get_name() << std::endl;
                 continue;
               }

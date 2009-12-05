@@ -14,21 +14,16 @@ SceneNode::~SceneNode()
 {
 }
 
-Intersection SceneNode::ray_intersect(Ray r) {
+Intersections SceneNode::ray_intersect(Ray r) {
   r.transform(get_inverse());
-  double closest = std::numeric_limits<double>::max();
-  Intersection ret;
+  Intersections ret;
   for (ChildList::iterator it = m_children.begin(); it != m_children.end(); it++) {
-    Intersection i = (*it)->ray_intersect(r);
-    if (i.hit) {
-      double dist = (i.pt - r.eye).length();
-      if (dist < closest) {
-        closest = dist;
-        i.transform(get_transform(), get_inverse());
-        ret = i;
-      }
+    Intersections i = (*it)->ray_intersect(r);
+    for (int j = 0; j < i.size(); j++) {
+      ret.addInter(i[j]);
     }
   }
+  ret.transform(get_transform(), get_inverse());
   return ret;
 }
 
@@ -146,25 +141,25 @@ GeometryNode::~GeometryNode()
 {
 }
 
-Intersection GeometryNode::ray_intersect(Ray r) {
+Intersections GeometryNode::ray_intersect(Ray r) {
   r.transform(get_inverse());
-  Intersection i = m_primitive->ray_intersect(r);
-  if (i.hit) {
+  Intersections i = m_primitive->ray_intersect(r);
+  for (int j = 0; j < i.size(); j++) {
     if (BUMPMAP) {
       if (m_material->bumpmap() != NULL) {
-        int map_x = m_material->bumpmap()->width() * i.map_x;
-        int map_y = m_material->bumpmap()->height() * i.map_y;
+        int map_x = m_material->bumpmap()->width() * i[j].map_x;
+        int map_y = m_material->bumpmap()->height() * i[j].map_y;
         double x_perturb = (*m_material->bumpmap())(map_x - 1, map_y, 0)
                           - (*m_material->bumpmap())(map_x + 1, map_y, 0);
         double y_perturb = (*m_material->bumpmap())(map_x, map_y - 1, 0)
                           - (*m_material->bumpmap())(map_x, map_y + 1, 0);
-        i.normal[0] += x_perturb * BUMPMAP;
-        i.normal[1] += y_perturb * BUMPMAP;
+        i[j].normal[0] += x_perturb * BUMPMAP;
+        i[j].normal[1] += y_perturb * BUMPMAP;
       }
     }
-    i.node = this;
-    i.transform(get_transform(), get_inverse());
+    i[j].node = this;
   }
+  i.transform(get_transform(), get_inverse());
   return i;
 }
 
@@ -191,23 +186,25 @@ BoundingNode::BoundingNode(const std::string& name,
 
 BoundingNode::~BoundingNode() {}
 
-Intersection BoundingNode::ray_intersect(Ray r) {
-  Intersection i = m_bound->ray_intersect(r);
+Intersections BoundingNode::ray_intersect(Ray r) {
+  Intersections i = m_bound->ray_intersect(r);
   if (BOUNDS) {
     return i;
   }
-  if (i.hit) {
-    Intersection ii = m_obj->ray_intersect(r);
+  for (int j = 0; j < i.size(); j++) {
+    Intersections ii = m_obj->ray_intersect(r);
     // Check if our child wants to texture map using the
     // map coords from the bounding primitive
-    if (ii.map_x == -1 || ii.map_y == -1) {
-      // We need to cast a ray along the normal, from the intersection point
-      Point3D new_eye = i.pt + ( 1000 * i.normal );
-      Vector3D new_ray = -1 * i.normal;
-      Ray mapper(ii.pt + ii.normal, -1 * ii.normal);
-      Intersection mapped = m_bound->ray_intersect(mapper);
-      ii.map_x = mapped.map_x;
-      ii.map_y = mapped.map_y;
+    for (int jj = 0; jj < ii.size(); jj++) {
+      if (ii[jj].map_x == -1 || ii[jj].map_y == -1) {
+        // We need to cast a ray along the normal, from the intersection point
+        Point3D new_eye = i[j].pt + ( 1000 * i[j].normal );
+        Vector3D new_ray = -1 * i[j].normal;
+        Ray mapper(ii[jj].pt + ii[jj].normal, -1 * ii[jj].normal);
+        Intersection mapped = m_bound->ray_intersect(mapper)[0];
+        ii[jj].map_x = mapped.map_x;
+        ii[jj].map_y = mapped.map_y;
+      }
     }
     return ii;
   }

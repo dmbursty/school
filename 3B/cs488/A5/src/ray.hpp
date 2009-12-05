@@ -2,6 +2,7 @@
 #define RAY_HPP
 
 #include "algebra.hpp"
+#include <vector>
 
 class GeometryNode;
 
@@ -11,6 +12,9 @@ struct Ray {
 
   void transform(const Matrix4x4& m);
   void normalize();
+
+  Ray jitterSphere(double radius);
+  Ray jitterCone(double radius);
 
   Point3D eye;
   Vector3D dir;
@@ -31,16 +35,21 @@ struct Intersection {
 
   double map_x, map_y;
   bool inside;
+  double dist;
+  bool left;
 };
 
 struct Pixel {
-  Pixel() : r(0), g(0), b(0), reflect(0), refract(0), empty(false) {}
+  Pixel() : r(0), g(0), b(0), reflect(0), gloss(0), refract(0), empty(false) {}
   // Base Colour
   double r, g, b;
 
   // Reflection intensity
   double reflect;
   Ray reflect_ray;
+  double gloss;
+  // normal may be needed for glossy reflections
+  Vector3D normal;
 
   // Refraction intensity
   double refract;
@@ -49,6 +58,21 @@ struct Pixel {
 
   // Whether we hit something or not
   bool empty;
+};
+
+struct intersect_compare {
+  bool operator() (Intersection i, Intersection j) { return (i.dist < j.dist); }
+};
+
+struct Intersections {
+  Intersections() {}
+  void addInter(Intersection i);
+  void sort(Point3D& eye);
+  void transform(const Matrix4x4& trans, const Matrix4x4& inv);
+  int size() { return inter.size(); }
+
+  std::vector<Intersection> inter;
+  Intersection& operator[](size_t i) { return inter[i]; }
 };
 
 #endif

@@ -35,7 +35,7 @@ std::ostream& operator<<(std::ostream& out, const Mesh& mesh)
   return out;
 }
 
-Intersection Mesh::ray_intersect(Ray r) {
+Intersections Mesh::ray_intersect(Ray r) {
   r.normalize();
   // x
   double x = r.eye[0];
@@ -47,6 +47,7 @@ Intersection Mesh::ray_intersect(Ray r) {
   double z = r.eye[2];
   double zt = r.dir[2];
 
+  Intersections rets;
   Intersection ret;
   double closest = std::numeric_limits<double>::max();
 
@@ -85,10 +86,11 @@ Intersection Mesh::ray_intersect(Ray r) {
         ret.normal = normal;
         ret.hit = true;
       }
+      rets.addInter(ret);
     }
   }
 
-  return ret;
+  return rets;
 }
 
 double* Mesh::getBoundingBox() {

@@ -103,7 +103,92 @@ void get_tuple(lua_State* L, int arg, T* data, int n)
   }
 }
 
-// Create CSG node
+// Set texture of a material
+extern "C"
+int gr_texture_cmd(lua_State* L)
+{
+  GRLUA_DEBUG_CALL;
+
+  gr_material_ud* selfdata = (gr_material_ud*)luaL_checkudata(L, 1, "gr.material");
+  luaL_argcheck(L, selfdata != 0, 1, "Material expected");
+
+  const char* texture = luaL_checkstring(L, 2);
+  if (strcmp(texture, "") != 0) {
+    Image* texture_img = new Image();
+    bool result = texture_img->loadPng(texture);
+    if (!result) luaL_error(L, "Could not open texture file");
+    selfdata->material->set_texture(texture_img);
+  }
+
+  return 0;
+}
+
+// Set bumpmap of a material
+extern "C"
+int gr_bumpmap_cmd(lua_State* L)
+{
+  GRLUA_DEBUG_CALL;
+
+  gr_material_ud* selfdata = (gr_material_ud*)luaL_checkudata(L, 1, "gr.material");
+  luaL_argcheck(L, selfdata != 0, 1, "Material expected");
+
+  const char* bumpmap = luaL_checkstring(L, 2);
+  if (strcmp(bumpmap, "") != 0) {
+    Image* bumpmap_img = new Image();
+    bool result = bumpmap_img->loadPng(bumpmap);
+    if (!result) luaL_error(L, "Could not open bumpmap file");
+    selfdata->material->set_bumpmap(bumpmap_img);
+  }
+
+  return 0;
+}
+
+// Set reflect of a material
+extern "C"
+int gr_reflect_cmd(lua_State* L)
+{
+  GRLUA_DEBUG_CALL;
+
+  gr_material_ud* selfdata = (gr_material_ud*)luaL_checkudata(L, 1, "gr.material");
+  luaL_argcheck(L, selfdata != 0, 1, "Material expected");
+
+  double reflect = luaL_checknumber(L, 2);
+  selfdata->material->set_reflect(reflect);
+
+  return 0;
+}
+
+// Set refraction index of a material
+extern "C"
+int gr_refract_cmd(lua_State* L)
+{
+  GRLUA_DEBUG_CALL;
+
+  gr_material_ud* selfdata = (gr_material_ud*)luaL_checkudata(L, 1, "gr.material");
+  luaL_argcheck(L, selfdata != 0, 1, "Material expected");
+
+  double refract = luaL_checknumber(L, 2);
+  selfdata->material->set_refract(refract);
+
+  return 0;
+}
+
+// Set gloss of a material
+extern "C"
+int gr_gloss_cmd(lua_State* L)
+{
+  GRLUA_DEBUG_CALL;
+
+  gr_material_ud* selfdata = (gr_material_ud*)luaL_checkudata(L, 1, "gr.material");
+  luaL_argcheck(L, selfdata != 0, 1, "Material expected");
+
+  double gloss = luaL_checknumber(L, 2);
+  selfdata->material->set_gloss(gloss);
+
+  return 0;
+}
+
+// Create CSG Union node
 extern "C"
 int gr_union_cmd(lua_State* L)
 {
@@ -121,6 +206,56 @@ int gr_union_cmd(lua_State* L)
   SceneNode* rchild = rchilddata->node;
 
   data->node = new UnionNode("union", lchild, rchild);
+
+  luaL_getmetatable(L, "gr.node");
+  lua_setmetatable(L, -2);
+
+  return 1;
+}
+
+// Create CSG Intersect node
+extern "C"
+int gr_intersect_cmd(lua_State* L)
+{
+  GRLUA_DEBUG_CALL;
+
+  gr_node_ud* data = (gr_node_ud*)lua_newuserdata(L, sizeof(gr_node_ud));
+  data->node = 0;
+
+  gr_node_ud* lchilddata = (gr_node_ud*)luaL_checkudata(L, 1, "gr.node");
+  luaL_argcheck(L, lchilddata != 0, 1, "Node expected");
+  SceneNode* lchild = lchilddata->node;
+  
+  gr_node_ud* rchilddata = (gr_node_ud*)luaL_checkudata(L, 2, "gr.node");
+  luaL_argcheck(L, rchilddata != 0, 2, "Node expected");
+  SceneNode* rchild = rchilddata->node;
+
+  data->node = new IntersectNode("intersect", lchild, rchild);
+
+  luaL_getmetatable(L, "gr.node");
+  lua_setmetatable(L, -2);
+
+  return 1;
+}
+
+// Create CSG Difference node
+extern "C"
+int gr_difference_cmd(lua_State* L)
+{
+  GRLUA_DEBUG_CALL;
+
+  gr_node_ud* data = (gr_node_ud*)lua_newuserdata(L, sizeof(gr_node_ud));
+  data->node = 0;
+
+  gr_node_ud* lchilddata = (gr_node_ud*)luaL_checkudata(L, 1, "gr.node");
+  luaL_argcheck(L, lchilddata != 0, 1, "Node expected");
+  SceneNode* lchild = lchilddata->node;
+  
+  gr_node_ud* rchilddata = (gr_node_ud*)luaL_checkudata(L, 2, "gr.node");
+  luaL_argcheck(L, rchilddata != 0, 2, "Node expected");
+  SceneNode* rchild = rchilddata->node;
+
+  data->node = new DifferenceNode("difference", lchild, rchild);
 
   luaL_getmetatable(L, "gr.node");
   lua_setmetatable(L, -2);
@@ -280,7 +415,9 @@ int gr_nh_sphere_cmd(lua_State* L)
 
   double radius = luaL_checknumber(L, 3);
 
-  data->node = new GeometryNode(name, new NonhierSphere(pos, radius));
+  data->node = new GeometryNode(name, new Sphere());
+  data->node->translate(Vector3D(pos[0], pos[1], pos[2]));
+  data->node->scale(Vector3D(radius, radius, radius));
 
   luaL_getmetatable(L, "gr.node");
   lua_setmetatable(L, -2);
@@ -304,7 +441,9 @@ int gr_nh_box_cmd(lua_State* L)
 
   double size = luaL_checknumber(L, 3);
 
-  data->node = new GeometryNode(name, new NonhierBox(pos, size));
+  data->node = new GeometryNode(name, new Cube());
+  data->node->translate(Vector3D(pos[0], pos[1], pos[2]));
+  data->node->scale(Vector3D(size, size, size));
 
   luaL_getmetatable(L, "gr.node");
   lua_setmetatable(L, -2);
@@ -461,28 +600,10 @@ int gr_material_cmd(lua_State* L)
   get_tuple(L, 2, ks, 3);
 
   double shininess = luaL_checknumber(L, 3);
-  double reflect = luaL_checknumber(L, 4);
-  double refract = luaL_checknumber(L, 5);
 
   data->material = new Material(Colour(kd[0], kd[1], kd[2]),
                                 Colour(ks[0], ks[1], ks[2]),
-                                shininess, reflect, refract);
-
-  // Texture and bump maps
-  const char* texture = luaL_checkstring(L, 6);
-  if (strcmp(texture, "") != 0) {
-    Image* texture_img = new Image();
-    bool result = texture_img->loadPng(texture);
-    if (!result) luaL_error(L, "Could not open texture file");
-    data->material->set_texture(texture_img);
-  }
-  const char* bumpmap = luaL_checkstring(L, 7);
-  if (strcmp(bumpmap, "") != 0) {
-    Image* bumpmap_img = new Image();
-    bool result = bumpmap_img->loadPng(bumpmap);
-    if (!result) luaL_error(L, "Could not open bumpmap file");
-    data->material->set_bumpmap(bumpmap_img);
-  }
+                                shininess, 0, 0, 0);
 
   luaL_newmetatable(L, "gr.material");
   lua_setmetatable(L, -2);
@@ -625,12 +746,24 @@ int gr_node_gc_cmd(lua_State* L)
   return 0;
 }
 
+// Material member functions
+static const luaL_reg grlib_material_functions[] = {
+  {"set_texture", gr_texture_cmd},
+  {"set_bumpmap", gr_bumpmap_cmd},
+  {"set_reflect", gr_reflect_cmd},
+  {"set_refract", gr_refract_cmd},
+  {"set_gloss", gr_gloss_cmd},
+  {0, 0}
+};
+
 // This is where all the "global" functions in our library are
 // declared.
 // If you want to add a new non-member function, add it here.
 static const luaL_reg grlib_functions[] = {
   {"node", gr_node_cmd},
   {"union", gr_union_cmd},
+  {"intersect", gr_intersect_cmd},
+  {"difference", gr_difference_cmd},
   {"sphere", gr_sphere_cmd},
   {"torus", gr_torus_cmd},
   {"cylinder", gr_cylinder_cmd},
@@ -686,6 +819,15 @@ bool run_lua(const std::string& filename)
 
 
   GRLUA_DEBUG("Setting up our functions");
+
+  // Set up the metatable for gr.material
+  luaL_newmetatable(L, "gr.material");
+  lua_pushstring(L, "__index");
+  lua_pushvalue(L, -2);
+  lua_settable(L, -3);
+
+  // Load the gr.material methods
+  luaL_openlib(L, 0, grlib_material_functions, 0);
 
   // Set up the metatable for gr.node
   luaL_newmetatable(L, "gr.node");

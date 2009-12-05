@@ -14,7 +14,7 @@ public:
        const std::vector< std::vector<int> >& faces);
 
   typedef std::vector<int> Face;
-  virtual Intersection ray_intersect(Ray r);
+  virtual Intersections ray_intersect(Ray r);
   virtual double* getBoundingBox();
 
 private:

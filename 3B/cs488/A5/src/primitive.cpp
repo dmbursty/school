@@ -1,7 +1,6 @@
 #include "primitive.hpp"
 #include "polyroots.hpp"
 #include <iostream>
-#include <limits>
 
 #define PI 3.14159265
 #define EPSILON 0.00001
@@ -10,8 +9,10 @@ Primitive::~Primitive()
 {
 }
 
-Intersection Primitive::ray_intersect(Ray r) {
-  return Intersection();
+Intersections Primitive::ray_intersect(Ray r) {
+  // Suppress unused parameter warning
+  (void) r;
+  return Intersections();
 }
 
 double* Primitive::getBoundingBox() {
@@ -24,7 +25,7 @@ double* Primitive::getBoundingBox() {
 
 Torus::~Torus() {}
 
-Intersection Torus::ray_intersect(Ray ray) {
+Intersections Torus::ray_intersect(Ray ray) {
   ray.normalize();
   // x
   double x = ray.eye[0];
@@ -58,17 +59,15 @@ Intersection Torus::ray_intersect(Ray ray) {
   double root[4];
   size_t roots = quarticRoots(b, c, d, e, root);
 
-  double xi, yi, zi, dist;
+  double xi, yi, zi;
+  Intersections rets;
   Intersection ret;
   ret.map_y = 0;
-  double closest = std::numeric_limits<double>::max();
   for (unsigned int i = 0; i < roots; i++) {
     xi = ray.eye[0] + root[i] * ray.dir[0];
     yi = ray.eye[1] + root[i] * ray.dir[1];
     zi = ray.eye[2] + root[i] * ray.dir[2];
-    dist = (Point3D(xi, yi, zi) - ray.eye).length();
-    if (root[i] > EPSILON && dist < closest) {
-      closest = dist;
+    if (root[i] > EPSILON) {
       ret.hit = true;
       // Texture map
       Vector3D up(0, 1, 0);
@@ -102,9 +101,10 @@ Intersection Torus::ray_intersect(Ray ray) {
       ret.normal[0] = 4 * xi * n;
       ret.normal[1] = 4 * yi * n;
       ret.normal[2] = 4 * zi * n + 8 * zi;
+      rets.addInter(ret);
     }
   }
-  return ret;
+  return rets;
 }
 
 ///////////////
@@ -113,7 +113,7 @@ Intersection Torus::ray_intersect(Ray ray) {
 
 Cylinder::~Cylinder() {}
 
-Intersection Cylinder::ray_intersect(Ray r) {
+Intersections Cylinder::ray_intersect(Ray r) {
   r.normalize();
   // x
   double x = r.eye[0];
@@ -134,9 +134,9 @@ Intersection Cylinder::ray_intersect(Ray r) {
   // constant term
   double c = x * x + z * z - 1;
 
-  double xi, yi, zi, t, dist;
+  double xi, yi, zi, t;
+  Intersections rets;
   Intersection ret;
-  double closest = std::numeric_limits<double>::max();
 
   double roots[2];
   size_t n = quadraticRoots(a, b, c, roots);
@@ -150,9 +150,7 @@ Intersection Cylinder::ray_intersect(Ray r) {
     xi = r.eye[0] + root * r.dir[0];
     yi = r.eye[1] + root * r.dir[1];
     zi = r.eye[2] + root * r.dir[2];
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (yi >= 0 && yi <= 1 && root > EPSILON && dist < closest) {
-      closest = dist;
+    if (yi >= 0 && yi <= 1 && root > EPSILON) {
       ret.hit = true;
       Vector3D north(0, 1, 0);
       Vector3D equator(0, 0, -1);
@@ -172,15 +170,14 @@ Intersection Cylinder::ray_intersect(Ray r) {
       ret.normal[0] = xi;
       ret.normal[1] = 0;
       ret.normal[2] = zi;
+      rets.addInter(ret);
     }
     // Check second root
     root = roots[1];
     xi = r.eye[0] + root * r.dir[0];
     yi = r.eye[1] + root * r.dir[1];
     zi = r.eye[2] + root * r.dir[2];
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (yi >= 0 && yi <= 1 && root > EPSILON && dist < closest) {
-      closest = dist;
+    if (yi >= 0 && yi <= 1 && root > EPSILON) {
       ret.hit = true;
       ret.pt[0] = xi;
       ret.pt[1] = yi;
@@ -189,16 +186,14 @@ Intersection Cylinder::ray_intersect(Ray r) {
       ret.normal[1] = 0;
       ret.normal[2] = zi;
       ret.inside = true;
-      //std::cout << "out - " << root << std::endl;
+      rets.addInter(ret);
     }
     // Check bottom plane intersection (y = 0)
     t = -y / yt;
     xi = x + xt * t;
     yi = y + yt * t;
     zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if ((xi * xi + zi * zi) < 1 && t > EPSILON && dist < closest) {
-      closest = dist;
+    if ((xi * xi + zi * zi) < 1 && t > EPSILON) {
       ret.hit = true;
       ret.map_x = (xi+1) / 4; // Divide by two cause our texture is too long
       ret.map_y = (zi+1) / 2;
@@ -208,15 +203,14 @@ Intersection Cylinder::ray_intersect(Ray r) {
       ret.normal[0] = 0;
       ret.normal[1] = -1;
       ret.normal[2] = 0;
+      rets.addInter(ret);
     }
     // Check top plane intersection (y = 1)
     t = (1-y) / yt;
     xi = x + xt * t;
     yi = y + yt * t;
     zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if ((xi * xi + zi * zi) < 1 && t > EPSILON && dist < closest) {
-      closest = dist;
+    if ((xi * xi + zi * zi) < 1 && t > EPSILON) {
       ret.hit = true;
       ret.map_x = (xi+1) / 4; // Divide by two cause our texture is too long
       ret.map_y = (zi+1) / 2;
@@ -226,9 +220,10 @@ Intersection Cylinder::ray_intersect(Ray r) {
       ret.normal[0] = 0;
       ret.normal[1] = 1;
       ret.normal[2] = 0;
+      rets.addInter(ret);
     }
   }
-  return ret;
+  return rets;
 }
 
 ///////////////
@@ -237,7 +232,7 @@ Intersection Cylinder::ray_intersect(Ray r) {
 
 Cone::~Cone() {}
 
-Intersection Cone::ray_intersect(Ray r) {
+Intersections Cone::ray_intersect(Ray r) {
   r.normalize();
   // x
   double x = r.eye[0];
@@ -259,9 +254,9 @@ Intersection Cone::ray_intersect(Ray r) {
   // Check discriminant
   double d = b * b - 4 * a * c;
 
-  double xi, yi, zi, t, dist;
+  double xi, yi, zi, t;
+  Intersections rets;
   Intersection ret;
-  double closest = std::numeric_limits<double>::max();
 
   ret.map_x = 0;
   ret.map_y = 0;
@@ -272,9 +267,7 @@ Intersection Cone::ray_intersect(Ray r) {
     xi = r.eye[0] + root * r.dir[0];
     yi = r.eye[1] + root * r.dir[1];
     zi = r.eye[2] + root * r.dir[2];
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (yi >= 0 && yi <= 1 && root > EPSILON && dist < closest) {
-      closest = dist;
+    if (yi >= 0 && yi <= 1 && root > EPSILON) {
       ret.hit = true;
       // Find longitude
       Vector3D p(xi, 0, zi);
@@ -294,15 +287,14 @@ Intersection Cone::ray_intersect(Ray r) {
       ret.normal[0] = xi;
       ret.normal[1] = -yi;
       ret.normal[2] = zi;
+      rets.addInter(ret);
     }
     // Check second root
     root = (-b + sqrt(d)) / (2 * a);
     xi = r.eye[0] + root * r.dir[0];
     yi = r.eye[1] + root * r.dir[1];
     zi = r.eye[2] + root * r.dir[2];
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (yi >= 0 && yi <= 1 && root > EPSILON && dist < closest) {
-      closest = dist;
+    if (yi >= 0 && yi <= 1 && root > EPSILON) {
       ret.hit = true;
       ret.pt[0] = xi;
       ret.pt[1] = yi;
@@ -310,15 +302,14 @@ Intersection Cone::ray_intersect(Ray r) {
       ret.normal[0] = xi;
       ret.normal[1] = -yi;
       ret.normal[2] = zi;
+      rets.addInter(ret);
     }
     // Check bottom plane intersection (y = 1)
     t = (1-y) / yt;
     xi = x + xt * t;
     yi = y + yt * t;
     zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if ((xi * xi + zi * zi) < 1 && t > EPSILON && dist < closest) {
-      closest = dist;
+    if ((xi * xi + zi * zi) < 1 && t > EPSILON) {
       ret.hit = true;
       ret.map_x = (xi+1) / 4; // Divide by two cause our texture is too long
       ret.map_y = (zi+1) / 2;
@@ -328,9 +319,10 @@ Intersection Cone::ray_intersect(Ray r) {
       ret.normal[0] = 0;
       ret.normal[1] = 1;
       ret.normal[2] = 0;
+      rets.addInter(ret);
     }
   }
-  return ret;
+  return rets;
 }
 
 ///////////////
@@ -341,7 +333,7 @@ Sphere::~Sphere()
 {
 }
 
-Intersection Sphere::ray_intersect(Ray r) {
+Intersections Sphere::ray_intersect(Ray r) {
   r.normalize();
   // x
   double x = r.eye[0];
@@ -363,9 +355,9 @@ Intersection Sphere::ray_intersect(Ray r) {
   // constant term
   double c = x * x + y * y + z * z - 1;
 
-  double xi, yi, zi, dist;
+  double xi, yi, zi;
+  Intersections rets;
   Intersection ret;
-  double closest = std::numeric_limits<double>::max();
 
   double roots[2];
   size_t n = quadraticRoots(a, b, c, roots);
@@ -381,9 +373,7 @@ Intersection Sphere::ray_intersect(Ray r) {
     xi = r.eye[0] + root * r.dir[0];
     yi = r.eye[1] + root * r.dir[1];
     zi = r.eye[2] + root * r.dir[2];
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (root > EPSILON && dist < closest) {
-      closest = dist;
+    if (root > EPSILON) {
       ret.hit = true;
       Vector3D north(0, 1, 0);
       Vector3D equator(0, 0, -1);
@@ -402,15 +392,14 @@ Intersection Sphere::ray_intersect(Ray r) {
       ret.normal[0] = xi;
       ret.normal[1] = yi;
       ret.normal[2] = zi;
+      rets.addInter(ret);
     }
     // Check second root
     root = roots[0];
     xi = r.eye[0] + root * r.dir[0];
     yi = r.eye[1] + root * r.dir[1];
     zi = r.eye[2] + root * r.dir[2];
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (root > EPSILON && dist < closest) {
-      closest = dist;
+    if (root > EPSILON) {
       ret.hit = true;
       Vector3D north(0, 1, 0);
       Vector3D equator(0, 0, -1);
@@ -430,10 +419,11 @@ Intersection Sphere::ray_intersect(Ray r) {
       ret.normal[1] = yi;
       ret.normal[2] = zi;
       ret.inside = true;
+      rets.addInter(ret);
     }
-    return ret;
+    return rets;
   }
-  return Intersection();
+  return Intersections();
 }
 
 ///////////////
@@ -444,7 +434,7 @@ Cube::~Cube()
 {
 }
 
-Intersection Cube::ray_intersect(Ray r) {
+Intersections Cube::ray_intersect(Ray r) {
   r.normalize();
   // x
   double x = r.eye[0];
@@ -456,11 +446,11 @@ Intersection Cube::ray_intersect(Ray r) {
   double z = r.eye[2];
   double zt = r.dir[2];
 
-  double xi, yi, zi, t, dist;
+  double xi, yi, zi, t;
+  Intersections rets;
   Intersection ret;
   ret.map_x = 0;
   ret.map_y = 0;
-  double closest = std::numeric_limits<double>::max();
 
   // Check front face
   if (zt != 0) {
@@ -468,11 +458,9 @@ Intersection Cube::ray_intersect(Ray r) {
     xi = x + xt * t;
     yi = y + yt * t;
     zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
     if (xi >= 0 && xi <= 1 &&
         yi >= 0 && yi <= 1 &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
+        t > EPSILON) {
       ret.hit = true;
       ret.map_x = xi;
       ret.map_y = yi;
@@ -482,17 +470,16 @@ Intersection Cube::ray_intersect(Ray r) {
       ret.normal[0] = 0;
       ret.normal[1] = 0;
       ret.normal[2] = 1;
+      rets.addInter(ret);
     }
     // Check Back face
     t = (0 - z) / zt;
     xi = x + xt * t;
     yi = y + yt * t;
     zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
     if (xi >= 0 && xi <= 1 &&
         yi >= 0 && yi <= 1 &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
+        t > EPSILON) {
       ret.hit = true;
       ret.map_x = xi;
       ret.map_y = yi;
@@ -502,6 +489,7 @@ Intersection Cube::ray_intersect(Ray r) {
       ret.normal[0] = 0;
       ret.normal[1] = 0;
       ret.normal[2] = -1;
+      rets.addInter(ret);
     }
   }
 
@@ -512,11 +500,9 @@ Intersection Cube::ray_intersect(Ray r) {
     xi = x + xt * t;
     yi = y + yt * t;
     zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
     if (zi >= 0 && zi <= 1 &&
         yi >= 0 && yi <= 1 &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
+        t > EPSILON) {
       ret.map_x = zi;
       ret.map_y = yi;
       ret.pt[0] = xi;
@@ -526,17 +512,16 @@ Intersection Cube::ray_intersect(Ray r) {
       ret.normal[1] = 0;
       ret.normal[2] = 0;
       ret.hit = true;
+      rets.addInter(ret);
     }
     // Check Left face
     t = (0 - x) / xt;
     xi = x + xt * t;
     yi = y + yt * t;
     zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
     if (zi >= 0 && zi <= 1 &&
         yi >= 0 && yi <= 1 &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
+        t > EPSILON) {
       ret.map_x = 1-zi;
       ret.map_y = yi;
       ret.pt[0] = xi;
@@ -546,6 +531,7 @@ Intersection Cube::ray_intersect(Ray r) {
       ret.normal[1] = 0;
       ret.normal[2] = 0;
       ret.hit = true;
+      rets.addInter(ret);
     }
   }
 
@@ -555,11 +541,9 @@ Intersection Cube::ray_intersect(Ray r) {
     xi = x + xt * t;
     yi = y + yt * t;
     zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
     if (zi >= 0 && zi <= 1 &&
         xi >= 0 && xi <= 1 &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
+        t > EPSILON) {
       ret.map_x = xi;
       ret.map_y = zi;
       ret.pt[0] = xi;
@@ -569,17 +553,16 @@ Intersection Cube::ray_intersect(Ray r) {
       ret.normal[1] = 1;
       ret.normal[2] = 0;
       ret.hit = true;
+      rets.addInter(ret);
     }
     // Check Bottom face
     t = (0 - y) / yt;
     xi = x + xt * t;
     yi = y + yt * t;
     zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
     if (zi >= 0 && zi <= 1 &&
         xi >= 0 && xi <= 1 &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
+        t > EPSILON) {
       ret.map_x = xi;
       ret.map_y = 1-zi;
       ret.pt[0] = xi;
@@ -589,194 +572,9 @@ Intersection Cube::ray_intersect(Ray r) {
       ret.normal[1] = -1;
       ret.normal[2] = 0;
       ret.hit = true;
+      rets.addInter(ret);
     }
   }
 
-  return ret;
-}
-
-///////////////
-// Non-Hier  //
-///////////////
-
-NonhierSphere::~NonhierSphere()
-{
-}
-
-Intersection NonhierSphere::ray_intersect(Ray r) {
-  r.normalize();
-  // x
-  double x = r.eye[0] - m_pos[0];
-  double xt = r.dir[0];
-  // y
-  double y = r.eye[1] - m_pos[1];
-  double yt = r.dir[1];
-  // z
-  double z = r.eye[2] - m_pos[2];
-  double zt = r.dir[2];
-
-  // t^2 term
-  double a = xt * xt + yt * yt + zt * zt;
-  // t term
-  double b = 2 * (x * xt + y * yt + z * zt);
-  // constant term
-  double c = x * x + y * y + z * z - (m_radius * m_radius);
-
-  // Check discriminant
-  double d = b * b - 4 * a * c;
-
-  if (d > 0) {
-    double root = (-b - sqrt(d)) / (2 * a);
-    if (root < EPSILON) return Intersection();
-    x = r.eye[0] + root * r.dir[0];
-    y = r.eye[1] + root * r.dir[1];
-    z = r.eye[2] + root * r.dir[2];
-    Intersection ret(x, y, z);
-    ret.normal[0] = x - m_pos[0];
-    ret.normal[1] = y - m_pos[1];
-    ret.normal[2] = z - m_pos[2];
-    return ret;
-  }
-  return Intersection();
-}
-
-NonhierBox::~NonhierBox()
-{
-}
-
-Intersection NonhierBox::ray_intersect(Ray r) {
-  r.normalize();
-  // x
-  double x = r.eye[0];
-  double xt = r.dir[0];
-  // y
-  double y = r.eye[1];
-  double yt = r.dir[1];
-  // z
-  double z = r.eye[2];
-  double zt = r.dir[2];
-
-  double xi, yi, zi, t, dist;
-  Intersection ret;
-  double closest = std::numeric_limits<double>::max();
-
-  // Check front face
-  if (zt != 0) {
-    t = (m_pos[2] + m_size - z) / zt;
-    xi = x + xt * t;
-    yi = y + yt * t;
-    zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (xi >= m_pos[0] && xi <= m_pos[0] + m_size &&
-        yi >= m_pos[1] && yi <= m_pos[1] + m_size &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
-      ret.hit = true;
-      ret.pt[0] = xi;
-      ret.pt[1] = yi;
-      ret.pt[2] = zi;
-      ret.normal[0] = 0;
-      ret.normal[1] = 0;
-      ret.normal[2] = 1;
-    }
-    // Check Back face
-    t = (m_pos[2] - z) / zt;
-    xi = x + xt * t;
-    yi = y + yt * t;
-    zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (xi >= m_pos[0] && xi <= m_pos[0] + m_size &&
-        yi >= m_pos[1] && yi <= m_pos[1] + m_size &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
-      ret.hit = true;
-      ret.pt[0] = xi;
-      ret.pt[1] = yi;
-      ret.pt[2] = zi;
-      ret.normal[0] = 0;
-      ret.normal[1] = 0;
-      ret.normal[2] = -1;
-    }
-  }
-
-  // Check side faces
-  if (xt != 0) {
-    // Check Right face
-    t = (m_pos[0] + m_size - x) / xt;
-    xi = x + xt * t;
-    yi = y + yt * t;
-    zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (zi >= m_pos[2] && zi <= m_pos[2] + m_size &&
-        yi >= m_pos[1] && yi <= m_pos[1] + m_size &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
-      ret.pt[0] = xi;
-      ret.pt[1] = yi;
-      ret.pt[2] = zi;
-      ret.normal[0] = 1;
-      ret.normal[1] = 0;
-      ret.normal[2] = 0;
-      ret.hit = true;
-    }
-    // Check Left face
-    t = (m_pos[0] - x) / xt;
-    xi = x + xt * t;
-    yi = y + yt * t;
-    zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (zi >= m_pos[2] && zi <= m_pos[2] + m_size &&
-        yi >= m_pos[1] && yi <= m_pos[1] + m_size &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
-      ret.pt[0] = xi;
-      ret.pt[1] = yi;
-      ret.pt[2] = zi;
-      ret.normal[0] = -1;
-      ret.normal[1] = 0;
-      ret.normal[2] = 0;
-      ret.hit = true;
-    }
-  }
-
-  if (yt != 0) {
-    // Check Top face
-    t = (m_pos[1] + m_size - y) / yt;
-    xi = x + xt * t;
-    yi = y + yt * t;
-    zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (zi >= m_pos[2] && zi <= m_pos[2] + m_size &&
-        xi >= m_pos[0] && xi <= m_pos[0] + m_size &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
-      ret.pt[0] = xi;
-      ret.pt[1] = yi;
-      ret.pt[2] = zi;
-      ret.normal[0] = 0;
-      ret.normal[1] = 1;
-      ret.normal[2] = 0;
-      ret.hit = true;
-    }
-    // Check Bottom face
-    t = (m_pos[1] - y) / yt;
-    xi = x + xt * t;
-    yi = y + yt * t;
-    zi = z + zt * t;
-    dist = (Point3D(xi, yi, zi) - r.eye).length();
-    if (zi >= m_pos[2] && zi <= m_pos[2] + m_size &&
-        xi >= m_pos[0] && xi <= m_pos[0] + m_size &&
-        dist < closest && t > EPSILON) {
-      closest = dist;
-      ret.pt[0] = xi;
-      ret.pt[1] = yi;
-      ret.pt[2] = zi;
-      ret.normal[0] = 0;
-      ret.normal[1] = -1;
-      ret.normal[2] = 0;
-      ret.hit = true;
-    }
-  }
-
-  return ret;
+  return rets;
 }

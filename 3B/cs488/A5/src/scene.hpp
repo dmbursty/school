@@ -14,7 +14,7 @@ public:
   SceneNode(const std::string& name);
   virtual ~SceneNode();
 
-  virtual Intersection ray_intersect(Ray r);
+  virtual Intersections ray_intersect(Ray r);
 
   const Matrix4x4& get_transform() const { return m_trans; }
   const Matrix4x4& get_inverse() const { return m_invtrans; }
@@ -95,7 +95,7 @@ public:
                Primitive* primitive);
   virtual ~GeometryNode();
 
-  virtual Intersection ray_intersect(Ray r);
+  virtual Intersections ray_intersect(Ray r);
   virtual BoundingNode* generateBounds();
 
   const Material* get_material() const;
@@ -126,7 +126,7 @@ public:
                GeometryNode* obj);
   virtual ~BoundingNode();
 
-  virtual Intersection ray_intersect(Ray r);
+  virtual Intersections ray_intersect(Ray r);
 
 protected:
   GeometryNode* m_bound;

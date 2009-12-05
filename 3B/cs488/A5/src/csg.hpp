@@ -8,9 +8,13 @@ class CSGNode : public SceneNode {
   CSGNode(const std::string& name, SceneNode* lchild, SceneNode* rchild)
     : SceneNode(name), lchild(lchild), rchild(rchild) {}
 
+  virtual Intersections ray_intersect(Ray r);
+
  protected:
   SceneNode* lchild;
   SceneNode* rchild;
+
+  virtual void handle(Intersections& inters, bool in_l, bool in_r) = 0;
 };
 
 class UnionNode : public CSGNode {
@@ -18,7 +22,26 @@ class UnionNode : public CSGNode {
   UnionNode(const std::string& name, SceneNode* lchild, SceneNode* rchild)
     : CSGNode(name, lchild, rchild) {}
 
-  virtual Intersection ray_intersect(Ray r);
+  virtual void handle(Intersections& inters, bool in_l, bool in_r);
 };
+
+class IntersectNode : public CSGNode {
+ public:
+  IntersectNode(const std::string& name, SceneNode* lchild, SceneNode* rchild)
+    : CSGNode(name, lchild, rchild) {}
+
+  virtual void handle(Intersections& inters, bool in_l, bool in_r);
+};
+
+class DifferenceNode : public CSGNode {
+ public:
+  DifferenceNode(const std::string& name, SceneNode* lchild, SceneNode* rchild)
+    : CSGNode(name, lchild, rchild) {}
+
+  virtual void handle(Intersections& inters, bool in_l, bool in_r);
+};
+
+
+
 
 #endif

@@ -1,9 +1,10 @@
 #include "material.hpp"
 
 Material::Material(const Colour& kd, const Colour& ks, double shininess,
-                   double reflect, double refract)
+                   double reflect, double refract, double gloss)
   : m_kd(kd), m_ks(ks), m_shininess(shininess),
-    m_reflect(reflect), m_refract(refract), _texture(NULL), _bumpmap(NULL)
+    m_reflect(reflect), m_refract(refract), m_gloss(gloss),
+    m_texture(NULL), m_bumpmap(NULL)
 {
 }
 

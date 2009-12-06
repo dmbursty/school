@@ -98,7 +98,6 @@ public:
   virtual Intersections ray_intersect(Ray r);
   virtual BoundingNode* generateBounds();
 
-  const Material* get_material() const;
   Material* get_material()
   {
     return m_material;
@@ -123,14 +122,24 @@ class BoundingNode : public SceneNode {
 public:
   BoundingNode(const std::string& name,
                GeometryNode* bound,
-               GeometryNode* obj);
+               SceneNode* obj, bool useful,
+               Point3D minpt, Point3D maxpt);
   virtual ~BoundingNode();
 
   virtual Intersections ray_intersect(Ray r);
+  virtual BoundingNode* generateBounds() { return NULL; }
+
+  virtual bool useful() { return m_useful; }
+  virtual Point3D& get_min() { return m_min; }
+  virtual Point3D& get_max() { return m_max; }
+  virtual GeometryNode* bound() { return m_bound; }
+  virtual SceneNode* obj() { return m_obj; }
 
 protected:
   GeometryNode* m_bound;
-  GeometryNode* m_obj;
+  SceneNode* m_obj;
+  bool m_useful;
+  Point3D m_min, m_max;
 };
 
 #endif

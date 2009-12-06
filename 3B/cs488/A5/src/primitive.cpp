@@ -578,3 +578,47 @@ Intersections Cube::ray_intersect(Ray r) {
 
   return rets;
 }
+
+////////////////////
+// Bounding Boxes //
+////////////////////
+
+double* Sphere::getBoundingBox() {
+  double* bounds = new double[7];
+  bounds[0] = -1; bounds[1] = -1; bounds[2] = -1;
+  bounds[3] = 1; bounds[4] = 1; bounds[5] = 1;
+  bounds[6] = 0;
+  return bounds;
+}
+
+double* Cube::getBoundingBox() {
+  double* bounds = new double[7];
+  bounds[0] = 0; bounds[1] = 0; bounds[2] = 0;
+  bounds[3] = 1; bounds[4] = 1; bounds[5] = 1;
+  bounds[6] = 0;
+  return bounds;
+}
+
+double* Cylinder::getBoundingBox() {
+  double* bounds = new double[7];
+  bounds[0] = -1; bounds[1] = 0; bounds[2] = -1;
+  bounds[3] = 1; bounds[4] = 1; bounds[5] = 1;
+  bounds[6] = 0;
+  return bounds;
+}
+
+double* Cone::getBoundingBox() {
+  double* bounds = new double[7];
+  bounds[0] = -1; bounds[1] = 0; bounds[2] = -1;
+  bounds[3] = 1; bounds[4] = 1; bounds[5] = 1;
+  bounds[6] = 0;
+  return bounds;
+}
+
+double* Torus::getBoundingBox() {
+  double* bounds = new double[7];
+  bounds[0] = -1 - r; bounds[1] = -1 - r; bounds[2] = -r;
+  bounds[3] = 1 + r; bounds[4] = 1 + r; bounds[5] = r;
+  bounds[6] = 0;
+  return bounds;
+}

@@ -4,14 +4,16 @@
 #include "ray.hpp"
 #include "queue.hpp"
 #include "config.hpp"
+#include "kdtree.hpp"
 
 #define DEG2RAD 0.0174532925
 #define NUM_THREADS 4
 
 // Lighting options
 // Variables
+unsigned int LEAF_PHOTONS = 10;
 unsigned int BUMPMAP = 100;
-unsigned int ANTIALIAS = 10;
+unsigned int ANTIALIAS = 1;
 unsigned int RECURSE = 10;
 unsigned int GLOSSY = 1;
 // Regular
@@ -21,8 +23,10 @@ unsigned int TEXTURE = 1;
 unsigned int SPECULAR = 1;
 unsigned int SHADOWS = 1;
 unsigned int FRESNEL = 1;
+unsigned int HIER_BOUND = 1;
 // Special rendering
 unsigned int NORMAL = 0;
+unsigned int ALL_BOUNDS = 0;
 unsigned int BOUNDS = 0;
 
 // Forward declare
@@ -46,9 +50,13 @@ void a4_render(// What to render
                const std::list<Light*>& lights
                )
 {
-
   // Generate Bounding Volumes
   root->generateBounds();
+
+  // Make photon map
+  KDTree* photon_map = new KDTree(0);
+
+  // TODO: Cast photons
 
   // Make render_data that the threads use
   Image img(width, height, 3);
@@ -373,7 +381,7 @@ Pixel ray_trace(int x, int y, Ray ray, RenderConfig* data, double index) {
               Intersections light_inter = data->root->ray_intersect(light_ray);
               if (light_inter.size() > 0) {
                 //std::cout << i.node->get_name() << " in shadow of " << light_inter.node->get_name() << std::endl;
-                continue;
+                if ((light_inter[0].pt - i.pt).length() < dist) continue;
               }
             }
 

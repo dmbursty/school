@@ -23,6 +23,7 @@ class UnionNode : public CSGNode {
     : CSGNode(name, lchild, rchild) {}
 
   virtual void handle(Intersections& inters, bool in_l, bool in_r);
+  virtual BoundingNode* generateBounds();
 };
 
 class IntersectNode : public CSGNode {
@@ -31,6 +32,7 @@ class IntersectNode : public CSGNode {
     : CSGNode(name, lchild, rchild) {}
 
   virtual void handle(Intersections& inters, bool in_l, bool in_r);
+  virtual BoundingNode* generateBounds();
 };
 
 class DifferenceNode : public CSGNode {
@@ -39,6 +41,7 @@ class DifferenceNode : public CSGNode {
     : CSGNode(name, lchild, rchild) {}
 
   virtual void handle(Intersections& inters, bool in_l, bool in_r);
+  virtual BoundingNode* generateBounds();
 };
 
 

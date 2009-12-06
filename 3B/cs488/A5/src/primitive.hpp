@@ -16,6 +16,7 @@ public:
   Torus(double r) : r(r) {}
   virtual ~Torus();
   virtual Intersections ray_intersect(Ray ray);
+  virtual double* getBoundingBox();
 private:
   double r;
 };
@@ -24,24 +25,28 @@ class Cylinder : public Primitive {
 public:
   virtual ~Cylinder();
   virtual Intersections ray_intersect(Ray r);
+  virtual double* getBoundingBox();
 };
 
 class Cone : public Primitive {
 public:
   virtual ~Cone();
   virtual Intersections ray_intersect(Ray r);
+  virtual double* getBoundingBox();
 };
 
 class Sphere : public Primitive {
 public:
   virtual ~Sphere();
   virtual Intersections ray_intersect(Ray r);
+  virtual double* getBoundingBox();
 };
 
 class Cube : public Primitive {
 public:
   virtual ~Cube();
   virtual Intersections ray_intersect(Ray r);
+  virtual double* getBoundingBox();
 };
 
 #endif

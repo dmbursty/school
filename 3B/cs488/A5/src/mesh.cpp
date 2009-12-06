@@ -96,14 +96,15 @@ Intersections Mesh::ray_intersect(Ray r) {
 double* Mesh::getBoundingBox() {
   // Goint to return the box as (x, y, z, r)
   Point3D p = m_verts.front();
-  // 0-2 mins, 3-5 maxs
-  double* bounds = new double[6];
+  // 0-2 mins, 3-5 maxs, 6: whether bounds provide a speedup
+  double* bounds = new double[7];
   bounds[0] = p[0];
   bounds[1] = p[1];
   bounds[2] = p[2];
   bounds[3] = p[0] + 0.001;
   bounds[4] = p[1] + 0.001;
   bounds[5] = p[2] + 0.001;
+  bounds[6] = 1.0;
   for (std::vector<Point3D>::iterator I = m_verts.begin(); I != m_verts.end(); ++I) {
     p = (*I);
     if (p[0] < bounds[0]) bounds[0] = p[0];

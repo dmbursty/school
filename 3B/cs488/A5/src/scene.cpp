@@ -2,6 +2,8 @@
 #include <iostream>
 #include <limits>
 
+extern unsigned int HIER_BOUND;
+extern unsigned int ALL_BOUNDS;
 extern unsigned int BOUNDS;
 extern unsigned int BUMPMAP;
 
@@ -93,14 +95,80 @@ bool SceneNode::is_joint() const
 }
 
 BoundingNode* SceneNode::generateBounds() {
+  std::cerr << "Building bounding box for \"" << get_name() << "\"" <<std::endl;
+  bool set = false;
+  Material* bound_mat;
+  double bounds[6];
   for (ChildList::iterator it = m_children.begin(); it != m_children.end(); it++) {
     BoundingNode* bound = (*it)->generateBounds();
-    if (bound != NULL) {
-      it = m_children.erase(it);
-      it = m_children.insert(it, bound);
+    if (bound != NULL){
+      // Keep track of our bounds
+      //std::cout << get_name() << " Child was on " << bound->get_min() << " to " << bound->get_max() << " - " << (*it)->get_name() << std::endl;
+      // Construct the 8 bounding points in the scene's coordinate system
+      Point3D minpt = bound->get_min();
+      Point3D maxpt = bound->get_max();
+      std::vector<Point3D> points;
+      points.push_back(Point3D(minpt[0], minpt[1], minpt[2]));
+      points.push_back(Point3D(minpt[0], maxpt[1], minpt[2]));
+      points.push_back(Point3D(maxpt[0], minpt[1], minpt[2]));
+      points.push_back(Point3D(maxpt[0], maxpt[1], minpt[2]));
+      points.push_back(Point3D(minpt[0], minpt[1], maxpt[2]));
+      points.push_back(Point3D(minpt[0], maxpt[1], maxpt[2]));
+      points.push_back(Point3D(maxpt[0], minpt[1], maxpt[2]));
+      points.push_back(Point3D(maxpt[0], maxpt[1], maxpt[2]));
+      // Transform the eight points and find min/max in scene coordinates
+      for (int i = 0; i < 8; i++) {
+        Point3D pt = (*it)->get_transform() * points[i];
+        if (set) {
+          bounds[0] = std::min(pt[0], bounds[0]);
+          bounds[1] = std::min(pt[1], bounds[1]);
+          bounds[2] = std::min(pt[2], bounds[2]);
+          bounds[3] = std::max(pt[0], bounds[3]);
+          bounds[4] = std::max(pt[1], bounds[4]);
+          bounds[5] = std::max(pt[2], bounds[5]);
+        } else {
+          set = true;
+          bound_mat = bound->bound()->get_material();
+          bounds[0] = pt[0];
+          bounds[1] = pt[1];
+          bounds[2] = pt[2];
+          bounds[3] = pt[0] + 0.0001;
+          bounds[4] = pt[1] + 0.0001;
+          bounds[5] = pt[2] + 0.0001;
+        }
+        //std::cout << "My new bounds " <<
+            //bounds[0] << ", " << bounds[1] << ", " << bounds[2] << " to " <<
+            //bounds[3] << ", " << bounds[4] << ", " << bounds[5] << std::endl;
+      }
+      // Insert the bounding node into the scene tree if it is useful
+      if (ALL_BOUNDS || bound->useful()) {
+        it = m_children.erase(it);
+        it = m_children.insert(it, bound);
+      } else {
+        // We no longer need the bounding node
+        delete bound;
+      }
     }
   }
-  return NULL;
+  if (!HIER_BOUND) return NULL;
+  if (set) {
+    // Construct a new bounding node for this scene
+    Cube* cube = new Cube();
+    GeometryNode* bounder = new GeometryNode("bound", cube);
+    bounder->set_material(bound_mat);
+    bounder->translate(Vector3D(bounds[0], bounds[1], bounds[2]));
+    bounder->scale(Vector3D(bounds[3] - bounds[0],
+                            bounds[4] - bounds[1],
+                            bounds[5] - bounds[2]));
+    bounder->set_transform(get_transform() * bounder->get_transform());
+    BoundingNode* boundNode = new BoundingNode(
+        "bound", bounder, this, true,
+        Point3D(bounds[0], bounds[1], bounds[2]),
+        Point3D(bounds[3], bounds[4], bounds[5]));
+    return boundNode;
+  } else {
+    return NULL;
+  }
 }
 
 JointNode::JointNode(const std::string& name)
@@ -173,7 +241,10 @@ BoundingNode* GeometryNode::generateBounds() {
     bound->scale(Vector3D(bounds[3] - bounds[0],
                           bounds[4] - bounds[1],
                           bounds[5] - bounds[2]));
-    BoundingNode* boundNode = new BoundingNode("bound", bound, this);
+    BoundingNode* boundNode = new BoundingNode(
+        "bound", bound, this, bounds[6] != 0,
+        Point3D(bounds[0], bounds[1], bounds[2]),
+        Point3D(bounds[3], bounds[4], bounds[5]));
     delete bounds;
     return boundNode;
   }
@@ -181,8 +252,10 @@ BoundingNode* GeometryNode::generateBounds() {
 }
 
 BoundingNode::BoundingNode(const std::string& name,
-                           GeometryNode* bound, GeometryNode* obj)
-  : SceneNode(name), m_bound(bound), m_obj(obj) {}
+                           GeometryNode* bound, SceneNode* obj, bool useful,
+                           Point3D minpt, Point3D maxpt)
+  : SceneNode(name), m_bound(bound), m_obj(obj), m_useful(useful),
+    m_min(minpt), m_max(maxpt) {}
 
 BoundingNode::~BoundingNode() {}
 
@@ -191,15 +264,16 @@ Intersections BoundingNode::ray_intersect(Ray r) {
   if (BOUNDS) {
     return i;
   }
-  for (int j = 0; j < i.size(); j++) {
+  if (i.size() > 0) {
+    i.sort(r.eye);
     Intersections ii = m_obj->ray_intersect(r);
     // Check if our child wants to texture map using the
     // map coords from the bounding primitive
     for (int jj = 0; jj < ii.size(); jj++) {
       if (ii[jj].map_x == -1 || ii[jj].map_y == -1) {
         // We need to cast a ray along the normal, from the intersection point
-        Point3D new_eye = i[j].pt + ( 1000 * i[j].normal );
-        Vector3D new_ray = -1 * i[j].normal;
+        Point3D new_eye = i[0].pt + ( 1000 * i[0].normal );
+        Vector3D new_ray = -1 * i[0].normal;
         Ray mapper(ii[jj].pt + ii[jj].normal, -1 * ii[jj].normal);
         Intersection mapped = m_bound->ray_intersect(mapper)[0];
         ii[jj].map_x = mapped.map_x;

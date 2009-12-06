@@ -58,6 +58,9 @@ struct Pixel {
 
   // Whether we hit something or not
   bool empty;
+
+  // The world-space coordinate of this pixel
+  Point3D pt;
 };
 
 struct intersect_compare {

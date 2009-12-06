@@ -9,6 +9,7 @@ class CSGNode : public SceneNode {
     : SceneNode(name), lchild(lchild), rchild(rchild) {}
 
   virtual Intersections ray_intersect(Ray r);
+  virtual std::vector<BoundingNode*> getCausticObjects();
 
  protected:
   SceneNode* lchild;

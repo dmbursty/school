@@ -52,7 +52,11 @@ public:
   // Returns true if and only if this node is a JointNode
   virtual bool is_joint() const;
 
+  // Traverse the tree and generate hierarchical bounding boxes
   virtual BoundingNode* generateBounds();
+  // Get a list of bounds for objects that could cause caustics
+  // This should return only reflective and refractive objects
+  virtual std::vector<BoundingNode*> getCausticObjects();
   
 protected:
   
@@ -97,6 +101,7 @@ public:
 
   virtual Intersections ray_intersect(Ray r);
   virtual BoundingNode* generateBounds();
+  virtual std::vector<BoundingNode*> getCausticObjects();
 
   Material* get_material()
   {
@@ -128,6 +133,7 @@ public:
 
   virtual Intersections ray_intersect(Ray r);
   virtual BoundingNode* generateBounds() { return NULL; }
+  virtual std::vector<BoundingNode*> getCausticObjects();
 
   virtual bool useful() { return m_useful; }
   virtual Point3D& get_min() { return m_min; }

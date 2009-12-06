@@ -10,8 +10,10 @@ class KDTree {
 
   void add(Point3D p) { points.push_back(p); }
 
-  void split();
+  int split();
   void print(std::string prefix);
+  int getDensityAt(Point3D& p);
+  int getLeafDensityAt(Point3D& p);
 
  private:
   int depth;

@@ -6,6 +6,7 @@
 #include "scene.hpp"
 #include "light.hpp"
 #include "queue.hpp"
+#include "kdtree.hpp"
 
 struct RenderConfig {
   // Image Parameters
@@ -24,6 +25,7 @@ struct RenderConfig {
   SceneNode* root;
   const Colour& ambient;
   const std::list<Light*>& lights;
+  KDTree* photon_map;
 
   // Threading Parameters
   Queue& queue;

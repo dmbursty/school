@@ -1,6 +1,8 @@
 #include "csg.hpp"
 #include <vector>
 
+#define EPSILON 0.00001
+
 extern unsigned int HIER_BOUND;
 
 Intersections CSGNode::ray_intersect(Ray r) {
@@ -8,6 +10,7 @@ Intersections CSGNode::ray_intersect(Ray r) {
 
   Intersections left = lchild->ray_intersect(r);
   Intersections right = rchild->ray_intersect(r);
+
   Intersections ret;
   for (int i = 0; i < left.size(); i++) {
     left[i].left = true;
@@ -23,6 +26,13 @@ Intersections CSGNode::ray_intersect(Ray r) {
   // that object
   handle(ret, left.size() % 2, right.size() % 2);
   ret.transform(get_transform(), get_inverse());
+  return ret;
+}
+
+std::vector<BoundingNode*> CSGNode::getCausticObjects() {
+  std::vector<BoundingNode*> ret;
+  BoundingNode* b = generateBounds();
+  ret.push_back(b);
   return ret;
 }
 

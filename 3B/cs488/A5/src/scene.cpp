@@ -1,6 +1,6 @@
 #include "scene.hpp"
 #include <iostream>
-#include <limits>
+#include <vector>
 
 extern unsigned int HIER_BOUND;
 extern unsigned int ALL_BOUNDS;
@@ -171,6 +171,19 @@ BoundingNode* SceneNode::generateBounds() {
   }
 }
 
+std::vector<BoundingNode*> SceneNode::getCausticObjects() {
+  std::vector<BoundingNode*> ret;
+  for (ChildList::iterator it = m_children.begin(); it != m_children.end(); it++) {
+    std::vector<BoundingNode*> objects = (*it)->getCausticObjects();
+    for (unsigned int j = 0; j < objects.size(); j++) {
+      objects[j]->bound()->set_transform(
+        get_transform() * objects[j]->bound()->get_transform());
+      ret.push_back(objects[j]);
+    }
+  }
+  return ret;
+}
+
 JointNode::JointNode(const std::string& name)
   : SceneNode(name)
 {
@@ -251,6 +264,29 @@ BoundingNode* GeometryNode::generateBounds() {
   return NULL;
 }
 
+std::vector<BoundingNode*> GeometryNode::getCausticObjects() {
+  std::vector<BoundingNode*> ret;
+  if (m_material->reflect() > 0 || m_material->refract() > 0) {
+    double* bounds = m_primitive->getBoundingBox();
+    if (bounds != NULL) {
+      Cube* cube = new Cube();
+      GeometryNode* bound = new GeometryNode(*this);
+      bound->set_primitive(cube);
+      bound->translate(Vector3D(bounds[0], bounds[1], bounds[2]));
+      bound->scale(Vector3D(bounds[3] - bounds[0],
+                            bounds[4] - bounds[1],
+                            bounds[5] - bounds[2]));
+      BoundingNode* boundNode = new BoundingNode(
+          "bound", bound, this, bounds[6] != 0,
+          Point3D(bounds[0], bounds[1], bounds[2]),
+          Point3D(bounds[3], bounds[4], bounds[5]));
+      delete bounds;
+      ret.push_back(boundNode);
+    }
+  }
+  return ret;
+}
+
 BoundingNode::BoundingNode(const std::string& name,
                            GeometryNode* bound, SceneNode* obj, bool useful,
                            Point3D minpt, Point3D maxpt)
@@ -283,4 +319,8 @@ Intersections BoundingNode::ray_intersect(Ray r) {
     return ii;
   }
   return i;
+}
+
+std::vector<BoundingNode*> BoundingNode::getCausticObjects() {
+  return m_obj->getCausticObjects();
 }

@@ -1,9 +1,11 @@
-mat1 = gr.material({0.7, 0.0, 0.0}, {0.0, 0.0, 0.0}, 5, "swirl.png", "")
-mat2 = gr.material({0.7, 0.0, 0.0}, {0.0, 0.0, 0.0}, 5, "checker1.png", "")
-mat3 = gr.material({0.7, 0.0, 0.0}, {0.0, 0.0, 0.0}, 5, "checker3.png", "")
+mat1 = gr.material({0.7, 0.0, 0.0}, {0.0, 0.0, 0.0}, 5)
+mat2 = gr.material({0.7, 0.0, 0.0}, {0.0, 0.0, 0.0}, 5)
+mat3 = gr.material({0.7, 0.0, 0.0}, {0.0, 0.0, 0.0}, 5)
+mat1:set_bumpmap("swirl.png")
+mat2:set_bumpmap("bumpy.png")
+mat3:set_bumpmap("checker_bump.png")
 
 scene_root = gr.node('root')
---scene_root:translate(-0.5, -0.5, 0)
 
 -- Cubes
 sa = gr.cube('sa', 0.3)
@@ -121,6 +123,6 @@ s12:set_material(mat3)
 white_light = gr.light({-800.0, 0.0, 800.0}, {0.5, 0.5, 0.5}, {1, 0, 0})
 light = gr.light({0.0, 0.0, 800.0}, {0.2, 0.2, 0.2}, {1, 0, 0})
 
-gr.render(scene_root, 'simple.png', 500, 750,
+gr.render(scene_root, 'bumpmaps.png', 500, 750,
 	  {0, 0, 10}, {0, 0, -1}, {0, 1, 0}, 50,
 	  {0.3, 0.3, 0.3}, {white_light, light})

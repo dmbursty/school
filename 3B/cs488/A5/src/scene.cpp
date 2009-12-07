@@ -228,14 +228,36 @@ Intersections GeometryNode::ray_intersect(Ray r) {
   for (int j = 0; j < i.size(); j++) {
     if (BUMPMAP) {
       if (m_material->bumpmap() != NULL) {
+        // Perturb in a cone
+        // Generate a vector that is perpendicular to the normal
+        Vector3D a;
+        if (i[j].normal[0] != 0) {
+          a[0] = (i[j].normal[1] + i[j].normal[2]) / i[j].normal[0];
+          a[1] = -1;
+          a[2] = -1;
+        } else if (i[j].normal[1] != 0) {
+          a[0] = -1;
+          a[1] = (i[j].normal[0] + i[j].normal[2]) / i[j].normal[1];
+          a[2] = -1;
+        } else if (i[j].normal[2] != 0) {
+          a[0] = -1;
+          a[1] = -1;
+          a[2] = (i[j].normal[0] + i[j].normal[1]) / i[j].normal[2];
+        }
+        // Generate second vector perpendicular to the two other vectors
+        a.normalize();
+        Vector3D b = a.cross(i[j].normal);
+        b.normalize();
+
+        // a and b now are an orthonormal basis of the plane defined by normal
         int map_x = m_material->bumpmap()->width() * i[j].map_x;
         int map_y = m_material->bumpmap()->height() * i[j].map_y;
         double x_perturb = (*m_material->bumpmap())(map_x - 1, map_y, 0)
                           - (*m_material->bumpmap())(map_x + 1, map_y, 0);
         double y_perturb = (*m_material->bumpmap())(map_x, map_y - 1, 0)
                           - (*m_material->bumpmap())(map_x, map_y + 1, 0);
-        i[j].normal[0] += x_perturb * BUMPMAP;
-        i[j].normal[1] += y_perturb * BUMPMAP;
+        i[j].normal = i[j].normal + x_perturb * BUMPMAP * a;
+        i[j].normal = i[j].normal + y_perturb * BUMPMAP * b;
       }
     }
     i[j].node = this;
@@ -308,9 +330,9 @@ Intersections BoundingNode::ray_intersect(Ray r) {
     for (int jj = 0; jj < ii.size(); jj++) {
       if (ii[jj].map_x == -1 || ii[jj].map_y == -1) {
         // We need to cast a ray along the normal, from the intersection point
-        Point3D new_eye = i[0].pt + ( 1000 * i[0].normal );
-        Vector3D new_ray = -1 * i[0].normal;
-        Ray mapper(ii[jj].pt + ii[jj].normal, -1 * ii[jj].normal);
+        //std::cout << ii[jj].pt << " - " << ii[jj].normal << std::endl;
+        Ray mapper(ii[jj].pt + 1000 * ii[jj].normal, -1 * ii[jj].normal);
+        //std::cout << mapper.eye << " - " << mapper.dir << std::endl;
         Intersection mapped = m_bound->ray_intersect(mapper)[0];
         ii[jj].map_x = mapped.map_x;
         ii[jj].map_y = mapped.map_y;

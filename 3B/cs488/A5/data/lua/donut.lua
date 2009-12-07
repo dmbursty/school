@@ -1,5 +1,7 @@
-donut = gr.material({0, 0, 0}, {0, 0, 0}, 0, 0, 0, "donut_tex.png", "donut_bump.png")
-bite = gr.material({0.25, 0, 0}, {0, 0, 0}, 0, 0, 0, "", "")
+donut = gr.material({0, 0, 0}, {0, 0, 0}, 0)
+bite = gr.material({0.25, 0, 0}, {0, 0, 0}, 0)
+donut:set_texture("donut_tex.png")
+donut:set_bumpmap("donut_bump.png")
 
 scene_root = gr.node('root')
 --scene_root:rotate('x', 90)
@@ -37,6 +39,6 @@ scene_root:add_child(s)
 
 white_light = gr.light({0, 1, 5}, {0.7, 0.7, 0.7}, {1, 0, 0})
 
-gr.render(scene_root, 'donut.png', 500, 500,
+gr.render(scene_root, 'donut_a.png', 500, 500,
 	  {0, 0, 5}, {0, 0, -1}, {0, 1, 0}, 50,
 	  {0.3, 0.3, 0.3}, {white_light})

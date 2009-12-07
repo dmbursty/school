@@ -1,0 +1,542 @@
+\documentclass {article}
+\usepackage{fullpage}
+
+\title{Advanced Ray Tracer}
+\author{Daniel Burstyn (20206120)}
+\date{Dec 6, 2009}
+
+\begin{document}
+\maketitle
+\newpage
+
+
+\begin{center}
+\begin{Huge}
+Manual
+\end{Huge}
+\end{center}
+
+\noindent{\Large \bf Final Project:}
+\section{Purpose}
+To implement a number of advanced ray tracer features and model an attractive
+scene.
+
+\section{Statement}
+The scene I plan to render is that of the top of a marble bathroom sink.  On the
+sink there will be a clear glass containing a toothbrush, and sink stopper.
+The faucet will be running, and the sink will be full of water.  The wall behind
+the sink will have a simple tile texture, and a mirror.
+
+The sink stopper is a cut off cone that will require a cone primitive and CSG to
+make.  A torus will also be used as the metal loop at the top of the stopper.
+The glass and toothbrush will require refraction.
+
+The water in the sink will be rippled and require bump mapping.  The sink and
+faucet will be constructed with CSG.  The mirror and sink will both be
+reflective, and texture mapping will be used for the tiles, and running water.
+
+\section{Using the Ray Tracer}
+
+\subsection{Lua Parser Extensions}
+Many of my objectives for this advanced ray tracer provide capabilities that
+were far beyond the scope of the ray tracer done in A4.  In order to express
+these new objects and properties, I needed to extend the parser so that users
+can specify these additions in their lua scripts.
+
+\subsubsection{Cylinders, Cones, and Tori}
+New primitives have been added to model new shapes.  These primitives are
+constructed very similarly to existing primitives:\\
+\verb!gr.cylinder("name")!: Construct a cylinder oriented on the y-axis from
+y=0 to y=1 with radius 1.\\
+\verb!gr.cone("name")!: Construct a cone oriented on the y-axis from
+y=0 to y=1 with the pointed tip at y=0 (upsidedown) and the base at y=1 as a
+circle of radius 1.\\
+\verb!gr.torus("name", radius)!: Construct a torus (donut shape) with the
+hole along the z-axis.  The torus cross-section will have the specified radius,
+but the radius around the torus itself is 1.
+
+\subsubsection{Texture mapping and Bump mapping}
+Objects can now have texture maps and bump maps applied to them to change the
+way they appear.  These maps are properties of \textbf{materials} and will
+affect all shapes with that material.  To specify texture maps or bump maps in
+lua scripts, use the commands:\\
+\verb!mat:set_texture("filename")! and \verb!mat:set_bumpmap("filename")!.\\
+Where \verb!mat! is a material object, and \textit{filename} is the path to a
+PNG image.  Materials can have both a bump map and a texture map.  The bump map
+will be based on the first channel of the specified image (Red in the case of
+RGB.)
+
+\subsubsection{Reflection and Refraction}
+Materials can be made to be reflective or refractive.  Note that refractive
+objects are inherently reflective due to fresnel equations and specifying both
+reflection and refraction will ignore the reflection.  Additionally, reflective
+objects can be made glossy if the user wishes.  The commands to specify these
+are:\\
+\verb!mat:set_reflect(intensity)!: intensity from 0 to 1 indicating what
+proportion of the reflected ray's colour is added to the pixel.\\
+\verb!mat:set_gloss(gloss)!: gloss from 0 to 1 indicating how much to
+jitter reflected rays.  A higher gloss value will produce reflections that look
+fuzzy or blurry.\\
+\verb!mat:set_refract(index)!: index should be greater that 1, and is the
+index of refraction of the material: a measure of how fast light travels in the
+medium.  Specifying 0 will turn off refraction if it has previously been enabled
+for this material.  For reference, water's index of refraction is close to 1.3,
+while glass is typically 1.5 to 1.7.  Air's index is approximately 1 and
+specifying this will make the material essentially invisible.
+
+\subsubsection{Constructive Solid Geometry}
+Shapes can now be combined through intersection, union, or difference to create
+more complicated shapes that could not previously be modelled.  Constructive
+solid geometry (CSG) nodes can be combined recursively to create arbitrarily
+complex objects out of simpler primitives.  Two nodes can be combined using the
+commands:\\
+\verb!gr.union(node a, node b)!: Produces the union of both shapes (points in
+either shape).  When nesting CSG nodes, union nodes are much safer than
+arbitrary Scene Nodes.\\
+\verb!gr.intersect(node a, node b)!: Produces the intersection of both shapes
+(only points in both shapes).\\
+\verb!gr.difference(node a, node b)!: Produces the difference a - b (points
+in a but not in b.)  Beware, unlike union and intersection, difference(a, b) is
+not the same as difference(b, a).\\
+
+\subsection{Compile Time Flags}
+There are several compile time flags (represented as global variables) that can
+be specified to alter the behaviour of the ray tracer.  These are all found at
+the top of \verb!a4.cpp!.  These can be classified into three categories:
+variables, flags, and special-case flags.
+
+\subsubsection{Variables}
+\verb!NUM_THREADS!: Number of threads to spawn.\\
+\verb!LEAF_PHOTONS!: Specify the number of nodes in a leaf of the kd-tree
+where the tree will no longer split.\\
+\verb!NUM_PHOTONS!: Specify the number of photons to cast \textbf{per} object
+\textbf{per} light.\\
+\verb!CAUSTIC_RADIUS!: The radius (in world-coordinates) to check for the
+density of photons within a point.\\
+\verb!PHOTON_DENSITY!: The factor to \textbf{divide} the number of photons in
+radius by to get an amount to brighten the pixel.\\
+\verb!BUMPMAP!: The intensity bump maps in the scene.  The perturbation ray is
+multiplied by this factor before adding it to the original normal.  Notice that
+setting this to 0 will turn off bump mapping.\\
+\verb!ANTIALIAS!: The number of jittered supersamples to do for antialiasing.
+The first ray is not jittered so set to 1 for no antialiasing.\\
+\verb!RECURSE!: The maximum recursion depth for ray tracing and photon
+casting.\\
+\verb!GLOSSY!: The number of jittered samples to take for glossy reflections.
+Beware this is multiplicative with \verb!ANTIALIAS! and can really slow down ray
+tracing if both are set to moderate values.\\
+
+\subsubsection{Boolean Flags}
+\verb!AMBIENT!: Ambient lighting on/off.\\
+\verb!DIFFUSE!: Diffuse lighting on/off.\\
+\verb!TEXTURE!: Texture mapping on/off.\\
+\verb!SPECULAR!: Specular lighting on/off.\\
+\verb!SHADOWS!: Shadows on/off.\\
+\verb!HIER_BOUND!: Hierarchical bounding boxes on/off.\\
+\verb!CAUSTICS!: Caustics and photon mapping on/off.\\
+
+\subsubsection{Special Case Flags}
+\verb!NORMAL!: Render colour based on normal direction.\\
+\verb!ALL_BOUNDS!: Use bounding boxes for primitives even in silly cases like
+bounding a sphere with a box.\\
+\verb!BOUNDS!: Render the bounding box instead of the object it bounds.\\
+\verb!COUNT_INTERS!: Count the approximate number of intersections computed.
+This is approximate due to threading issues.\\
+
+\subsection{Running}
+Now that you have created your scene with a lua file, and set the compile time
+flags you want, you can run the ray tracer by compiling it (simply running
+\verb!make!) and then running it by calling \verb!./rt <lua file>!.  While
+running the ray tracer will inform you of it's progress through generating
+bounding boxes, then photon mapping, and finally ray tracing the scene.
+
+\section{Implementation}
+
+This section will discuss the implementation details of the objectives I
+completed as part of this project.  There will also be references to parts of
+the code where the implementation was done.
+
+\subsection{Additional Primitives}
+See \verb!primitive.cpp! and \verb!primitive.hpp!.\\
+
+Three additional primitives were added for the advanced ray tracer on top of the
+sphere and cube available in A4.  These three primitives are cylinders, cones,
+and tori.  In order to correctly model new primitives at this point we only need
+to write new ray intersect methods.\\
+
+Since we already have sphere and cube done, additional primitives can be done in
+a very similar fashion.  We must parameterize the ray, and use root-finding
+techniques to find the intersection points of the ray with the primitive.  Here
+are the basic methods of finding these intersection points for the new
+primitives.\\
+
+\textbf{Cylinder}\\
+Equation of cylinder: $x^2 + z^2 = 1$\\
+Parameterization gives a quadratic which we can find the roots of.\\
+Check roots to make sure $0 \ge y \ge 1$ to make the cylinder bounded.\\
+Normal is from the centre out: $[x, 0, z]$.\\
+Additionally check top and bottom parts of cylinder:\\
+Perform plane intersection, and check that we are within the cylinder's
+radius---that $x^2 + z^2 < 1$.\\
+Normals for top and bottom planes are trivially y axis and -y axis.\\
+
+\textbf{Cone}\\
+Equation of cone: $x^2 + z^2 = y^2$\\
+Parameterization gives a quadratic which we can find the roots of.\\
+Check roots to make sure $0 \ge y \ge 1$ to make the cone bounded.\\
+Normal is from the centre out but also angled according to y: $[x, y, z]$.\\
+Additionally check flat section of the cone.\\
+Perform plane intersection, and then check that we are within the cone's
+radius---that $x^2 + z^2 < 1$ since the cone is upside-down, $y=1$.\\
+Normal for the plane is trivially y axis.\\
+
+\textbf{Torus}\\
+Equation of torus: $(\sqrt{x^2 + y^2} - R) + z^2 = r^2$\\
+Parameterization gives us a quadric which means up to 4 roots.\\
+Using provided quadric root finder, we just iterate over the roots to
+find the closest intersection.\\
+The normal of the torus at that point can be computed using the gradient
+operator $\nabla$ to find the surface normals by applying it to the equation of
+the torus:\\
+$\frac{\delta f}{\delta x} = 4x(x^2 + y^2 + z^2 - r^2 - R^2)$\\
+$\frac{\delta f}{\delta x} = 4y(x^2 + y^2 + z^2 - r^2 - R^2)$\\
+$\frac{\delta f}{\delta x} = 4z(x^2 + y^2 + z^2 - r^2 - R^2) + 8R^2z$\\
+Plugging in the intersection point yields the normal.\\
+
+\subsection{Texture and Bump Mapping}
+See \verb!primitive.cpp! for UV mapping,  \verb!scene.cpp:Geometry! for normal
+perturbation, and \verb!a4.cpp:ray_trace! for texture map lookup.\\
+
+\subsubsection{UV Mapping}
+To do texture mapping and bump mapping, we must transform intersection points on
+an object's surface into 2D coordinates so we can do a lookup in the maps.  To
+do this I used basic UV mapping for each primitive as explained below:
+
+\textbf{Cube}\\
+Cube is the easiest - simply determine which face the intersection is on (we
+know this already by doing intersection) and take the other two coordinates as
+the u, v values.  Ex. intersection at point $[1, 0.2, 0.7]$ on the unit cube
+gives $u = 0.2$ and $v = 0.7$.
+
+\textbf{Sphere}\\
+In order to UV map onto a sphere, we calculate the latitude and longitude of the
+intersection point on the sphere.  We use vectors to the top of the sphere, any
+point on the equator, and the vector the intersection point.  We can find
+latitude through the following:\\
+$\phi$ = arccos(-1 * north $\bullet$ point)\\
+$\theta$ = ( arccos( point $\bullet$ equator / sin($\phi$) ) ) / $2\pi$\\
+latitude = $1 - \phi / \pi$
+if north $\times$ equator $\bullet$ point $< 0$ then\\
+\ \ \ \ longitude = $\theta$\\
+else\\
+\ \ \ \ longitude = $1 - \theta$\\
+Now, u = longitude and v = latitude.
+
+\textbf{Cylinder}\\
+Moving into the new primitives...\\
+We calculate u = longitude exactly the same as sphere, and v = y.\\
+Unless we hit the top or bottom, in which case, we can simply do u = x, and v =
+z.\\
+
+\textbf{Cone}\\
+Exactly the same as cylinder!\\
+
+\textbf{Torus}\\
+This one is tricky:\\
+Use the same longitude calculation as before, but our equator vector points
+through the torus, and up points to any point on the torus to get u.  Now for
+v, we must do a slightly different longitude calculation, since we want to find
+the point around the torus cross section.  To do this, we take the vector to the
+angle around the torus and cross product it with the vector through the torus to
+get the tangent vector to the torus at that point.  We can now do the longitude
+calculation with the tangent vector as up, and the vector through the torus as
+the equator vector.  This gives us the v value and we are finally done!
+
+\subsubsection{Using the maps}
+Now that we have a u and v value, which are on 0 to 1 and correspond to x and y
+values in the map image, we want to use the map image.  They are used in the
+following way:
+
+\textbf{Texture Map}\\
+Upon intersection, simply use u and v to find the pixel colour in the texture
+map, and use that colour as the diffuse colour instead of the one stored in the
+material.\\
+
+\textbf{Bump Map}\\
+We want to perturb the normal in a cone shape, so we need to find the plane
+defined by the normal vector, so we can perturb it along that plane.
+Using the dot product formula ($x_1x_2 + y_1y_2 + z1_z2 = $cos$\theta$, and the
+fact that cos(90) = 0, to come up with the vector $[y_1 + z_1 / x_1, -1, -1]$
+which will be perpendicular to the given vector.  Let's call this vector a.  Now
+compute vector b = normal $\times$ a to get a and b as an orthonormal basis of
+the plane defined by the normal vector.\\
+Next use u and v to look up a point in the bumpmap.  We want to take the
+difference in colour from the point above and point below to find the
+perturbation factor along vector a, and similarily the points to the left and
+right for the perturbation along b.  Simply add the scaled a and b vectors to
+the normal to get the perturbed normal vector.
+
+\subsection{Constructive Solid Geometry}
+CSG is entirely in \verb!csg.cpp! and \verb!csg.hpp!.\\
+
+CSG required a complete refactoring of the code since now we want to do boolean
+operations on intersection \textbf{line segments}.  Now, all ray intersection
+methods return a list of intersections instead of just the closest one.  We need
+to be sure to keep the intersections of rays leaving primitives because they
+will be absolutely necessary for CSG and also refraction later.\\
+
+For a CSG node to do a ray intersection, it will call ray intersect for both of
+it's children, and then handle the returned intersections based on what type of
+node it is.  For all nodes, they will begin by placing all of the intersection
+points into a single list, marking which ones came from the left child and which
+from the right, and will sort that list by distance from the ray's origin.\\
+
+The CSG node will then make a call to \verb!handle()! which is a virtual method
+that will trim out intersections from the list that are unnecessary.
+
+Each type of CSG node will traverse the intersection list in order, and whenever
+it hits an object from the left child it will toggle it's in\_left boolean.  The
+same thing will happen for the right children.  We can determine whether the
+origin of the ray is in either child to begin with by looking at the number of
+intersections returned.  If the number was odd, then we were inside that child.
+This goes under the assumption that a ray will never be perfectly tangent to an
+object.
+
+Each CSG child then follows it's own rules that govern when to delete a node.
+Union nodes will delete an intersection it encounters if it is already in
+the other child.  Intersection nodes will delete intersections it encounters
+\textit{unless} it is in the other primitive.  The difference node's behaviour
+is a bit more complex and can be seen in \verb!csg.cpp! if necessary.  The
+difference node must also be careful to reverse the normals at the intersection
+points of the right object that it keeps.
+
+
+\subsection{Glossy Reflections}
+Reflections are handled in \verb!a4.cpp:ray_trace_recurse!.\\
+
+After extending the lua parser to accept reflective materials, we need to
+incorporate them into the ray tracer.  When a ray hits an object, and that's
+object's material is reflective we want to cast another ray in the reflected
+direction.  This direction can be computed as follows:\\
+cos$\theta1$ = - ray $\bullet$ normal\\
+vector r = ray + (2 * cos$\theta1$ * normal)\\
+And the reflected ray is simply in direction r, from the intersection point of
+the original ray.
+
+To do reflections, the ray tracer needed to be recursive so a large amount of
+refactoring was done.  ray\_trace was changed to a method that simply takes a
+ray, and some auxiliary data and returns a Pixel.  The Pixel struct contains
+information about the intersection like the colour of the intersection, but also
+whether we hit a reflective object or anything at all (see \verb!ray.hpp!).\\
+
+Ray tracing is now done recursively where if the pixel returned was reflective,
+we take the reflected ray from the pixel and cast it again so long as we haven't
+reached the maximum recursion depth.  The parameters of the pixel specify how
+much we should weight the recursive rays so once we get a Pixel from casting
+the reflected ray, we weight it's colour and add it to our own, and then return.
+The recursion will terminate when the maximum recursion depth is reached, when a
+ray is cast with no intersection, or when a ray hits and object that is not
+reflective.
+
+For glossy, reflections we only need to make a slight modification.  We expand
+our Pixel to store information about how glossy a material is.  The glossier it
+is, the more blurry it's reflection should be.  In order to achieve this effect,
+before we cast our reflected ray recursively, we need to jitter it in a random
+direction.  We will jitter it in a cone with radius = gloss.  We already know
+how to perturb a ray from bump mapping, so now we do the same thing, except the
+perturbation amount is random from -gloss to gloss.  Larger gloss values give
+wider jitter cones and thus blurrier reflections.  Of course, due to the added
+noise, we need to cast a number of jittered reflection rays and average the
+returns.
+
+\subsection{Refraction}
+Refraction is handled in \verb!a4.cpp:ray_trace_recurse!.\\
+
+With reflection already done, refraction is a simple expansion on top.  We
+modify Pixel to contain information about the refraction properties of the
+object we hit, but we also need to keep track of the refraction index at the
+origin of the ray so we can do the appropriate calculations.  Once we can store
+and pass this information around, we can use it to do refraction recursively in
+ray\_trace\_recurse.
+
+When an object we hit with a ray is refractive, it has no colour, we we want to
+recursively cast a refractive ray to get the colour of the pixel.  Additionally
+clear objects have some amount of reflectivity defined by fresnel equations.
+
+To do refraction we do the following computations:
+n1 = ray.index\\
+if (ray.index = Pixel.index) n2 = 1 since we are leaving the object\\
+else n2 = ray.index since this is the index of the object we are entering\\
+n = n1 / n2\\
+cos$\theta1$ = - ray $\bullet$ normal\\
+cos$\theta2$ = $1 - n^2(1 - $cos$\theta1^2$)\\
+if (cos$\theta2 < 0$) do total internal reflection\\
+else vector refract = (n * ray) + (n * cos$\theta1$ - cos$\theta2$)\\
+
+we now have the refracted ray's direction, and the reflected ray's direction
+from reflections.  However we may have total internal reflection.  This is a
+physical phenomena that occurs when light is trying to leave a dense medium but
+can't because it's angle of entry is too wide, so the ray is completely
+reflected and not refracted.  In this case we just recurse by reflecting with a
+weight of 1.\\
+
+If we do refract, only part of the light is refracted, and some is reflected.
+This is due to fresnel equations.  The proportion of light refracted can be
+calculated as:\\
+
+\noindent nd = -cos$\theta1$\\
+nt = normal $\bullet$ refract direction\\
+$r1 = (n2 * nd - n1 * nt) / (n2 * nd + n1 * nt)$\\
+$r2 = (n1 * nd - n2 * nt) / (n1 * nd + n2 * nt)$\\
+reflect weight = $(r1^2 + r2^2) / 2$\\
+refract weight = 1 - reflect weight\\
+
+\noindent now we can recurse twice, once with the reflected ray, once with the refracted
+ray.  We can weight the returned Pixels, and return our Pixel.  This achieves
+the refraction effect.\\
+
+\subsection{Hierarchical Bounding Boxes}
+Bounding boxes are constructed for each node so see \verb!scene.cpp! and
+\verb!csg.cpp!\\
+
+Hierarchical bounding boxes take large chunks of the scene and put them under a
+single bounding box in an effort to reduce the number of intersection that need
+to be done.  These bounding boxes are constructed before ray tracing by doing a
+pass through the scene graph calling generateBounds().
+
+generateBounds() will simply recurse and attempt to get BoundingNodes from the
+node's children.  This will recurse until it reaches a GeometryNode which will
+construct a bounding node based on the bounds of its object.  Each primitive can
+easily generate it's bounds since they are all unit-shapes.  GeometryNodes will
+make the bounding node in its own coordinate system and return the node to it's
+parent.  The parent can then choose to replace it's child with the bounding node
+which will effectively bound it.\\
+
+First of all, the parent node doesn't necessarily know what it's children are,
+and these bounds may decrease efficiency, but we still need to return them for
+CSG nodes to be able to make their own bounds.  As a solution, bounding nodes
+have a boolean which indicates whether they are useful or not.  GeometryNode
+bounds are not useful unless they are bounding a mesh, but CSG bounds, and
+SceneNode bound are useful.  These nodes can construct new bounding nodes out of
+their children, mark them as useful, and return them to their parent for
+processing.\\
+
+Construction of new bounding nodes for CSG is quite complicated but can be found
+in \verb!csg.cpp!.  Constructing bounding nodes for scene nodes is almost
+identical to that of union CSG nodes and is not worth looking into too
+heavily.\\
+
+Through these constructs, the pass through the scene graph calling generateBound
+will produce bounding nodes for all meshes, scene nodes, and CSG nodes, since
+useful bounds will always be accepted.\\
+
+SceneNodes, and CSG nodes logically contain children that relate to each other
+closely, and are very likely close to each other, so this seems to be an
+effective heuristic for picking bounding nodes.\\
+
+\subsection{kD-Trees and Photon Mapping}
+kD-Trees are in \verb!kdtree.cpp! and photon mapping is in \verb!a4.cpp!\\
+
+kD-Trees are k-dimensional trees, but in this case we will be using them to
+store points in 3-Space: Photons.  kD-Trees operate by splitting it's children
+about a median value for an axis that is determined based on the depth of the
+tree.  This way, we will cycle through the dimensions in which we split our
+points.  For the purposes of photon mapping, these kD-trees will have a
+threshold at which the points within that threshold will be stored in an
+intermediate node of the kd-tree instead of being pushed down to the left or
+right child.\\
+
+To use a kD-Tree, we first fill it with points, in this case by photon mapping,
+and then we call split on the tree to tell the tree to divide it's points about
+medians as explained above.  This effectively does a space partitioning which
+will give us an efficient way to calculate the number of points within a radius
+of another point which we will want to do for caustics below.\\
+
+Now that we have our data structure set up, we want to do the photon mapping
+itself.  At this point, we only plan to do caustics so we can make some
+optimizations about our photon mapping.\\
+
+First of all, caustics are only caused by reflective or refractive objects, so
+we only need to cast photons at those objects.  Additionally, since we
+hierarchical bounding boxes, we have a really easy way to find the bounds of an
+object that we can cast photons at.  We can construct a list of
+reflective/refractive objects by recursing through the scene graph, and when we
+hit a relevant object, we simply construct it's bounds and return them.  We
+collect the list of all these objects as we return from the recursion until we
+reach the root and have a list of bounding boxes for only the objects we care
+about.  We also need to use the transforms at each level of the graph so the
+bounding boxes end up in world coordinates.\\
+
+Now, since we have these boxes, we can easily generate random points in the box
+which will represent the point we throw our photon at.  We simply throw a
+\textbf{huge} number of photons at random points in each box.  We use a function
+very similar to ray\_trace\_recurse (photon\_map\_recurse) which will trace the
+ray until it hits an object that is neither reflective or refractive (or a
+glossy object with some probability).  The intersection point returned is then
+thrown into the kd-tree.\\
+
+Once we are done casting our photons, we call split on the tree, and then we can
+use it for caustics.\\
+
+\subsection{Caustics}
+Caustics are the bright spots you see when light reflects or refracts through
+different curvy objects.  This is very difficult to model with conventional ray
+tracing, because it is so hard to trace from a point back through all possible
+shiny/refractive surfaces to see if we hit a light.  Instead we cast a large
+number of photons from the lights towards shiny and refractive objects, and
+store where they land in a kd-tree.  We chose to use kd-trees because of the
+speed of looking up the density of photons at a point, which is what caustics
+are.\\
+
+So, at this point, we have a split kd-tree that contains all the photon
+locations.  All we need to do is factor this into our lighting equation.  To do
+this, when we are casting rays and we hit a point and we are doing the lighting
+calculation, query the kd-tree for the density of photons at the intersection
+point, and divide that density by a specified factor and add that value as part
+of the calculation.\\
+
+The difficulty in this is getting the parameters just right.  We have to worry
+about how many photons to cast, what the right division factor is, and what a
+good radius of checking photons is.  For this project experimentation was done
+to find ideal values.\\
+
+\section{Bibliography}
+        1. http://en.wikipedia.org/wiki/Procedural\_texture\\
+        2. people.scs.carleton.ca/~mould/courses/3501/procedural.pptx\\
+        3. www.cs.ucdavis.edu/~amenta/s06/findnorm.pdf\\
+        4. www.emeyex.com/site/projects/raytorus.pdf\\
+        5. http://en.wikipedia.org/wiki/UV\_mapping\\
+        6. http://www.cs.unc.edu/~rademach/xroads-RT/RTarticle.html\\
+        7. http://en.wikipedia.org/wiki/Fresnel\_equations\\
+        8. http://en.wikipedia.org/wiki/Kd\_tree\\
+
+\newpage
+
+
+\noindent{\Large\bf Objectives:}
+
+{\hfill{\bf Full UserID:\rule{2in}{.1mm}}\hfill{\bf Student ID:\rule{2in}{.1mm}}\hfill}
+
+\begin{description}
+     \item[\_\_\_]  Additional primitives cylinder, cone, and torus are added.
+
+     \item[\_\_\_]  Texture mapping is added.
+
+     \item[\_\_\_]  Bump mapping is added.
+
+     \item[\_\_\_]  Constructive solid geometry for primitives is added.
+
+     \item[\_\_\_]  Glossy Reflections are added.
+
+     \item[\_\_\_]  Refraction is added.
+
+     \item[\_\_\_]  Hierarchical bounding boxes for improved efficiency.
+
+     \item[\_\_\_]  Photon mapping with kD-trees.
+
+     \item[\_\_\_]  Caustics using photon mapping.
+
+     \item[\_\_\_]  A final scene is modelled as described above.
+\end{description}
+\end{document}
+

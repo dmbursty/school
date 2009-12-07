@@ -1,11 +1,16 @@
 -- A simple scene with some miscellaneous geometry.
+mat1 = gr.material({0.7, 1.0, 0.7}, {0.5, 0.7, 0.5}, 25)
+mat2 = gr.material({0.5, 0.5, 0.5}, {0.5, 0.7, 0.5}, 25)
+mat3 = gr.material({1.0, 0.6, 0.1}, {0.5, 0.7, 0.5}, 25)
+mat4 = gr.material({0.7, 0.6, 1.0}, {0.5, 0.4, 0.8}, 25)
 ref = 0.3
-mat1 = gr.material({0.7, 1.0, 0.7}, {0.5, 0.7, 0.5}, 25, ref, 0, "", "")
-mat2 = gr.material({0.5, 0.5, 0.5}, {0.5, 0.7, 0.5}, 25, ref, 0, "", "")
-mat3 = gr.material({1.0, 0.6, 0.1}, {0.5, 0.7, 0.5}, 25, ref, 0, "", "")
-mat4 = gr.material({0.7, 0.6, 1.0}, {0.5, 0.4, 0.8}, 25, ref, 0, "", "")
+mat1:set_reflect(ref)
+--mat2:set_reflect(ref)
+--mat3:set_reflect(ref)
+mat4:set_reflect(ref)
 
-clear = gr.material({1, 0, 0}, {0, 0, 0}, 0, 0, 1.5, "", "")
+clear = gr.material({1, 0, 0}, {0, 0, 0}, 0)
+clear:set_refract(1.5)
 
 scene_root = gr.node('root')
 

@@ -1,9 +1,13 @@
 #include "primitive.hpp"
 #include "polyroots.hpp"
+#include <pthread.h>
 #include <iostream>
 
 #define PI 3.14159265
 #define EPSILON 0.00001
+
+extern unsigned int COUNT_INTERS;
+extern unsigned int INTERSECTIONS;
 
 Primitive::~Primitive()
 {
@@ -26,6 +30,7 @@ double* Primitive::getBoundingBox() {
 Torus::~Torus() {}
 
 Intersections Torus::ray_intersect(Ray ray) {
+  if (COUNT_INTERS) ++INTERSECTIONS;
   ray.normalize();
   // x
   double x = ray.eye[0];
@@ -114,6 +119,7 @@ Intersections Torus::ray_intersect(Ray ray) {
 Cylinder::~Cylinder() {}
 
 Intersections Cylinder::ray_intersect(Ray r) {
+  if (COUNT_INTERS) ++INTERSECTIONS;
   r.normalize();
   // x
   double x = r.eye[0];
@@ -179,13 +185,24 @@ Intersections Cylinder::ray_intersect(Ray r) {
     zi = r.eye[2] + root * r.dir[2];
     if (yi >= 0 && yi <= 1 && root > EPSILON) {
       ret.hit = true;
+      Vector3D north(0, 1, 0);
+      Vector3D equator(0, 0, -1);
+      Vector3D point(xi, 0, zi);
+      point.normalize();
+      double phi = acos(-1 * north.dot(point));
+      ret.map_y = yi;
+      double theta = ( acos( point.dot(equator) / sin(phi)) ) / (2 * PI);
+      if (north.cross(equator).dot(point) > 0) {
+        ret.map_x = theta;
+      } else {
+        ret.map_x = 1 - theta;
+      }
       ret.pt[0] = xi;
       ret.pt[1] = yi;
       ret.pt[2] = zi;
       ret.normal[0] = xi;
       ret.normal[1] = 0;
       ret.normal[2] = zi;
-      ret.inside = true;
       rets.addInter(ret);
     }
     // Check bottom plane intersection (y = 0)
@@ -233,6 +250,7 @@ Intersections Cylinder::ray_intersect(Ray r) {
 Cone::~Cone() {}
 
 Intersections Cone::ray_intersect(Ray r) {
+  if (COUNT_INTERS) ++INTERSECTIONS;
   r.normalize();
   // x
   double x = r.eye[0];
@@ -296,6 +314,18 @@ Intersections Cone::ray_intersect(Ray r) {
     zi = r.eye[2] + root * r.dir[2];
     if (yi >= 0 && yi <= 1 && root > EPSILON) {
       ret.hit = true;
+      // Find longitude
+      Vector3D p(xi, 0, zi);
+      p.normalize();
+      Vector3D equator(0, 0, -1);
+      Vector3D north(0, 1, 0);
+      double theta = acos( equator.dot(p) ) / (2 * PI);
+      if (north.cross(equator).dot(p) > 0) {
+        ret.map_x = theta;
+      } else {
+        ret.map_x = 1 - theta;
+      }
+      ret.map_y = yi;
       ret.pt[0] = xi;
       ret.pt[1] = yi;
       ret.pt[2] = zi;
@@ -334,6 +364,7 @@ Sphere::~Sphere()
 }
 
 Intersections Sphere::ray_intersect(Ray r) {
+  if (COUNT_INTERS) ++INTERSECTIONS;
   r.normalize();
   // x
   double x = r.eye[0];
@@ -435,6 +466,7 @@ Cube::~Cube()
 }
 
 Intersections Cube::ray_intersect(Ray r) {
+  if (COUNT_INTERS) ++INTERSECTIONS;
   r.normalize();
   // x
   double x = r.eye[0];

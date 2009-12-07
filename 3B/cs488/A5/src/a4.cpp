@@ -12,26 +12,28 @@
 // Lighting options
 // Variables
 unsigned int LEAF_PHOTONS = 10;
-unsigned int NUM_PHOTONS = 80000;
+unsigned int NUM_PHOTONS = 20000;
 double CAUSTIC_RADIUS = 0.1;
 unsigned int PHOTON_DENSITY = 200;
 unsigned int BUMPMAP = 100;
 unsigned int ANTIALIAS = 1;
 unsigned int RECURSE = 10;
-unsigned int GLOSSY = 1;
-// Regular
+unsigned int GLOSSY = 3;
+// Regular Flags
 unsigned int AMBIENT = 1;
 unsigned int DIFFUSE = 1;
 unsigned int TEXTURE = 1;
 unsigned int SPECULAR = 1;
 unsigned int SHADOWS = 1;
-unsigned int FRESNEL = 1;
 unsigned int HIER_BOUND = 1;
 unsigned int CAUSTICS = 1;
 // Special rendering
 unsigned int NORMAL = 0;
 unsigned int ALL_BOUNDS = 0;
 unsigned int BOUNDS = 0;
+// Count number of intersections
+unsigned int COUNT_INTERS = 0;
+unsigned int INTERSECTIONS = 0;
 
 // Forward declare
 void* threadRender(void* arg);
@@ -172,6 +174,10 @@ void a4_render(// What to render
   }
 
   std::cerr << std::endl;
+
+  if (COUNT_INTERS) {
+    std::cerr << "Did " << INTERSECTIONS << " intersections" << std::endl;
+  }
 
   // Save image
   img.savePng(filename);
@@ -489,14 +495,20 @@ Pixel photon_map_recurse(Ray ray, RenderConfig* data,
   if (p.refract > 0 || p.reflect > 0) {
     // If we are only reflective, then reflect the photon
     if (p.refract == 0) {
-      // If glossy, then jitter
-      if (p.gloss > 0) {
-        Ray jittered_ray = p.reflect_ray.jitterCone(p.gloss);
-        // Recurse to get reflection
-        return photon_map_recurse(jittered_ray, data, index, recursion + 1);
+      // Use monte carlo to decide wheter to store photon or reflect it
+      double r = (rand() % 1000) / 1000.0;
+      if (r < p.reflect) {
+        // If glossy, then jitter
+        if (p.gloss > 0) {
+          Ray jittered_ray = p.reflect_ray.jitterCone(p.gloss);
+          // Recurse to get reflection
+          return photon_map_recurse(jittered_ray, data, index, recursion + 1);
+        } else {
+          // Recurse to get reflection
+          return photon_map_recurse(p.reflect_ray, data, index, recursion + 1);
+        }
       } else {
-        // Recurse to get reflection
-        return photon_map_recurse(p.reflect_ray, data, index, recursion + 1);
+        return p;
       }
     } else {
       // If we are refractive, use monte carlo to decide

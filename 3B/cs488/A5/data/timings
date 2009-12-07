@@ -1,0 +1,15 @@
+Hier
+Did 146877791 intersections
+
+real  2m53.958s
+user  11m25.103s
+sys 0m0.544s
+
+
+Non-Hier
+Did 211673667 intersections
+
+real  3m39.342s
+user  13m56.096s
+sys 0m0.688s
+

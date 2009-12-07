@@ -1,0 +1,49 @@
+Name: Daniel Burstyn
+Student Number: 20206120
+User-id: dmbursty
+Assignment: 4 - Ray Tracer
+
+The final executable was compiled on this machine: 
+gl06.student.cs
+
+How to invoke my program: 
+./rt
+
+I have created the following data files, which are in the data directory:
+bounding_boxes.png        Shows hierarchical bounding boxes
+bumpmaps.png              Shows bumpmaps
+caustics_on_black.png     Shows caustics by themselves
+caustics_on_wood.png      Shows same caustics in a scene
+csg_donut.png             Shows CSG and texture mapping
+csg.png                   Shows More CSG
+csg_texture.png           Shows More CSG
+final_photon.png       *  My final scene  *
+final_scene.png           Alternate final scene
+glossy1.png               Glossy reflections
+glossy2.png               Glossier reflections
+glossy_cone.png           Glossy plane reflections
+macho_cows_test_box.png   Hierarchical bounding boxes
+manns_room.png            Bonus image
+new_primitives.png        New Primitives
+no_caustics.png           Scene without caustics
+nonhier.png               Refraction
+textures.png              Texture Mapping
+timings                   Hierarchical bounding box timing comparison - final scene
+lua                       Lua files
+maps                      Texture/bumpmap files
+
+
+My program assumes the following: 
+N/A
+
+Objectives:
+1. Additional primitives cylinder, cone, and torus are added.
+2. Texture mapping is added.
+3. Bump mapping is added.
+4. Constructive solid geometry for primitives is added.
+5. Glossy Reflections are added.
+6. Refraction is added.
+7. Hierarchical bounding boxes for improved efficiency.
+8. Photon mapping with kD-trees.
+9. Caustics using photon mapping.
+10. A final scene is modelled as described above.

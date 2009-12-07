@@ -32,7 +32,8 @@ Intersections CSGNode::ray_intersect(Ray r) {
 std::vector<BoundingNode*> CSGNode::getCausticObjects() {
   std::vector<BoundingNode*> ret;
   BoundingNode* b = generateBounds();
-  ret.push_back(b);
+  if (b->bound()->get_material()->reflect() > 0 ||
+      b->bound()->get_material()->refract() > 0) ret.push_back(b);
   return ret;
 }
 

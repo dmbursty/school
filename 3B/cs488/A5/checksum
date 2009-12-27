@@ -1,0 +1,331 @@
+sum is: /usr/bin/sum
+
+
+2009-12-06 19:30 Checksum for A5 for dmbursty on gl06.student.cs  Page 1
+
+
+A5:
+total 1748
+ 9602467 drwxrwxr-x 4 dmbursty dmburstyn    4096 2009-12-06 19:30 data/
+ 9602466 drwxrwxr-x 4 dmbursty dmburstyn    4096 2009-12-06 19:28 ./
+ 9602479 -rw-r-x--- 1 dmbursty dmburstyn    1740 2009-12-06 19:28 README*
+  233753 drwxrwxr-x 2 dmbursty dmburstyn   12288 2009-12-06 19:22 src/
+ 9602475 -rwxr-xr-x 1 dmbursty dmburstyn 1438164 2009-12-06 19:22 rt*
+ 9602473 -rw-r--r-- 1 dmbursty dmburstyn  307704 2009-12-06 13:00 screenshot01.png
+22933181 drwxrwx--- 9 dmbursty cs488        4096 2009-11-30 23:24 ../
+
+A5/data:
+total 2756
+ 9602467 drwxrwxr-x 4 dmbursty dmburstyn   4096 2009-12-06 19:30 ./
+ 9602476 -rw-r--r-- 1 dmbursty dmburstyn      0 2009-12-06 19:30 out
+ 9602466 drwxrwxr-x 4 dmbursty dmburstyn   4096 2009-12-06 19:28 ../
+11792192 drwxrwxr-x 2 dmbursty dmburstyn   4096 2009-12-06 19:20 maps/
+11792190 drwxrwxr-x 2 dmbursty dmburstyn   4096 2009-12-06 19:20 lua/
+ 9602468 -rw-r----- 1 dmbursty dmburstyn  45056 2009-12-06 19:19 .manual.tex.swp
+ 9602469 -rw-r--r-- 1 dmbursty dmburstyn   6910 2009-12-06 19:19 manual.log
+ 9602472 -rw-r--r-- 1 dmbursty dmburstyn 110698 2009-12-06 19:19 manual.pdf
+ 9602471 -rw-r--r-- 1 dmbursty dmburstyn   2148 2009-12-06 19:19 manual.aux
+ 9602470 -rw-r----- 1 dmbursty dmburstyn  27131 2009-12-06 19:19 manual.tex
+ 9602474 -rw-r--r-- 1 dmbursty dmburstyn   2790 2009-12-06 17:18 fullpage.sty
+  233756 -rw-r--r-- 1 dmbursty dmburstyn    167 2009-12-06 16:02 timings
+25774120 -rw-r--r-- 1 dmbursty dmburstyn  22034 2009-12-06 13:57 csg.png
+25774119 -rw-r--r-- 1 dmbursty dmburstyn  33610 2009-12-06 13:57 csg_texture.png
+11792191 -rw-r--r-- 1 dmbursty dmburstyn 319672 2009-12-06 13:51 no_caustics.png
+16941393 -rw-r--r-- 1 dmbursty dmburstyn 182437 2009-12-06 13:46 textures.png
+16941408 -rw-r--r-- 1 dmbursty dmburstyn 171591 2009-12-06 13:45 bumpmaps.png
+26133292 -rw-r--r-- 1 dmbursty dmburstyn 290987 2009-12-06 13:11 final_scene.png
+26133293 -rw-r--r-- 1 dmbursty dmburstyn 307704 2009-12-06 13:00 final_photon.png
+25774126 -rw-r--r-- 1 dmbursty dmburstyn  95406 2009-12-06 12:49 new_primitives.png
+26133288 -rw-r--r-- 1 dmbursty dmburstyn 242736 2009-12-06 11:51 manns_room.png
+26846683 -rw-r--r-- 1 dmbursty dmburstyn  53394 2009-12-06 05:29 csg_donut.png
+ 5934735 -rw-r--r-- 1 dmbursty dmburstyn  35937 2009-12-06 04:30 caustics_on_black.png
+26409963 -rw-r--r-- 1 dmbursty dmburstyn 323578 2009-12-06 04:24 caustics_on_wood.png
+11792187 -rw-r--r-- 1 dmbursty dmburstyn   7472 2009-12-05 20:21 macho_cows_test_box.png
+11792186 -rw-r--r-- 1 dmbursty dmburstyn  16882 2009-12-05 16:28 bounding_boxes.png
+12138779 -rw-r--r-- 1 dmbursty dmburstyn  98626 2009-12-05 02:46 glossy2.png
+12138789 -rw-r--r-- 1 dmbursty dmburstyn  81540 2009-12-05 02:37 glossy1.png
+27573488 -rw-r--r-- 1 dmbursty dmburstyn 113993 2009-12-05 02:10 glossy_cone.png
+11792189 -rw-r--r-- 1 dmbursty dmburstyn  89973 2009-12-04 00:51 nonhier.png
+
+A5/data/maps:
+total 2392
+ 9602467 drwxrwxr-x 4 dmbursty dmburstyn    4096 2009-12-06 19:30 ../
+11792192 drwxrwxr-x 2 dmbursty dmburstyn    4096 2009-12-06 19:20 ./
+ 6789509 -rw-r--r-- 1 dmbursty dmburstyn  119700 2009-12-06 12:55 bumpy.png
+16668270 -rwxr-x--- 1 dmbursty dmburstyn   29658 2009-12-06 12:51 swirl.png*
+11882263 -rw-r--r-- 1 dmbursty dmburstyn    3830 2009-12-06 12:50 checker3.png
+11882267 -rwxr-x--- 1 dmbursty dmburstyn   57859 2009-12-06 11:26 mann.png*
+16668272 -rwxr-x--- 1 dmbursty dmburstyn    5624 2009-12-06 09:19 tb_tip.png*
+16668275 -rw-r--r-- 1 dmbursty dmburstyn    4799 2009-12-06 09:12 toothbrush_bump.png
+16668273 -rwxr-x--- 1 dmbursty dmburstyn    5102 2009-12-06 09:10 toothbrush.png*
+16668271 -rwxr-x--- 1 dmbursty dmburstyn   58947 2009-12-06 08:58 tb_end.png*
+16668269 -rw-r--r-- 1 dmbursty dmburstyn   12781 2009-12-06 07:34 stream_bump.png
+
+
+
+
+
+
+
+2009-12-06 19:30 Checksum for A5 for dmbursty on gl06.student.cs  Page 2
+
+
+16668268 -rwxr-x--- 1 dmbursty dmburstyn   23336 2009-12-06 07:30 stream.png*
+11882264 -rwxr-x--- 1 dmbursty dmburstyn    7488 2009-12-06 05:30 checker_bump.png*
+16668276 -rw-r--r-- 1 dmbursty dmburstyn 1677779 2009-12-04 22:30 wood.png
+16234030 -rwxr-x--- 1 dmbursty dmburstyn    3603 2009-12-04 19:34 checker1.png*
+11882262 -rwxr-x--- 1 dmbursty dmburstyn    3357 2009-12-04 18:56 checker2.png*
+11882265 -rwxr-x--- 1 dmbursty dmburstyn   14656 2009-12-02 18:29 donut_bump.png*
+11882266 -rwxr-x--- 1 dmbursty dmburstyn  153535 2009-12-02 18:12 donut_tex.png*
+11882268 -rw-r--r-- 1 dmbursty dmburstyn  200399 2009-12-02 17:35 ripple.png
+
+A5/data/lua:
+total 252
+ 9602467 drwxrwxr-x 4 dmbursty dmburstyn   4096 2009-12-06 19:30 ../
+11792190 drwxrwxr-x 2 dmbursty dmburstyn   4096 2009-12-06 19:20 ./
+ 9085986 -rw-r--r-- 1 dmbursty dmburstyn   6728 2009-12-06 14:46 scene.lua
+  290977 -rw-r--r-- 1 dmbursty dmburstyn   1302 2009-12-06 13:50 caustics.lua
+11792185 -rw-r--r-- 1 dmbursty dmburstyn   2735 2009-12-06 13:42 bumpmaps.lua
+16941412 -rw-r--r-- 1 dmbursty dmburstyn   2734 2009-12-06 13:27 textures.lua
+26846684 -rw-r--r-- 1 dmbursty dmburstyn    952 2009-12-06 05:28 donut.lua
+15806209 -rw-r-x--- 1 dmbursty dmburstyn   1691 2009-12-05 20:56 nonhier.lua*
+ 1509681 -rw-r-x--- 1 dmbursty dmburstyn   2894 2009-12-05 20:21 macho-cows.lua*
+16215140 -rw-r-x--- 1 dmbursty dmburstyn 180010 2009-12-05 13:07 cow.obj*
+11758068 -rw-r-x--- 1 dmbursty dmburstyn   1268 2009-12-05 12:43 readobj.lua*
+28875692 -rw-r-x--- 1 dmbursty dmburstyn   8859 2009-12-05 12:43 smstdodeca.lua*
+12138793 -rw-r--r-- 1 dmbursty dmburstyn    778 2009-12-05 03:16 spheres.lua
+12662698 -rw-r-x--- 1 dmbursty dmburstyn   4322 2009-12-03 19:35 buckyball.lua*
+18403681 -rw-r--r-- 1 dmbursty dmburstyn    984 2009-12-01 17:10 new_primitives.lua
+
+A5/src:
+total 532
+ 9602466 drwxrwxr-x 4 dmbursty dmburstyn  4096 2009-12-06 19:28 ../
+  233753 drwxrwxr-x 2 dmbursty dmburstyn 12288 2009-12-06 19:22 ./
+13382189 -rw-r----- 1 dmbursty dmburstyn 20480 2009-12-06 19:10 .a4.cpp.swo
+13382191 -rw-r--r-- 1 dmbursty dmburstyn 12288 2009-12-06 18:31 .ray.hpp.swp
+13382190 -rw-r-x--- 1 dmbursty dmburstyn 15218 2009-12-06 17:39 primitive.cpp*
+13382188 -rw-r-x--- 1 dmbursty dmburstyn 16035 2009-12-06 16:23 a4.cpp*
+28380813 -rw-r----- 1 dmbursty dmburstyn 45056 2009-12-06 16:04 .a4.cpp.swp
+  290979 -rw-r--r-- 1 dmbursty dmburstyn 12288 2009-12-06 16:03 .timings.swp
+26133297 -rw-r----- 1 dmbursty dmburstyn 40960 2009-12-06 15:25 .primitive.cpp.swp
+  290976 -rw-r--r-- 1 dmbursty dmburstyn 16384 2009-12-06 15:15 .scene.lua.swp
+ 5934736 -rw-r----- 1 dmbursty dmburstyn 24576 2009-12-06 13:23 .scene.cpp.swp
+16941410 -rw-r-x--- 1 dmbursty dmburstyn 11398 2009-12-06 13:23 scene.cpp*
+26133291 -rw-r--r-- 1 dmbursty dmburstyn 32768 2009-12-06 12:38 .csg.cpp.swp
+26133296 -rw-r--r-- 1 dmbursty dmburstyn 16391 2009-12-06 12:38 csg.cpp
+21641615 -rw-r--r-- 1 dmbursty dmburstyn 12288 2009-12-06 09:08 .ray.cpp.swp
+21641617 -rw-r--r-- 1 dmbursty dmburstyn  3142 2009-12-06 09:08 ray.cpp
+ 5934740 -rw-r----- 1 dmbursty dmburstyn 36864 2009-12-06 05:22 .scene_lua.cpp.swp
+26846675 -rw-r-x--- 1 dmbursty dmburstyn 21989 2009-12-06 05:21 scene_lua.cpp*
+ 3186767 -rw-r--r-- 1 dmbursty dmburstyn  1313 2009-12-06 01:33 csg.hpp
+ 3186761 -rw-r--r-- 1 dmbursty dmburstyn  2238 2009-12-06 00:51 kdtree.cpp
+10467522 -rw-r--r-- 1 dmbursty dmburstyn   731 2009-12-05 23:53 config.hpp
+10467515 -rw-r--r-- 1 dmbursty dmburstyn   455 2009-12-05 23:39 kdtree.hpp
+15806206 -rw-r--r-- 1 dmbursty dmburstyn  1602 2009-12-05 21:36 ray.hpp
+32207759 -rw-r-x--- 1 dmbursty dmburstyn  3369 2009-12-05 20:39 scene.hpp*
+28875678 -rw-r-x--- 1 dmbursty dmburstyn  3388 2009-12-05 12:34 mesh.cpp*
+28875674 -rw-r-x--- 1 dmbursty dmburstyn  1033 2009-12-05 12:21 primitive.hpp*
+   39401 -rw-r-x--- 1 dmbursty dmburstyn   437 2009-12-04 23:32 material.cpp*
+
+
+
+
+
+
+
+2009-12-06 19:30 Checksum for A5 for dmbursty on gl06.student.cs  Page 3
+
+
+   39412 -rw-r-x--- 1 dmbursty dmburstyn  1086 2009-12-04 23:32 material.hpp*
+19775529 -rw-r-x--- 1 dmbursty dmburstyn   606 2009-12-04 00:04 mesh.hpp*
+29120063 -rw-r-x--- 1 dmbursty dmburstyn  9558 2009-12-03 15:03 algebra.hpp*
+16231615 -rw-r-x--- 1 dmbursty dmburstyn   136 2009-11-30 23:24 scene_lua.hpp*
+30064997 -rw-r-x--- 1 dmbursty dmburstyn  3308 2009-11-30 23:24 algebra.cpp*
+17598271 -rw-r-x--- 1 dmbursty dmburstyn   170 2009-11-30 23:24 lua488.hpp*
+17598265 -rw-r--r-- 1 dmbursty dmburstyn   303 2009-11-30 23:24 queue.hpp
+17598262 -rw-r-x--- 1 dmbursty dmburstyn   415 2009-11-30 23:24 light.cpp*
+20381441 -rw-r-x--- 1 dmbursty dmburstyn  6100 2009-11-30 23:24 image.cpp*
+27285512 -rw-r--r-- 1 dmbursty dmburstyn   438 2009-11-30 23:24 queue.cpp
+  233769 -rw-r-x--- 1 dmbursty dmburstyn   287 2009-11-30 23:24 light.hpp*
+  233768 -rw-r-x--- 1 dmbursty dmburstyn   637 2009-11-30 23:24 a4.hpp*
+  233765 -rw-r-x--- 1 dmbursty dmburstyn   718 2009-11-30 23:24 Makefile*
+  233764 -rw-r-x--- 1 dmbursty dmburstyn   966 2009-11-30 23:24 polyroots.hpp*
+  233763 -rw-r-x--- 1 dmbursty dmburstyn  1787 2009-11-30 23:24 image.hpp*
+  233761 -rw-r--r-- 1 dmbursty dmburstyn    22 2009-11-30 23:24 config.cpp
+  233755 -rw-r-x--- 1 dmbursty dmburstyn 47477 2009-11-30 23:24 polyroots.cpp*
+  233754 -rw-r-x--- 1 dmbursty dmburstyn   276 2009-11-30 23:24 main.cpp*
+
+A5                                      
+A5/data                                 
+A5/data/bounding_boxes.png              62303    17
+A5/data/bumpmaps.png                    18380   168
+A5/data/caustics_on_black.png           27476    36
+A5/data/caustics_on_wood.png            05069   316
+A5/data/csg_donut.png                   51078    53
+A5/data/csg.png                         06869    22
+A5/data/csg_texture.png                 44085    33
+A5/data/final_photon.png                19953   301
+A5/data/final_scene.png                 22224   285
+A5/data/fullpage.sty                    11023     3
+A5/data/glossy1.png                     43878    80
+A5/data/glossy2.png                     41912    97
+A5/data/glossy_cone.png                 62681   112
+A5/data/lua                             
+A5/data/lua/buckyball.lua               10689     5
+A5/data/lua/bumpmaps.lua                34413     3
+A5/data/lua/caustics.lua                16933     2
+A5/data/lua/cow.obj                     57991   176
+A5/data/lua/donut.lua                   52697     1
+A5/data/lua/macho-cows.lua              51907     3
+A5/data/lua/new_primitives.lua          23574     1
+A5/data/lua/nonhier.lua                 03285     2
+A5/data/lua/readobj.lua                 57040     2
+A5/data/lua/scene.lua                   49622     7
+A5/data/lua/smstdodeca.lua              02544     9
+A5/data/lua/spheres.lua                 01144     1
+A5/data/lua/textures.lua                35403     3
+A5/data/macho_cows_test_box.png         16995     8
+A5/data/manns_room.png                  02217   238
+A5/data/manual.aux                      11535     3
+A5/data/manual.log                      42106     7
+A5/data/manual.pdf                      22031   109
+A5/data/manual.tex                      01347    27
+A5/data/.manual.tex.swp                 47894    44
+A5/data/maps                            
+
+
+
+
+
+
+
+2009-12-06 19:30 Checksum for A5 for dmbursty on gl06.student.cs  Page 4
+
+
+A5/data/maps/bumpy.png                  54463   117
+A5/data/maps/checker1.png               41767     4
+A5/data/maps/checker2.png               48746     4
+A5/data/maps/checker3.png               40125     4
+A5/data/maps/checker_bump.png           22634     8
+A5/data/maps/donut_bump.png             05293    15
+A5/data/maps/donut_tex.png              18099   150
+A5/data/maps/mann.png                   03323    57
+A5/data/maps/ripple.png                 16963   196
+A5/data/maps/stream_bump.png            14531    13
+A5/data/maps/stream.png                 09692    23
+A5/data/maps/swirl.png                  25015    29
+A5/data/maps/tb_end.png                 57127    58
+A5/data/maps/tb_tip.png                 17755     6
+A5/data/maps/toothbrush_bump.png        02761     5
+A5/data/maps/toothbrush.png             02450     5
+A5/data/maps/wood.png                   51345  1639
+A5/data/new_primitives.png              46321    94
+A5/data/no_caustics.png                 06595   313
+A5/data/nonhier.png                     21062    88
+A5/data/out                             00000     0
+A5/data/textures.png                    22093   179
+A5/data/timings                         14043     1
+A5/README                               11268     2
+A5/rt                                   36336  1405
+A5/screenshot01.png                     19953   301
+A5/src                                  
+A5/src/a4.cpp                           54171    16
+A5/src/.a4.cpp.swo                      47949    20
+A5/src/.a4.cpp.swp                      42955    44
+A5/src/a4.hpp                           30758     1
+A5/src/algebra.cpp                      00294     4
+A5/src/algebra.hpp                      19750    10
+A5/src/config.cpp                       20933     1
+A5/src/config.hpp                       42117     1
+A5/src/csg.cpp                          60800    17
+A5/src/.csg.cpp.swp                     54537    32
+A5/src/csg.hpp                          14864     2
+A5/src/image.cpp                        19939     6
+A5/src/image.hpp                        52703     2
+A5/src/kdtree.cpp                       06232     3
+A5/src/kdtree.hpp                       57542     1
+A5/src/light.cpp                        61411     1
+A5/src/light.hpp                        49384     1
+A5/src/lua488.hpp                       04702     1
+A5/src/main.cpp                         38275     1
+A5/src/Makefile                         50255     1
+A5/src/material.cpp                     45118     1
+A5/src/material.hpp                     33333     2
+A5/src/mesh.cpp                         57783     4
+A5/src/mesh.hpp                         53758     1
+A5/src/polyroots.cpp                    13141    47
+A5/src/polyroots.hpp                    52382     1
+A5/src/primitive.cpp                    53421    15
+A5/src/.primitive.cpp.swp               14791    40
+A5/src/primitive.hpp                    29807     2
+
+
+
+
+
+
+
+2009-12-06 19:30 Checksum for A5 for dmbursty on gl06.student.cs  Page 5
+
+
+A5/src/queue.cpp                        58730     1
+A5/src/queue.hpp                        53975     1
+A5/src/ray.cpp                          09898     4
+A5/src/.ray.cpp.swp                     16554    12
+A5/src/ray.hpp                          47069     2
+A5/src/.ray.hpp.swp                     25841    12
+A5/src/scene.cpp                        49471    12
+A5/src/.scene.cpp.swp                   35510    24
+A5/src/scene.hpp                        30360     4
+A5/src/scene_lua.cpp                    33537    22
+A5/src/.scene_lua.cpp.swp               38956    36
+A5/src/scene_lua.hpp                    33354     1
+A5/src/.scene.lua.swp                   23553    16
+A5/src/.timings.swp                     33782    12
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

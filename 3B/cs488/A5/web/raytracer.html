@@ -1,0 +1,282 @@
+<html>
+<head>
+<style type="text/css">
+  body {
+    background-color: #F5F5F5;
+    font-family: verdana, 'sans-serif';
+  }
+
+  div.center {
+    text-align: center;
+    padding: 0px;
+  }
+
+  div.content
+  {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid gray;
+    padding: 15px;
+    max-width: 1100px;
+    background-color: #FFFFFF;
+  }
+
+  h1,h2 {
+    font-family: serif;
+  }
+
+  table 
+  { 
+    border-spacing: 10px;
+  }
+
+  td 
+  {
+    padding: 5px;
+    border: 1px solid gray;
+    vertical-align: bottom;
+    text-align: center;
+  }
+
+  td img
+  {
+    display: block;
+   /* width: 500px;
+    height: 500px;
+   */
+  }
+  
+  td p
+  {
+    text-align: left;
+  }
+
+</style>
+</head>
+<body>
+<div class="center">
+<div class="content">
+
+  <h1 align="center">Max Burstyn's CS 488 Project Page</h1>
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#1">Additional Primitives</a></li>
+    <li><a href="#2">Texture Mapping</a></li>
+    <li><a href="#3">Bump Mapping</a></li>
+    <li><a href="#4">Constructive Solid Geometry</a></li>
+    <li><a href="#5">Glossy Reflections</a></li>
+    <li><a href="#6">Refraction</a></li>
+    <li><a href="#7">Hierarchical Bounding Boxes</a></li>
+    <li><a href="#8"><i>k</i>d-trees</a></li>
+    <li><a href="#8">Caustics</a></li>
+    <li><a href="#10">Unique Scene</a></li>
+  </ol>
+  <h2><a name="1">Objective 1: Additional Primitives</a></h2>
+  <table>
+    <tr>
+      <td>
+        <img src="img/new_primitives.png"/>
+        <p>
+          Cylinder, Cone, and Tori.
+        </p>
+      </td>
+    </tr>
+  </table>
+
+  <h2><a name="2">Objective 2: Texture Mapping</a></h2>
+  <table>
+    <tr>
+      <td>
+        <img src="img/textures.png"/>
+        <p>
+          Texture mapping for all primitives.
+        </p>
+      </td>
+    </tr>
+  </table>
+
+  <h2><a name="3">Objective 3: Bump Mapping</a></h2>
+  <table>
+    <tr>
+      <td>
+        <img src="img/bumpmaps.png"/>
+        <p>
+          Bump mapping for all primitives.
+        </p>
+      </td>
+    </tr>
+  </table>
+
+  <h2><a name="4">Objective 4: Constructive Solid Geometry</a></h2>
+  <table>
+    <tr>
+      <td>
+        <img src="img/csg.png"/>
+        <p>
+          Sphere - (Cylinder - Torus) CSG.
+        </p>
+      </td>
+      <td>
+        <img src="img/csg_texture.png"/>
+        <p>
+          Texture mapping CSG.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="img/csg_donut.png"/>
+        <p>
+          A donut!
+        </p>
+      </td>
+      <td>
+      </td>
+    </tr>
+  </table>
+
+  <h2><a name="5">Objective 5: Glossy Reflections</a></h2>
+  <table>
+    <tr>
+      <td>
+        <img src="img/glossy1.png"/>
+        <p>
+          Glossy and non-glossy sphere.
+        </p>
+      </td>
+      <td>
+        <img src="img/glossy2.png"/>
+        <p>
+          Glossier and non-glossy sphere.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="img/glossy_cone.png"/>
+        <p>
+          Glossy reflections off a floor.
+        </p>
+      </td>
+      <td>
+      </td>
+    </tr>
+  </table>
+
+  <h2><a name="6">Objective 6: Refraction</a></h2>
+  <table>
+    <tr>
+      <td>
+        <img src="img/nonhier.png"/>
+        <p>
+          Refractive primitives.
+        </p>
+      </td>
+    </tr>
+  </table>
+
+  <h2><a name="7">Objective 7: Hierarchical Bounding Boxes</a></h2>
+  <p>Hierarchical bounding box timings for the final scene:</p>
+  <table>
+    <tr>
+      <td/>
+      <td> Hierarchical </td>
+      <td> Regular </td>
+    </tr>
+    <tr>
+      <td>intersections</td>
+      <td>146877791</td>
+      <td>211673667</td>
+    </tr>
+    <tr>
+      <td>real</td>
+      <td>2m53.958s</td>
+      <td>3m39.342</td>
+    </tr>
+    <tr>
+      <td>user</td>
+      <td>11m25.103</td>
+      <td>13m56.096s</td>
+    </tr>
+    <tr>
+      <td>sys</td>
+      <td>0m0.544s</td>
+      <td>0m0.688s</td>
+    </tr>
+  </table>
+  <p>About 65 Million intersections avoided, and 2.5 min saved.</p>
+  <p>Bounds <a href="img/final_bound.png">here</a>, but I'll save the final images for the end!</p>
+  <table>
+    <tr>
+      <td>
+        <img src="img/sample.png"/>
+        <p>
+          Final scene from A4.
+        </p>
+      </td>
+      <td>
+        <img src="img/bounding_boxes.png"/>
+        <p>
+          Hierarchical bounding boxes for scene from A4.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="img/macho-cows.png"/>
+        <p>
+          Macho cows from A4.
+        </p>
+      </td>
+      <td>
+        <img src="img/macho_cows_test_box.png"/>
+        <p>
+          Hierarchical bounding boxes for macho cows.
+        </p>
+      </td>
+    </tr>
+  </table>
+
+  <h2><a name="8">Objective 8, 9: <i>k</i>d-trees</a> and Caustics</h2>
+  <table>
+    <tr>
+      <td>
+        <img src="img/caustics_on_wood.png"/>
+        <p>
+          Caustics from clear cylinder, sphere, and reflective ring.
+        </p>
+      </td>
+      <td>
+        <img src="img/caustics_on_black.png"/>
+        <p>
+          Just the caustics on a black surface.
+        </p>
+      </td>
+    </tr>
+  </table>
+
+  <h2><a name="10">Objective 10: Unique Scene</a></h2>
+  <table>
+    <tr>
+      <td>
+        <img src="img/final_photon.png"/>
+        <p>
+          Final scene with photon mapping enabled.
+        </p>
+      </td>
+      <td>
+        <img src="img/final_scene.png"/>
+        <p>
+          Final scene with no photon mapping.
+        </p>
+      </td>
+    </tr>
+  </table>
+
+
+</div>
+</div>
+
+</body>
+</html>

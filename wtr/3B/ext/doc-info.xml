@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index version="7" terms="10" docs="10" partition="1">
+  <query-fields>
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+    <query-field name="name" type="int" length="4" storage-type="native" />
+  </query-fields>
+  <binning-fields>
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+    <binning-field name="name" storage-type="native" />
+  </binning-fields>
+</index>

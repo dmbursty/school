@@ -13,7 +13,7 @@
 \section{Introduction}
 
 \subsection{Outline}
-This document will first cover what our product, So Blog It's Good,
+This document will first cover what our product, \textsf{soblogitsgood},
 does, and the motivation for creating it.  Common, simple ways to use
 it are covered next, along with descriptions of each of our screens.
 We then cover the advanced features and how to use our developer API.
@@ -27,17 +27,18 @@ from their point of view.  If we filter out this particular data we can
 investigate what the big topics the blogging population (the "blogosphere") is
 talking about.
 
-\textsf{soblogitsgood} can be used in two very distinct ways.  The first is its web
-interface, which allows users to query the database looking for
+\textsf{soblogitsgood} can be used in two very distinct ways.  The first is
+its web interface, which allows users to query the database looking for 
 \textbf{opinions} on a topic.  A typical Google search will typically return a
 wide range of informative results.  However, user will frequently want to hear
-about a product or service from another actual person.  \textsf{soblogitsgood} can be used
-to find user stories and not just feature lists.
+about a product or service from another actual person.  \textsf{soblogitsgood}
+can be used to find user stories and not just feature lists.
 
-The second use is more advanced and aims to provide access to the collected
-data through an API.  This API is available to developers who want to perform
-their own analysis on our corpus of blogs.  This saves them the trouble of
-having to collect and clean all that data.
+The second use is more advanced and aims to provide access to the service
+through an API. This API is available to developers who want programmatic
+access to our service. Also available is a data access API for those who want
+to perform their own analysis on our corpus of blogs.  
+This saves them the trouble of having to collect and clean the blog data.
 
 
 \section{Search Basics}
@@ -85,7 +86,7 @@ The snippet is \textsf{soblogitsgood}'s algorithmic attempt to extract just the 
 page most relevant to your query. The sentiment plus keywords help you figure
 out if the article is what you want. Keywords help you verify that the link is
 the correct topic, and the bins will allow you to refine the results if you
-find that there are to many options, and many are irrelevent.
+find that there are to many options, and many are irrelevant.
 
 \subsection{Break It Down}
 If a finer level of detail is wanted, press `Break It Down'. This mode causes
@@ -121,24 +122,16 @@ to use it.  This `main' help page will also be accessible from all other help
 pages.  If `help' is clicked on a results page, the opened page will also
 explain how to interpret the results presented.
 
-%TODO
-    TODO: screenshot
+The main help page has basic information about our product and how to
+use it.  It additionally links to this document, or an updated user
+manual.  The help navigation tree is on the left, allowing the user to
+easily access help on any page they desire.
 
-The above screenshot shows the main help page.  As described previously, it
-has basic information about our product and how to use it.  It additionally
-links to this document, or an updated user manual.  The help navigation tree
-is on the left, allowing the user to easily access help on any feature they
-desire.
-
-%TODO
-    TODO: mock-up screenshots of help page
-
-The above screenshot shows a sample help web page for an analysis page.  As
-you can see, each feature on the page has an explanation---the visualization
-explains how the data was broken down, each column of data has an explanation
-describing it, etc.  This page describes to the user precisely what they are
-looking at and what they can do in order to clear any confusion they may
-have.
+Each analysis and results page has a help page.  Each feature on the
+page has an explanation - each visualization, column, etc. has it's
+relevant features pointed out.  This page describes to the user
+precisely what they are looking at and what they can do in order to
+clear any confusion they may have.
 
 \section{Advanced Features}
 For the more advanced user, we provide APIs for making sentiment search
@@ -161,7 +154,7 @@ BlogResults sentimentSearch(String query, SearchFilter filter);
 \end{verbatim}
 
 BlogResults support methods to retrieve blog posts, and SearchFilter can be
-used to specify restictions on the results like posting data, or category.
+used to specify restrictions on the results like posting data, or category.
 
 Here is an example of how to use the API:
 \begin{verbatim}
@@ -191,45 +184,47 @@ BlogPost getRandomBlogPost(SearchFilter filter);
 We allow users to request all blog posts that match the specified filter.
 This is useful if they want to do an analysis over the large data set.  We
 also support getting random blogs or blog posts so that developers can do an
-analyis on a smaller sample of our data.
+analysis on a smaller sample of our data.
 
 \section{Glossary}
 \begin{description}
 \item[API]
 API stands for Application Programming Interface and is an interface that a
 piece of software implements that allows other software to interact with it.
-\item[Bin] 
-Bins are categorizations that [The Product] uses to classify articles. These 
-categories mirror the structure of data within our servers, and thus searches 
+\item[Bin]
+Bins are categorizations that [The Product] uses to classify articles. These
+categories mirror the structure of data within our servers, and thus searches
 within a bin are much faster and more accurate.
-\item[Blog] 
+\item[Blog]
 A blog is a "web log" that consists of the authors thoughts, sentiments or
-general ideas. They can express anything from the day to day activities to a 
+general ideas. They can express anything from the day to day activities to a
 highly technical tutorial about a given topic.
-\item[Blogosphere] 
+\item[Blogosphere]
 The blogosphere is made up of all blogs and their interconnections. The term
 implies that blogs exist together as a connected community (or as a collection
 of connected communities) or as a social network in which everyday authors can
 publish their opinions.
-\item[Corpus] 
+\item[Corpus]
 A corpus is a collection of writing, that may be preprocessed and annotated to
 enhance automatic processing, testing, or verification of algorithms.
-\item[Crawl] 
+\item[Crawl]
 A crawler explores the web in some kind of automated manner in order to discover
-sites that match a certain criteria. In \textsf{soblogitsgood}'s use case, all sites are 
+sites that match a certain criteria. In \textsf{soblogitsgood}'s use case, all sites are
 explored but only blogs are stored and processed.
-\item[Natural Language] 
-Natural languages are languages that are not formally defined and instead 
+\item[Natural Language]
+Natural languages are languages that are not formally defined and instead
 evolved over time through every day human interaction. Currently, English is
 the main natural language that we search using \textsf{soblogitsgood}.
-\item[Opinion] 
+\item[Opinion]
 In our case opinion is basically any kind of natural discussion about a given
 topic. Although opinions should be based on facts, in general they do not have
 to be, and in general an opinionated article should not be affiliated with the
 topic is is discussing, to avoid bias.
-\item[Sentiment] 
-Sentiment is the overall emotional content within an article. Some articles for example will be angry and others may be gleeful. Some sentiments can be 
+\item[Sentiment]
+Sentiment is the overall emotional content within an article. Some articles
+for example will be angry and others may be gleeful. Some sentiments can be 
 classified into positive and negative allowing for refinement.
 \end{description}
 \end{document}
 
+p

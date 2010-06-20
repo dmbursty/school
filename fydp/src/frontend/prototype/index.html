@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <title> So Blog It's Good</title>
+
+    <style type="text/css">
+      body {
+        font-family: "Verdana", Sans-serif;
+      }
+
+      td
+      {
+        width: 500;
+        vertical-align: top;
+      }
+
+      td.goodhead
+      {
+        background-color: #49BD43;
+      }
+
+      td.badhead
+      {
+        background-color: #F95353;
+      }
+
+      td.goodterms
+      {
+        border-width: 1px;
+        border-bottom-style: solid;
+      }
+
+      td.badterms
+      {
+        border-width: 1px;
+        border-bottom-style: solid;
+      }
+    </style>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#search").live("click", function(){
+          // Clear old items
+          $(".gooditem").each(function(index, element) { $(element).hide(); });
+          $(".baditem").each(function(index, element) { $(element).hide(); });
+          $(".goodterms").html("");
+          $(".badterms").html("");
+          // Make request
+          $.ajax({url: "http://localhost:15863/solr/getBlogPost",
+                  type: "POST",
+                  data: ({"filter": "{\"query\": \"" + $("#query").val() + "\", \"category\": null, \"sentiment\": null, \"start\": null, \"end\": null, \"random_seed\": null, \"limit\": 10}"}),
+                  success: function(msg) {
+                    // Handle notable terms
+                    var terms = "";
+                    $(msg[0]).each(function(index, element) { terms += ", " + element[0]; });
+                    $(".goodterms").html("<b>Notable terms:</b> " + terms.substring(2));
+                    terms = ""
+                    $(msg[1]).each(function(index, element) { terms += ", " + element[0]; });
+                    $(".badterms").html("<b>Notable terms:</b> " + terms.substring(2));
+                    // Handle query results
+                    $(msg[2]).each(function(index, element) {
+                      var content = "";
+                      content += "<b>" + element[0] + "</b><br />" + element[1];
+                      if (element[2]) {
+                        $("td.good").append('<p class="gooditem">' + content + '</p>');
+                      } else {
+                        $("td.bad").append('<p class="baditem">' + content + '</p>');
+                      };
+                    });
+                  }
+                });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>So Blog It's Good</h1>
+    <input id="query" type="text">
+    <input id="search" type="submit" value="Search">
+    <br />
+    <br />
+    <table>
+      <tr>
+        <td class="goodhead"><center><b>Good</b></center></td>
+        <td class="badhead"><center><b>Bad</b></center></td>
+      </tr>
+      <tr>
+        <td class="goodterms"></td>
+        <td class="badterms"></td>
+      </tr>
+      <tr>
+        <td class="good"></td>
+        <td class="bad"></td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+package ece428;
+
+public enum JmyState {
+	CLOSED,
+	LISTENING,
+	SYN_SENT,
+	SYN_RECEIVED,
+	IDLE,
+	DATA_SENT,
+	FIN_RECEIVED,
+	FIN_SENT;	
+}

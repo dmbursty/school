@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 public class TestClient {
     protected static S_StreamSocket socket;
+    private static Logger log = Logger.getLogger(TestClient.class.getName());
     
     public static void analysisClient() throws Exception {
         byte[] data = new byte[256000];
@@ -15,11 +16,11 @@ public class TestClient {
         
         socket.S_connect(new InetSocketAddress("localhost", 13337));
         long now = System.currentTimeMillis();
-        System.out.println("==== Data sent on " + now + "====");
-        socket.S_send(data, 250*1024);
+        System.out.println("==== 1k sent on " + now + "====");
+        socket.S_send(data, 1*1024);
         now = System.currentTimeMillis();
         
-        //socket.S_close();        
+        socket.S_close();        
     }
 
     public static void greetingClient() throws Exception {
@@ -55,7 +56,7 @@ public class TestClient {
 	    Logger.getLogger("").setLevel(Level.FINE);
         InetSocketAddress addr = new InetSocketAddress("localhost", 0);
         socket = new S_StreamSocket(addr);
-        analysisClient();
+        greetingClient();
 
         System.out.println("done main");
 	}

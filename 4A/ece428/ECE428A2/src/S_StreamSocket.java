@@ -34,7 +34,7 @@ class S_StreamSocket {
             consoleHandler = new ConsoleHandler();
             topLogger.addHandler(consoleHandler);
         }
-        consoleHandler.setLevel(Level.INFO);
+        consoleHandler.setLevel(Level.FINE);
 
         socket = new T_DatagramSocket(addr);
         socket.T_setSoTimeout(WorkerThread.SO_TIMEOUT);

@@ -6,35 +6,20 @@ import java.util.logging.Logger;
 
 public class TestServer {
     protected static S_StreamSocket socket;
+    private static Logger log = Logger.getLogger(TestServer.class.getName());
     
     public static void analysisServer() throws Exception {
         byte[] buf = new byte[256000];
-        byte[] bigbuf = new byte[256000];
         while (true) {
             socket.S_accept();
             
             int len = 0;
             int recvLen = 0;
-            while (recvLen < 250*1024) {
+            while (recvLen < 1*1024) {
                 len = socket.S_receive(buf, buf.length);
-                System.out.println("Got " + len);
-                for (int i = 0; i < len; i++) {
-                    bigbuf[recvLen + i] = buf[i];
-                }
                 recvLen += len;
             }
             System.out.println("==== Received " + recvLen + " at " + System.currentTimeMillis() + "====");
-            
-            int badbytes = 0;
-            for (int i = 0; i < recvLen; i++) {
-                if (bigbuf[i] != (byte) (i % Byte.MAX_VALUE)) {
-                    if (badbytes == 0) {
-                        System.out.println("first mismatch at byte " + i);
-                    }
-                    badbytes++;
-                }
-            }
-            System.out.println(badbytes + " badbytes");
             
             socket.S_close();
             break;
@@ -58,7 +43,7 @@ public class TestServer {
 
             String data = "Hello, client. I'm fine thank you.";
             socket.S_send(data.getBytes(), data.getBytes().length);
-            //socket.S_close();
+            socket.S_close();
             break;
         }
     }    
@@ -77,7 +62,7 @@ public class TestServer {
         Logger.getLogger("").setLevel(Level.FINE);
         InetSocketAddress addr = new InetSocketAddress("localhost", 13337);
         socket = new S_StreamSocket(addr);
-        analysisServer();
+        greetingServer();
 
         System.out.println("done main");
     }

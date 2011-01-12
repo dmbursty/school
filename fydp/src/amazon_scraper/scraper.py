@@ -10,7 +10,7 @@ review_pattern = re.compile("(\d)\.0 out of 5 stars.*?<b>(.*?)</b>.*?</table>(?:
 #review_pattern = re.compile("<b>(.*?)</b><br />\s*(.*?)<div", re.DOTALL)
 url_pattern = re.compile("http://www.amazon.com/(.*)/[dg]p/(.*?)(?:/|$)")
 baseurl = "http://www.amazon.com/%s/product-reviews/%s/ref=cm_cr_pr_link_%d?ie=UTF8&showViewpoints=0&pageNumber=%d"
-num_pages = 3
+num_pages = 1
 
 def handle_review(review):
   match = review_pattern.search(review)
@@ -61,11 +61,23 @@ def handle_asin(title, asin):
 
     for review in reviews:
       if review[0] == '1':
+        ff = open("worst", "a")
+        ff.write(review[1:])
+        ff.close()
+      elif review[0] == '2':
         ff = open("bad", "a")
         ff.write(review[1:])
         ff.close()
-      elif review[0] == '5':
+      elif review[0] == '3':
+        ff = open("neutral", "a")
+        ff.write(review[1:])
+        ff.close()
+      elif review[0] == '4':
         ff = open("good", "a")
+        ff.write(review[1:])
+        ff.close()
+      elif review[0] == '5':
+        ff = open("best", "a")
         ff.write(review[1:])
         ff.close()
 

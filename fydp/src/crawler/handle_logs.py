@@ -16,14 +16,18 @@ def handle_url(url):
   # Go to the url and check if there is an rss feed available
   try:
     page = urllib2.urlopen(url)
-    match = feed_pattern.search(page.read())
+    data = page.read()
+    match = feed_pattern.search(data)
     if match:
       if match.group(2).startswith("http"):
         handle_feed(match.group(2))
       else:
         # Feed url may be relative
         handle_feed(url + match.group(2))
-
+    else:
+      match = isrss_pattern.search(data)
+        if match:
+          handle_feed(url)
   except Exception, e:
     # Timeout
     return
@@ -48,6 +52,7 @@ if __name__ == "__main__":
     log_pattern = re.compile(".*?\s*200\s*[\-0-9]* (\S*?)\s")
     feed_pattern = re.compile(
         "<link rel=\"alternate\" type=\"application/rss\+xml\" title=\"(.*?)\" href=\"(.*?)\"")
+    isrss_pattern = re.compile("<rss.*>")
 
     socket.setdefaulttimeout(5)
 

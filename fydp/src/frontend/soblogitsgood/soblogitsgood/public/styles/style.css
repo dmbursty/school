@@ -1,0 +1,190 @@
+body {
+  font-family: "Verdana", Sans-serif;
+  font-size: 100%;
+  color: #363636;
+}
+
+h3.resultLink {
+  margin-top: 0.0em;
+  margin-bottom: 0.0em;
+  font-size: medium;
+  font-weight: normal;
+}
+
+span.good {
+  font-size: 0.9em;
+  color: #49BD43;
+}
+
+span.bad {
+  font-size: 0.9em;
+  color: #F95353;
+}
+
+p.result
+{
+  font-size: small;
+  margin-top: 0px;
+  margin-bottom: 15px;
+}
+
+img.graph {
+  float: right;
+}
+
+td
+{
+  vertical-align: top;
+}
+
+td.content
+{
+  padding-left: 10px;
+  height: 500px;
+}
+
+td.sidebar
+{
+  width: 150px;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-right-color: #aaaaaa;
+  white-space: nowrap;
+}
+
+.sidebar p
+{
+  margin-top: 0px;
+}
+
+ul.views
+{
+  list-style-type: none;
+  margin-left: 0px;
+  padding-left: 0px;
+  margin-top: 0px;
+}
+
+ul.views li 
+{
+  background-repeat: no-repeat;
+  background-position: 0px 5px;
+
+  margin-left: 0px;
+  padding-left: 10px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+.icon {
+  float:left;
+  height:16px;
+  width:16px;
+  margin-right:10px;
+  margin-top:3px;
+  outline:medium none;
+}
+
+.sidebar a:link, .sidebar a:visited   /* unvisited, visited link */
+{
+  color:#0000FF; 
+  text-decoration: none;
+}
+
+.sidebar a:hover, .sidebar a:active   /* mouse over, selected link */
+{
+  color:#363636;
+  text-decoration: underline;
+}
+
+span.modePicked
+{
+  /* text-decoration: underline;*/
+  font-weight: bold;
+}
+
+td.goodhead
+{
+  background-color: #49BD43;
+  background-image: url('../images/goodcorner.png');
+  background-repeat:no-repeat;
+  width: 500px;
+  height: 20px;
+}
+
+td.badhead
+{
+  background-color: #49BD43;
+  background-image: url('../images/badcorner.png');
+  background-repeat:no-repeat;
+  background-position: right;
+  background-color: #F95353;
+  width: 500px;
+  height: 20px;
+}
+
+td.goodterms
+{
+  border-width: 1px;
+  border-bottom-style: solid;
+}
+
+td.badterms
+{
+  border-width: 1px;
+  border-bottom-style: solid;
+}
+
+td.tagcloud
+{
+  vertical-align: middle;
+  text-align: justify;
+  padding: 20px;
+}
+
+input.up
+{
+  background-image: url("../images/up_light.png");
+  background-color: transparent;
+  width: 40px;
+  border: 0;
+}
+
+input.up:hover
+{
+  background-image: url("../images/up.png");
+  cursor: pointer;
+}
+
+input.down
+{
+  background-image: url("../images/down_light.png");
+  background-color: transparent;
+  width: 40px;
+  border: 0;
+}
+
+input.down:hover
+{
+  background-image: url("../images/down.png");
+  cursor: pointer;
+}
+
+input.range-go
+{
+  float: left;
+}
+
+div.slider
+{
+  width: 500px;
+  margin: 20px;
+}
+
+.graphheader
+{
+  color: white;
+  background-color: #49BD43;
+  text-align: center;
+  font-size: 9pt;
+}

@@ -2,7 +2,7 @@ import BeautifulSoup, re, urllib, sys
 
 comment_id = re.compile("comment|usertext")
 
-def splitText(text):
+def findComments(text):
     """
     Returns a list of comments in the given text.
 
@@ -39,12 +39,13 @@ def splitText(text):
         except:
             None
 
-    return commentList
+    [comment.extract() for comment in commentList]
 
+    return unicode(soup), [str(comment) for comment in commentList]
 
 if __name__ == '__main__':
     f = urllib.urlopen(sys.argv[1])
-    comments = splitText(f.read())
+    content, comments = findComments(f.read())
     for c in comments:
         print c
         print "-------------------------------------"

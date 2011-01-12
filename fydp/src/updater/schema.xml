@@ -433,7 +433,8 @@
    <field name="content" type="text" indexed="true" stored="true"/>
    <field name="published" type="date" indexed="true" stored="true"/>
    <field name="feedurl" type="string" indexed="true" stored="true"/>
-   <field name="sentiment" type="boolean" indexed="true" stored="true"/>
+   <field name="sentiment" type="double" indexed="true" stored="true"/>
+   <field name="comments" type="string" indexed="true" stored="true"/>
 
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
@@ -498,7 +499,7 @@
  <defaultSearchField>text</defaultSearchField>
 
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
- <solrQueryParser defaultOperator="OR"/>
+ <solrQueryParser defaultOperator="AND"/>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,

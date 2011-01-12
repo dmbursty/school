@@ -8,6 +8,7 @@ import cherrypy
 from cherrypy import tools
 from json import JSONEncoder
 
+import traceback, sys
 
 queue = UpdateQueue.UpdateQueue()
 
@@ -35,14 +36,17 @@ class UpdateThread(Thread):
                 #Do we need another thread here?
                 feed.update()
                 # store.store_mysql(feed.feedEntries)
+                print "About to store into SOLR"
                 store.store_solr(feed.feedEntries)
                 # free memory; don't hold onto entire entry set
                 feed.feedEntries = None
+                print "About to Save"
                 feed.save(conn)
+                print "Re-Adding to Queue"
                 queue.add(feed)
             except Exception as e:
                 print "Exception when processing feed URL " + feed.url
-                print e
+		traceback.print_exc(file=sys.stdout)
 
 class Parser(object):
     def index(self, feed_url):
@@ -85,5 +89,6 @@ def main():
         quit()
 
 if __name__ == '__main__':
+    store.initialize()
     main()
 

@@ -1,14 +1,21 @@
 import cherrypy
 from cherrypy import tools
-from json import JSONEncoder
+
+try:
+    from json import JSONEncoder
+except ImportError:
+    from simplejson import JSONEncoder
+
 from SearchFilter import SearchFilter
 from urllib2 import *
 import solr
 import MySQLdb
-import getpass
+#import getpas
+sys.path.append("..\n-grams")
 import ngrams
 import re
-
+#Add the following directory(or the equivalent on your system) to pythonpath environment variable:
+#~/fydp/src/n-grams
 encoder = JSONEncoder()
 
 def jsonify_tool_callback(*args, **kwargs):
@@ -18,14 +25,9 @@ def jsonify_tool_callback(*args, **kwargs):
 
 tools.jsonify = cherrypy.Tool('before_finalize', jsonify_tool_callback, priority=30)
 
-class HelloWorld(object):
-    def index(self):
-        page = open("../frontend/prototype/index.html")
-        content = page.read()
-        page.close()
-        return content
-
-    index.exposed = True
+class Root(object):
+    # Should only handle static requests
+    pass
 
 class Solr(object):
     def index(self):
@@ -38,10 +40,10 @@ class Solr(object):
         parsedFilter = SearchFilter()
         parsedFilter.decode(filter)
         params = parsedFilter.toSolr()
-        params['q'] = params['q'] +  " sentiment:true"
+        params['q'] = params['q'] +  " sentiment:[0.75 TO 1.0]"
         good_response = conn.query(**(params))
         params = parsedFilter.toSolr()
-        params['q'] = params['q'] +  " sentiment:false"
+        params['q'] = params['q'] +  " sentiment:[0.0 TO 0.25]"
         bad_response = conn.query(**(params))
         conn.close()
         goodText = ""
@@ -52,7 +54,7 @@ class Solr(object):
                 goodText += hit['content']
             elif hit['sentiment'] == False:
                 badText += hit['content']
-        q, p = ngrams.main(goodText, badText)
+        q, p = ngrams.main(goodText, badText, ngrams.getWordsForDisplay)
         return (q, p, [(hit['title'], hit['content'], hit['sentiment']) for hit in results if hit['content']])
 
     @tools.jsonify()
@@ -125,7 +127,7 @@ class MySQL(object):
     getBlog.exposed = True
 
 print 'start page!'
-root = HelloWorld()
+root = Root()
 root.mysql = MySQL('fydp', 'fydp')
 root.solr = Solr()
 print dir(cherrypy)

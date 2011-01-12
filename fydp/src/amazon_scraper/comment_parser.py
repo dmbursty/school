@@ -23,9 +23,9 @@ class Comment:
 def read_file(filename):
     comments = []
 
-    if filename == "good":
+    if filename == "best":
         sentiment = "true"
-    elif filename == "bad":
+    elif filename == "worst":
         sentiment = "false"
     else:
         print "Unexpected filename. Must be either 'good' or 'bad'."

@@ -2,11 +2,25 @@ import time, FeedEntry
 import feedparser
 import re
 import urllib
+from BeautifulSoup import BeautifulSoup
+from BeautifulSoup import Comment
+from BeautifulSoup import CData
+from BeautifulSoup import Declaration
+from BeautifulSoup import ProcessingInstruction
+import split_beautiful
+from clean_data import clean_data
+filterScript = re.compile("<script.*?ipt>|<style.*?style>", re.DOTALL)
 
 class Feed:
+
     """Class representing a Feed that needs to be periodically updated."""
-    def __init__(self, url, lastEntry = None, updateInterval = 15 * 60 * 4, lastUpdated = 0, saved = False):
-        self.url = url
+    def __init__(self,
+                 url,
+                 lastEntry = None,
+                 updateInterval = 15 * 60 * 4,
+                 lastUpdated = 0,
+                 saved = False):
+        self.url = url.encode('utf-8')
         self.feedEntries = None
         self.__saved__ = saved
         self.__lastEntry__ = lastEntry
@@ -14,16 +28,23 @@ class Feed:
         self.lastUpdated = lastUpdated
 
     def update(self):
-        print 'updating url ' + self.url
-        feed = feedparser.parse( self.url )
         self.feedEntries = []
         self.lastUpdated = time.time()
+
+        if re.search( 'reddit', self.url ) or re.search( 'imbd', self.url ) :
+            return
+
+        print 'updating ' + self.url
+        feed = feedparser.parse( self.url )
         if len(feed.entries) == 0:
             return
+        if len(feed.entries) > 1000:
+            print 'More than 1000 entries in feed: ' + self.url
+            
         firstEntry = feed['entries'][0].link
         for entry in feed.entries:
             author = None
-            comments = None
+            comments = []
             guid = None
             updated = None
             summary = ""
@@ -37,11 +58,6 @@ class Feed:
                 pass
 
             try:
-                comments = entry.comments
-            except AttributeError:
-                pass
-
-            try:
                 updated = entry.updated
             except AttributeError:
                 pass
@@ -51,24 +67,41 @@ class Feed:
             except AttributeError:
                 pass
 
+            summary = summary.encode('utf-8')
+            
             content = self.__retrieve_content__(summary, entry.link)
-            re.sub( "<[^>]*?>", "", content)
+            content, comments_in_content = clean_data( content, summary )
+
+            for i in range(0, len(comments_in_content)):
+                comments.append(
+                    FeedEntry.FeedEntry(entry.link + '#comment' + str(i),
+                                        feed.url,
+                                        comments_in_content[i].encode('utf-8'),
+                                        comments_in_content[i].encode('utf-8'),
+                                        (entry.title + ' Comment ' + str(i)).encode('utf-8'),
+                                        (entry.link + '#comment' + str(i)).encode('utf-8'),
+                                        '',
+                                        None,
+                                        updated))
+
             self.feedEntries.append(
-                FeedEntry.FeedEntry(entry.link,
+                FeedEntry.FeedEntry(entry.link.encode('utf-8'),
                                     feed.url,
-                                    re.sub( "<[^>]*?>", "", content),
-                                    content,
-                                    entry.title,
-                                    entry.link,
-                                    author,
+                                    content.encode('utf-8'),
+                                    content.encode('utf-8'),
+                                    entry.title.encode('utf-8'),
+                                    entry.link.encode('utf-8'),
+                                    author.encode('utf-8'),
                                     comments,
                                     updated))
+            
         self.__lastEntry__ = firstEntry;
 
     def __retrieve_content__(self, str, link):
         filehandle = urllib.urlopen(link)
         content = filehandle.read()
         contentTypeSplit = filehandle.headers['content-type'].split('charset=');
+
         encoding = 'ISO-8859-1'
         if len( contentTypeSplit ) == 2:
           encoding = contentTypeSplit[-1]

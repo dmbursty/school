@@ -1,0 +1,6 @@
+.svn
+*.pyc
+*.o
+*.d
+*.swo
+*.swp

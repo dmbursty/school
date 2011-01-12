@@ -1,3 +1,5 @@
+echo export PYTHONPATH=$PYTHONPATH:`pwd`/n-grams:`pwd`/comment_splitter >> ~/.bashrc
+
 # you must run this cript with sudo
 echo "Installing sqlite3"
 apt-get install sqlite3
@@ -14,6 +16,7 @@ wget http://download.cherrypy.org/cherrypy/3.1.2/CherryPy-3.1.2.tar.gz
 tar -zxf CherryPy-3.1.2.tar.gz
 cd CherryPy-3.1.2
 python setup.py install
+d ..
 
 echo "Fetching solr"
 wget http://opensource.become.com/apache/lucene/solr/1.4.0/apache-solr-1.4.0.tgz
@@ -32,5 +35,8 @@ echo "Fetching Heritrix"
 wget http://sourceforge.net/projects/archive-crawler/files/archive-crawler%20%28heritrix%201.x%29/1.14.3/heritrix-1.14.3.tar.gz/download
 tar -xvzf heritrix-1.14.3.tar.gz
 
+
+
 cd updater
 mysql -u root -p < createschema.sql
+

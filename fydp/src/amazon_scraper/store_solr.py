@@ -1,3 +1,4 @@
+from __future__ import with_statement
 import httplib, urllib
 import htmllib
 from datetime import datetime
@@ -6,6 +7,9 @@ from dateutil.tz import *
 from xml.sax.saxutils import escape
 import comment_parser
 import sys
+
+
+from charlies_sentiment import *
 sys.path.append("../updater")
 from store import escape_string_xml
 import re
@@ -34,6 +38,7 @@ def store_solr(comments):
         <field name="published">%s</field>
         <field name="feedurl">%s</field>
         <field name="sentiment">%s</field>
+        <field name="comments"></field>
         </doc>""".encode('utf-8')   
 
     for comment in comments:
@@ -45,8 +50,8 @@ def store_solr(comments):
         link = escape_string_xml("http://amazon.com")
         comments = escape_string_xml("")
         content = escape_string_xml(clean(comment.content))
-        sent = escape_string_xml(get_sentiment(comment))
-
+        sent = escape_string_xml(get_sentiment(feedurl, link, content))
+	if not sent: continue
         date = datetime.now(tzutc())
         date = date.strftime(date_format).encode('utf-8')
 
@@ -67,35 +72,26 @@ def store_solr(comments):
         print resp.read()
     conn.close()
 
-def get_sentiment(entry):
-  global initialized
-  if not initialized:
-     line = analyzer.stdout.readline().strip()
-     while line != 'Enter Input Now': 
-        line = analyzer.stdout.readline().strip()
-        print line
-     initialized = True
-     print 'initialized'
+def get_sentiment(feedurl, link, content):
+  f = open('log.txt', 'a')
+  f.write(content + '\n')
+  f.write("url:" + feedurl + '\n')
+  f.write("link:" + link + '\n')
+  sentiment2 = classify(content)
+  f.write("sentiment2: %s\n" % sentiment2)
+  f.write("#BOUNDARY#\n")
+  f.close()
 
-  content = entry.content.encode('utf-8')
-  with open('test.txt', 'a') as f:
-    f.write(content.strip() + '\nBOUNDARY\n')
-    
-  analyzer.stdin.write(content.strip() + '\n')
-  analyzer.stdin.write("#BOUNDARY#\n")
-  out = analyzer.stdout.readline().strip()
-  print out.encode('utf-8')
-  return out.encode('utf-8')
+  if not sentiment2:
+     return False
 
-import subprocess
-cmd = 'java -cp ../sentiment/sentimentDemo.jar:../sentiment/lingpipe-3.9.2.jar PolarityWhole ../sentiment/reviews/'.split()
-
-analyzer = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout = subprocess.PIPE)
-initialized = False
-
+  print 'sentiment%s' % sentiment2
+  return str(sentiment2).encode('utf-8')
 # ********** main!
+
+train_on_amazon('../sentiment/reviews/cleaned_good', '../sentiment/reviews/cleaned_bad')
 print "storing good"
-comments = comment_parser.read_file("good")
+comments = comment_parser.read_file("best")
 store_solr(comments)
 
 #div = 21
@@ -104,7 +100,7 @@ store_solr(comments)
 #    store_solr(comments[i*num:num])
 #
 print "storing bad"
-comments = comment_parser.read_file("bad")
+comments = comment_parser.read_file("worst")
 store_solr(comments)
 #for i in range(1):
 #    store_solr(comments[i*num:num])

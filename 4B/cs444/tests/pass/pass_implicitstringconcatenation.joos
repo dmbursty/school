@@ -1,0 +1,8 @@
+/* pass: implicit string concatenation */
+public class A {
+  public A() {}
+  public String m(int x) {
+    return "foo" + x + true + null;
+  }
+}
+

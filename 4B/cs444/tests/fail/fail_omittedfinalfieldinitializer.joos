@@ -1,0 +1,5 @@
+/* fail: omitted final field initializer */
+public class A {
+  protected final int x /* = 0 */;
+}
+

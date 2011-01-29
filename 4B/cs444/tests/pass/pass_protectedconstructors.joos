@@ -1,0 +1,5 @@
+/* pass: protected constructors */
+public class A {
+  protected A() {}
+}
+

@@ -1,0 +1,6 @@
+/* pass: boolean literals */
+public class A {
+  public A() {}
+  protected boolean x = false;
+}
+

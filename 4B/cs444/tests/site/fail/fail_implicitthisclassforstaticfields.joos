@@ -1,0 +1,8 @@
+/* fail: implicit this class for static fields */
+public class A {
+  protected static int x;
+  public int m() {
+    return x;
+  }
+}
+

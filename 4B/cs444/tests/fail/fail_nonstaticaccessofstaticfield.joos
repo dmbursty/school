@@ -1,0 +1,9 @@
+/* fail: non-static access of static field */
+public class A {
+  public static int x;
+  public int m() {
+    A a = new A();
+    return a.x;
+  }
+}
+

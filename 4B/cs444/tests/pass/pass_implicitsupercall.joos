@@ -1,0 +1,5 @@
+/* pass: implicit super call */
+public class A {
+  public A() { /* super(); */}
+}
+

@@ -1,0 +1,6 @@
+/* fail: array declaration after variable name */
+public class A {
+  public A() {}
+  protected int x[];
+}
+

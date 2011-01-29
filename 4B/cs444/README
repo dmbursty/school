@@ -1,0 +1,15 @@
+Scanner
+-------
+
+USAGE:
+    python scanner.py [-t output_type] [-o output_file] input_file_name
+
+        output_type -- one of: status, html
+	               html output is styled using scanner.css stylesheet
+
+        output_file -- file name for output file; if non give stdout is used
+
+Testing
+-------
+
+[[unfinished; see test.py]]

@@ -1,0 +1,5 @@
+/* pass: static field declaration */
+public class A {
+  protected static int x;
+}
+

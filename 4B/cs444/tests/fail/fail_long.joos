@@ -1,0 +1,5 @@
+/* fail: long */
+public class A {
+  protected long x;
+}
+

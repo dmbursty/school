@@ -1,0 +1,3 @@
+/* fail: strictfp */
+  public strictfp class A {}
+

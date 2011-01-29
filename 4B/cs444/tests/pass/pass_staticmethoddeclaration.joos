@@ -1,0 +1,8 @@
+/* pass: static method declaration */
+public class A {
+  public A() {}
+  public static int m() {
+    return 42;
+  }
+}
+

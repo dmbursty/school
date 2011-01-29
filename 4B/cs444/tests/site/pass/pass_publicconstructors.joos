@@ -1,0 +1,5 @@
+/* pass: public constructors */
+public class A {
+  public A() {}
+}
+

@@ -1,0 +1,5 @@
+/* pass: restricted static native int m(int) */
+  public class A {
+    public static native int m(int i);
+  }
+

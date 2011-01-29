@@ -1,0 +1,6 @@
+/* pass: int literals */
+public class A {
+  public A() {}
+  protected int x = 42;
+}
+

@@ -1,0 +1,38 @@
+span {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid #000000;
+}
+
+pre {
+    margin: 2px;
+    padding: 0px;
+}
+
+.lineNumber {
+    color: #FF0000;
+    background-color: #00FF00;
+    border: 1px solid #000000;
+}
+
+.whitespace        { color: #222222; background-color: #DDDDDD; }
+.newline           { color: #DDDDDD; background-color: #222222; }
+.sl_comment        { color: #000066; background-color: #CC9900; }
+.ml_comment        { color: #000033; background-color: #CC9933; }
+.max_int_literal   { color: #CCCCAA; background-color: #440000; }
+.int_literal       { color: #AAAA99; background-color: #660000; }
+.hex_literal       { color: #9900FF; background-color: #99FF00; }
+.char_literal      { color: #00CCFF; background-color: #330000; }
+.string_literal    { color: #CC0000; background-color: #66FF99; }
+.bool_literal      { color: #CC9966; background-color: #0000CC; }
+.null_literal      { color: #CCBB99; background-color: #0000EE; }
+.operator          { color: #003300; background-color: #CCFF66; }
+.keyword           { color: #CCFF00; background-color: #003333; }
+.keyword_forbidden { color: #FF0000; background-color: #00FFFF; }
+.identifier        { color: #660066; background-color: #CC99FF; }
+.unscanned        { color: #000000; background-color: #FF0000; }
+
+.newline {
+    padding-right: 2px;
+    padding-left: 2px;
+}

@@ -1,0 +1,21 @@
+package pkg.mine;
+
+import java.util.something;
+
+class X {
+    protected int a = 1;
+    protected bool b = true;
+    public String c = "c";
+
+// This is a comment
+    
+    public static void main(String args[]) {
+        System.out.print(c + b + a);
+        ++a;
+        a += 4;
+        a <<= 2;
+        a +=a+++2;
+    }
+/* This is a multi line * comment 
+** /*  */
+}

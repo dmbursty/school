@@ -1,0 +1,5 @@
+/* fail: multi array */
+public class A {
+  protected int[][] x;
+}
+

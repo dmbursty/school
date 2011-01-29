@@ -1,0 +1,5 @@
+/* fail: double */
+public class A {
+  protected double x;
+}
+

@@ -1,0 +1,5 @@
+/* fail: private fields */
+public class A {
+  private int x;
+}
+

@@ -1,0 +1,9 @@
+a.success:link {color:#00FF00;}
+a.success:visited {color:#00AA00;}
+a.success:hover {color:#006600;}
+a.success:active {color:#009900;}
+
+a.failure:link {color:#FF0000;}
+a.failure:visited {color:#AA0000;}
+a.failure:hover {color:#660000;}
+a.failure:active {color:#990000;}

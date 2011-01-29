@@ -1,0 +1,9 @@
+/* fail: multiple types per file */
+class A {
+  protected int x;
+}
+
+class B {
+  protected int y;
+}
+

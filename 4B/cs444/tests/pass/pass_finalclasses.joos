@@ -1,0 +1,5 @@
+/* pass: final classes */
+  public final class A {
+    public A() {}
+  }
+

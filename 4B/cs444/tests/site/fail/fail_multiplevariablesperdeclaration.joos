@@ -1,0 +1,4 @@
+/* fail: multiple variables per declaration */
+public class A {
+  public int x,y,z;
+}

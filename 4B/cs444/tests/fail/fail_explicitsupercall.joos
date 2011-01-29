@@ -1,0 +1,5 @@
+/* fail: explicit super call */
+public class A {
+  public A() {  super(); }
+}
+

@@ -1,0 +1,78 @@
+\documentclass[12pt]{article}
+% Preamble
+\usepackage[left=2cm,top=1cm,right=2cm,nohead,nofoot]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+% Header
+\title{CO250 Assignment 2}
+\author{Maximilian Burstyn (20206120)}
+\date{January 21, 2011}
+
+% Body
+\begin{document}
+\maketitle
+\newcounter{Lcount}
+\begin{list}{Exercise \arabic{Lcount}.}{\usecounter{Lcount}}
+
+% Exercise 1
+\item \hfill\\
+\begin{tabular}{| l || c | c | c | c | c |} 
+\hline
+block & A & B & C & D & E \\
+\hline
+weight & 7 & 12 & 4 & 12 & 9 \\
+impurity & 2 & 1 & 1 & 2 & 1 \\
+value & 25 & 13 & 15 & 20 & 12 \\
+\hline
+\end{tabular}
+
+Weight minimum of 20 \\
+Impurity maximum of 4 \\
+
+\newcounter{subLcount}
+\begin{list}{(\alph{subLcount})}{\usecounter{subLcount}}
+
+\item \hfill\\
+\(
+  \mbox{Let } x_i = 
+  \begin{cases}
+    0 & \mbox{ if we mine block $i$ } \\
+    1 & \mbox{ otherwise } \\
+  \end{cases}
+  \forall i \in \{A, B, C, D, E\}
+\) \\
+
+\(
+  \mbox{Let } x =
+  \begin{bmatrix}
+    x_A \\ x_B \\ x_C \\ x_D \\ x_E \\
+  \end{bmatrix}
+\)
+
+\hfill \\
+
+maximize $\begin{bmatrix} 25 & 13 & 15 & 20 & 12 \end{bmatrix} x$ \\
+
+\(
+  \mbox{such that} \\
+  \begin{bmatrix}
+     7 & 12 &  4 & 12 &  9 \\
+    -2 & -1 & -1 & -2 & -1 \\
+  \end{bmatrix}
+  x \geq
+  \begin{bmatrix}
+    20 \\ -4 \\
+  \end{bmatrix}
+\) \\
+
+\(
+x \geq \begin{bmatrix} 0\\0\\0\\0\\0\\ \end{bmatrix},\ 
+x \leq \begin{bmatrix} 1\\1\\1\\1\\1\\ \end{bmatrix},\ 
+x \in \mathbb{Z}^5
+\)
+
+\end{list}
+
+\end{list}
+\end{document}

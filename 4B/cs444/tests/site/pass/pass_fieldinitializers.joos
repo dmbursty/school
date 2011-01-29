@@ -1,0 +1,6 @@
+/* pass: field initializers */
+public class A {
+  public A() {}
+  protected int x = 42;
+}
+

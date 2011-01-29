@@ -1,0 +1,6 @@
+/* fail: instance initializers */
+public class A {
+  public int x;
+  { x = 42; }
+}
+

@@ -1,0 +1,5 @@
+/* fail: float */
+public class A {
+  protected float x;
+}
+

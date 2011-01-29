@@ -1,0 +1,5 @@
+/* fail: package private classes */
+package dovs.joos.features;
+
+/* package private */ class A {}
+

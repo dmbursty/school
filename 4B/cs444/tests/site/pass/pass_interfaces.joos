@@ -1,0 +1,3 @@
+/* pass: public interfaces */
+  public interface A {}
+

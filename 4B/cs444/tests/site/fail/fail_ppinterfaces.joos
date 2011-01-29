@@ -1,0 +1,3 @@
+/* fail: package private interfaces */
+  interface A {}
+

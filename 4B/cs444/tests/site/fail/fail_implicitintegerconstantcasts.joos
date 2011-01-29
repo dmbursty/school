@@ -1,0 +1,6 @@
+/* fail: implicit integer constant casts */
+class A {
+  public byte x = /* (byte) */5;
+}
+
+

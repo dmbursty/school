@@ -1,0 +1,4 @@
+  python scanner.py -t status $1
+  ret=$?
+  echo $ret
+  exit $ret
